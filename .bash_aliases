@@ -14,7 +14,6 @@ alias pi='ssh -t pi@musinformatics.ddns.net screen -RR'
 
 # python virtualenvs
 alias personal='export PYTHONSTARTUP=/Users/cfahy/.pystartup_personal; source ~/.virtualenv/personal/bin/activate'
-#alias compete='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/compete/bin/activate'
 
 # sudo
 alias pacman='sudo pacman'
