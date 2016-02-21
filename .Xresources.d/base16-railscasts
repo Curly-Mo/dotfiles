@@ -1,0 +1,42 @@
+! Base16 Railscasts
+! Scheme: Ryan Bates (http://railscasts.com)
+
+#define base00 #2b2b2b
+#define base01 #272935
+#define base02 #3a4055
+#define base03 #5a647e
+#define base04 #d4cfc9
+#define base05 #e6e1dc
+#define base06 #f4f1ed
+#define base07 #f9f7f3
+#define base08 #da4939
+#define base09 #cc7833
+#define base0A #ffc66d
+#define base0B #a5c261
+#define base0C #519f50
+#define base0D #6d9cbe
+#define base0E #b6b3eb
+#define base0F #bc9458
+
+URxvt*.foreground:   base05
+URxvt*.background:   base00
+URxvt*.cursorColor:  base05
+URxvt*borderColor: base00
+
+URxvt*.color0:       base00
+URxvt*.color1:       base08
+URxvt*.color2:       base0B
+URxvt*.color3:       base0A
+URxvt*.color4:       base0D
+URxvt*.color5:       base0E
+URxvt*.color6:       base0C
+URxvt*.color7:       base05
+
+URxvt*.color8:       base03
+URxvt*.color9:       base09
+URxvt*.color10:      base01
+URxvt*.color11:      base02
+URxvt*.color12:      base04
+URxvt*.color13:      base06
+URxvt*.color14:      base0F
+URxvt*.color15:      base07
