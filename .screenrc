@@ -1,0 +1,5 @@
+shell -$SHELL
+
+startup_message off
+
+defscrollback 9000

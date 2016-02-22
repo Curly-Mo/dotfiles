@@ -124,7 +124,7 @@ URxvt.clipboard.pastecmd: xsel -ob
 ! URxvt*fadeColor: colour
 
 ! Set the application icon pixmap; option -icon.
-! URxvt*iconFile: /home/colin/Pictures/terminal.ico
+URxvt*iconFile: /usr/share/pixmaps/terminal.png
 
 ! Use the specified colour for the scrollbar [default #B2B2B2].
 ! URxvt*scrollColor: colour
