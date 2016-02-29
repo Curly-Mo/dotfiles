@@ -18,3 +18,4 @@ alias personal='export PYTHONSTARTUP=/Users/cfahy/.pystartup_personal; source ~/
 
 # sudo
 alias pacman='sudo pacman'
+alias sudont='sudo $(fc -nl -1)'

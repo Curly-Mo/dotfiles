@@ -19,8 +19,8 @@ export PAGER=less
 export LESS="-iMSx4 -FX"
 
 # Alias definitions
-if [ -f ~/.bash_aliases ]; then
-    . ~/.bash_aliases
+if [ -f ~/.aliases ]; then
+    . ~/.aliases
 fi
 
 # enable programmable completion features (you don't need to enable
@@ -57,3 +57,7 @@ cd "$(<~/.lastdir)"
 export PYTHONSTARTUP=/home/colin/.pystartup
 # matplotlib
 #export DYLD_FALLBACK_LIBRARY_PATH=/usr/local/Cellar/libpng/1.5.18/lib/:$DYLD_FALLBACK_LIBRARY_PATH
+
+
+# torch7
+. /home/colin/packages/torch/install/bin/torch-activate
