@@ -8,13 +8,14 @@ alias l='ls -CF'
 alias ltr='ls -ltr'
 alias lr='ls -ltu'
 
+alias grep="grep --color=always"
+alias ..="cd .."
 
 # raspi
 alias pi='ssh -t pi@musinformatics.ddns.net screen -RR'
 
-
 # python virtualenvs
-alias personal='export PYTHONSTARTUP=/Users/cfahy/.pystartup_personal; source ~/.virtualenv/personal/bin/activate'
+alias personal='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/personal/bin/activate'
 
 # sudo
 alias pacman='sudo pacman'
