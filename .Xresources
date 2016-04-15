@@ -13,6 +13,7 @@
 !
 ! xft fonts
 URxvt*font: xft:inconsolata:size=16
+!URxvt*font: xft:Roboto Mono:size=14
 !URxvt*font: xft:fira mono:size=14
 
 !
@@ -46,6 +47,8 @@ URxvt*scrollBar_floating: false
 !
 ! scrolling
 !
+! Srollback buffer
+URxvt*saveLines: 50000
 ! do not scroll with output
 URxvt*scrollTtyOutput: false
 ! scroll in relation to buffer (with mouse scroll or Shift+Page Up)
@@ -56,14 +59,27 @@ URxvt*scrollTtyKeypress: true
 !
 ! extensions
 !
-URxvt*perl-ext-common: default,tabbedex,matcher,clipboard
+URxvt.perl-ext-common: default,tabbedex,matcher,clipboard
+! tabs
 URxvt.tabbed.autohide: true
+URxvt.keysym.M-t: perl:tabbedex:new_tab
+URxvt.keysym.M-Right: perl:tabbedex:next_tab
+URxvt.keysym.M-Left: perl:tabbedex:prev_tab
+URxvt.keysym.Control-t: perl:tabbedex:new_tab
+URxvt.keysym.Control-Tab: perl:tabbedex:next_tab
+! urxvt does weird stuff with ctrl-shift and shift-tab
+URxvt.keysym.Control-Shift-ISO_Left_Tab: perl:tabbedex:prev_tab
+URxvt.iso14755: False
+URxvt.iso14755_52: False
+! clipboard
+URxvt.clipboard.copycmd: xsel --input --clipboard
+URxvt.clipboard.pastecmd: xsel --output --clipboard
+URxvt.clipboard.autocopy: true
+URxvt.keysym.M-c: perl:clipboard:copy
+URxvt.keysym.M-v: perl:clipboard:paste
+! other
 URxvt.url-launcher: /usr/bin/google-chrome-stable
-URxvt.matcher.button  : 1
-URxvt.keysym.Alt-c: perl:clipboard:copy
-URxvt.keysym.Alt-v: perl:clipboard:paste
-URxvt.clipboard.copycmd:  xsel -ib
-URxvt.clipboard.pastecmd: xsel -ob
+URxvt.matcher.button: 1
 
 
 ! Compile xft: Attempt to find a visual with the given bit depth; option -depth.

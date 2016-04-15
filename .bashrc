@@ -8,6 +8,7 @@
 #bash history
 export HISTFILESIZE=1000000
 export HISTSIZE=1000000
+export HISTCONTROL=ignoreboth:erasedups
 
 PS1='[\u@\h \W]\$ '
 #Path additions
@@ -43,7 +44,7 @@ function parse_git_branch {
 export PS1="[\[\033[0;35m\]\t\[\033[0m\]] \u@\h:\[\033[0;36m\]\w\[\033[0m\] \[\033[0;33m\]\$(parse_git_branch) \n\[\033[0m\]$ "
 
 #Python Virtual Environment
-source ~/.virtualenv/personal/bin/activate
+source ~/.virtualenv/venv3/bin/activate
 
 #medleydb
 #export MEDLEYDB_PATH="/Users/cfahy/medleydb/Database/"

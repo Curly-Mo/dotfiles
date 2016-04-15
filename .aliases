@@ -11,12 +11,21 @@ alias lr='ls -ltu'
 alias grep="grep --color=always"
 alias ..="cd .."
 
-# raspi
-alias pi='ssh -t pi@musinformatics.ddns.net screen -RR'
-
 # python virtualenvs
-alias personal='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/personal/bin/activate'
+#alias personal='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/personal/bin/activate'
+alias venv3='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/venv3/bin/activate'
+alias venv2='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/venv2/bin/activate'
 
 # sudo
 alias pacman='sudo pacman'
 alias sudont='sudo $(fc -nl -1)'
+
+# xdg
+alias open='xdg-open'
+
+# tools
+alias top='htop'
+
+# raspi
+alias pi='ssh -t pi@musinformatics.ddns.net screen -RR'
+
