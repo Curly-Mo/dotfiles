@@ -8,6 +8,7 @@ zplug "~/.zsh_theme", from:local
 
 # Load Oh My Zsh Libs
 zplug "lib/history", from:oh-my-zsh
+zplug "lib/directories", from:oh-my-zsh
 zplug "lib/theme-and-appearance", from:oh-my-zsh
 zplug "lib/prompt_info_functions", from:oh-my-zsh
 # Load Oh My Zsh Plugins
