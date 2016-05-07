@@ -8,6 +8,9 @@ alias l='ls -CF'
 alias ltr='ls -ltr'
 alias lr='ls -ltu'
 
+# I'm an idiot
+alias rm='rm -I'
+
 alias grep="grep --color=always"
 alias ..="cd .."
 

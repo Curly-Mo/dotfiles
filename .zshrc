@@ -1,63 +1,52 @@
-HISTFILE=~/.zsh_history
-HISTSIZE=1000000
-SAVEHIST=1000000
-setopt HIST_IGNORE_DUPS
-setopt appendhistory autocd extendedglob
-unsetopt beep
-bindkey -v
+# Load zplug
+export ZPLUG_HOME=~/packages/zplug
+source $ZPLUG_HOME/init.zsh
 
-zstyle :compinstall filename '/home/colin/.zshrc'
-autoload -Uz compinit promptinit colors vcs_info
-compinit
-promptinit
-colors
-prompt walters
+#  Theme
+#zplug "themes/tonotdo", from:oh-my-zsh
+zplug "~/.zsh_theme", from:local
 
-zstyle ':completion:*' menu select
+# Load Oh My Zsh Libs
+zplug "lib/history", from:oh-my-zsh
+zplug "lib/theme-and-appearance", from:oh-my-zsh
+zplug "lib/prompt_info_functions", from:oh-my-zsh
+# Load Oh My Zsh Plugins
+zplug "plugins/git", from:oh-my-zsh, nice:10
+zplug "plugins/vi-mode", from:oh-my-zsh
+zplug "plugins/archlinux", from:oh-my-zsh
+export ZSH_CACHE_DIR=~/.cache/zsh
+zplug "plugins/last-working-dir", from:oh-my-zsh
+zplug "plugins/cp", from:oh-my-zsh
+# Python Plugins
+zplug "plugins/pip", from:oh-my-zsh
+zplug "plugins/python", from:oh-my-zsh
+zplug "plugins/virtualenv", from:oh-my-zsh
+zplug "plugins/pyenv", from:oh-my-zsh
+# Other Plugins
+zplug "zsh-users/zsh-syntax-highlighting", nice:10
+zplug "rupa/z", use:z.sh
 
-# Dirstack
-DIRSTACKFILE="$HOME/.cache/zsh/dirs"
-if [[ -f $DIRSTACKFILE ]] && [[ $#dirstack -eq 0 ]]; then
-  dirstack=( ${(f)"$(< $DIRSTACKFILE)"} )
-  [[ -d $dirstack[1] ]] && cd $dirstack[1]
-fi
-chpwd() {
-  print -l $PWD ${(u)dirstack} >$DIRSTACKFILE
-}
-DIRSTACKSIZE=20
-setopt autopushd pushdsilent pushdtohome
-## Remove duplicate entries
-setopt pushdignoredups
-## This reverts the +/- operators.
-setopt pushdminus
+# Update self
+zplug "zplug/zplug"
+
+# Source plugins and add commands to $PATH
+zplug load --verbose
+
 
 # Alias definitions
 if [ -f ~/.aliases ]; then
-    source ~/.aliases
+    . ~/.aliases
 fi
 
-# Custom prompt
-if [ -f ~/.zsh_theme ]; then
-    source ~/.zsh_theme
-fi
+# vim-mode
+bindkey -v
+bindkey '^R' history-incremental-pattern-search-backward
+bindkey '^[[A' up-line-or-search
+bindkey '^[[B' down-line-or-search
 
-# Show current git branch in prompt.
-function parse_git_branch {
-  git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
-}  
-
-
-#Store last directory
-declare -r PROMPT_COMMAND='printf %s "$PWD" > ~/.lastdir'
-#Init in last directory
-cd "$(<~/.lastdir)"
-
-# Python
-export PYTHONSTARTUP=/home/colin/.pystartup
 #Python Virtual Environment
-export VIRTUAL_ENV_DISABLE_PROMPT='1'
-source ~/.virtualenv/personal/bin/activate
+source ~/.virtualenv/venv3/bin/activate
 
-#Less for viewing wide queries
-export PAGER=less
-export LESS="-iMSx4 -FX"
+# Fn navigation keys
+bindkey "^[[7~" beginning-of-line
+bindkey "^[[8~" end-of-line

@@ -12,8 +12,8 @@
 ! fonts
 !
 ! xft fonts
-URxvt*font: xft:inconsolata:size=16
-!URxvt*font: xft:Roboto Mono:size=14
+!URxvt*font: xft:inconsolata:size=16
+URxvt*font: xft:Roboto Mono:size=14
 !URxvt*font: xft:fira mono:size=14
 
 !

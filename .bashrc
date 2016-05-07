@@ -61,4 +61,4 @@ export PYTHONSTARTUP=/home/colin/.pystartup
 
 
 # torch7
-. /home/colin/packages/torch/install/bin/torch-activate
+#. /home/colin/packages/torch/install/bin/torch-activate
