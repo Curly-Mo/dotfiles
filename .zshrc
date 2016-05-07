@@ -26,6 +26,7 @@ zplug "plugins/pyenv", from:oh-my-zsh
 # Other Plugins
 zplug "zsh-users/zsh-syntax-highlighting", nice:10
 zplug "rupa/z", use:z.sh
+zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, nice:10
 
 # Update self
 zplug "zplug/zplug"
