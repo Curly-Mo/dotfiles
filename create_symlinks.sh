@@ -1,19 +1,17 @@
 #!/bin/bash
-# Create symlinks in $HOME to all .files and .dirs in dotfiles directory
+# Create symlinks in $HOME using GNU stow
 
-script_dir=$(dirname $0)
-dotfiles=$(find ${script_dir} -maxdepth 1 -type f -name '.*' -printf "%f\n")
-dotdirs=$(find ${script_dir} -maxdepth 1 -type d -name '.*' ! -name '.git' -printf "%f\n")
-echo $dotfiles
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+dotdirs=$(find ${script_dir} -maxdepth 1 -type d ! -path '*/\.*' ! -path "$script_dir" -printf "%f\n")
+#echo $script_dir
 echo $dotdirs
-printf "Create symlinks for: \n$dotfiles \n and \n$dotdirs \nIn: $HOME \n"
-read -p "Confirm? " -n 1 -r
-echo
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    echo "Creating symlinks"
-    find ~/dotfiles -maxdepth 1 -type f -name '.*' -exec ln -s -i {} --target-directory=$HOME \;
-    find ~/dotfiles -maxdepth 1 -type d -name '.*' ! -name '.git' -exec ln -s -i {} --target-directory=$HOME \;
-fi
-
-printf 'done!\n'
+for d in $dotdirs ; do
+    printf "Create symlinks in $HOME for: $d\n"
+    read -p "Confirm? " -n 1 -r
+    echo
+    if [[ $REPLY =~ ^[Yy]$ ]]
+    then
+        stow $d --verbose=2 -d $script_dir --target $HOME
+    fi
+    echo
+done

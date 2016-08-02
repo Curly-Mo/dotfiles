@@ -6,7 +6,7 @@ Plug 'scrooloose/syntastic'
 Plug 'haya14busa/incsearch.vim'
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 "Plug 'nathanaelkane/vim-indent-guides'
-Plug 'vim-airline/vim-airline'
+"Plug 'vim-airline/vim-airline'
 "Plug 'SirVer/ultisnips'
 "Plug 'honza/vim-snippets'
 Plug 'mattn/emmet-vim'
@@ -37,12 +37,15 @@ set tabstop=4
 set softtabstop=4
 set shiftwidth=4
 set expandtab
+autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
+
 
 " aliases
 :command WQ wq
 :command Wq wq
 :command Q q
-:command W w !sudo tee %
+:command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 
 " paste
 nnoremap <F2> :set invpaste paste?<CR>
@@ -73,7 +76,10 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['flake8']
+let g:syntastic_python_checkers = ['pylint']
+let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_html_checkers = ['eslint']
+let g:syntastic_css_checkers = ['stylelint']
 
 " YouCompleteMe
 "let g:ycm_python_binary_path = '/usr/bin/python3'

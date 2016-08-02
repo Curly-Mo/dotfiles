@@ -1,0 +1,14 @@
+#!/bin/sh
+
+gaming=$(wmctrl -d | grep Gaming | cut -d ' ' -f1)
+if [ "" = "$gaming" ]
+then
+    num_desktops=$(wmctrl -d | wc -l)
+    wmctrl -n $(($num_desktops + 1))
+    wmctrl -s $num_desktops
+    rename_workspace.py $num_desktops "Gaming"
+else
+    wmctrl -s $gaming
+fi
+
+launch_or_focus steam

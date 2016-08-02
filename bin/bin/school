@@ -1,0 +1,14 @@
+#!/bin/sh
+
+school=$(wmctrl -d | grep School | cut -d ' ' -f1)
+if [ "" = "$school" ]
+then
+    num_desktops=$(wmctrl -d | wc -l)
+    wmctrl -n $(($num_desktops + 1))
+    wmctrl -s $num_desktops
+    rename_workspace.py $num_desktops "School"
+else
+    wmctrl -s $school
+fi
+
+launch_or_focus google-chrome --new-window email.nyu.edu newclasses.nyu.edu drive.google.com/drive/u/0/folders/0BzXM3T_GSbtlbjliZTI1T24wVmM arch.library.nyu.edu/databases/subject/music overleaf.com/dash

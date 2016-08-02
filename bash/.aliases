@@ -1,5 +1,10 @@
 # Aliases sourced by .bashrc
 
+# various
+alias grep="grep --color=always"
+alias ..="cd .."
+alias vim="nvim"
+
 # ls
 alias ls='ls -Gh --color=auto --group-directories-first'
 alias ll='ls -la'
@@ -11,9 +16,6 @@ alias lr='ls -ltu'
 # I'm an idiot
 alias rm='rm -I'
 
-alias grep="grep --color=always"
-alias ..="cd .."
-
 # python virtualenvs
 #alias personal='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/personal/bin/activate'
 alias venv3='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/venv3/bin/activate'
@@ -21,6 +23,7 @@ alias venv2='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/
 
 # sudo
 alias pacman='sudo pacman'
+alias pacmatic='sudo pacmatic'
 alias sudont='sudo $(fc -nl -1)'
 
 # xdg

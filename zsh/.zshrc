@@ -9,11 +9,11 @@ zplug "~/.zsh_theme", from:local
 # Load Oh My Zsh Libs
 zplug "lib/history", from:oh-my-zsh
 zplug "lib/directories", from:oh-my-zsh
-zplug "lib/theme-and-appearance", from:oh-my-zsh
 zplug "lib/prompt_info_functions", from:oh-my-zsh
+zplug "lib/completion", from:oh-my-zsh
 # Load Oh My Zsh Plugins
 zplug "plugins/git", from:oh-my-zsh, nice:10
-zplug "plugins/vi-mode", from:oh-my-zsh
+#zplug "plugins/vi-mode", from:oh-my-zsh
 zplug "plugins/archlinux", from:oh-my-zsh
 export ZSH_CACHE_DIR=~/.cache/zsh
 zplug "plugins/last-working-dir", from:oh-my-zsh
@@ -32,7 +32,7 @@ zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, nice:10
 zplug "zplug/zplug"
 
 # Source plugins and add commands to $PATH
-zplug load --verbose
+zplug load
 
 
 # Alias definitions
@@ -47,8 +47,12 @@ bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 
 #Python Virtual Environment
+export PYTHONSTARTUP=/home/colin/.pystartup
 source ~/.virtualenv/venv3/bin/activate
 
 # Fn navigation keys
 bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
+
+# Welcome message
+fortune showerthoughts

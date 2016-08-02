@@ -1,4 +1,5 @@
 # Colin's ZSH Theme
+GIT_PROMPT_EXECUTABLE="haskell"
 
 PROMPT='
 $(_timestamp) $(_virtualenv_prompt_info)$(_user_host)${_current_dir}$(_ruby_version)
@@ -8,7 +9,7 @@ PROMPT2='%{$fg[$CARETCOLOR]%}◀%{$reset_color%} '
 
 RPROMPT='$(_vi_status)%{$(echotc UP 1)%}$(_git_time_since_commit) $(git_super_status) ${_return_status}%{$(echotc DO 1)%}'
 
-_current_dir="%F{030}%3~%{$reset_color%} "
+_current_dir="%F{030}%7~%{$reset_color%} "
 _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
 _hist_no="%{$fg[grey]%}%h%{$reset_color%}"
 
