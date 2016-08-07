@@ -1,36 +1,52 @@
 " Load plugins with vim-plug
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.config/nvim/plugged')
+Plug 'neomake/neomake'
+Plug 'SirVer/ultisnips'
+function! DoRemote(arg)
+  UpdateRemotePlugins
+endfunction
+Plug 'Shougo/deoplete.nvim', { 'do': function('DoRemote') }
+Plug 'vim-airline/vim-airline'
 "Plug 'chriskempson/base16-vim'
 "Plug 'romainl/Apprentice'
-Plug 'scrooloose/syntastic'
-Plug 'haya14busa/incsearch.vim'
+"Plug 'scrooloose/syntastic'
+"Plug 'haya14busa/incsearch.vim'
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 "Plug 'nathanaelkane/vim-indent-guides'
-"Plug 'vim-airline/vim-airline'
 "Plug 'SirVer/ultisnips'
 "Plug 'honza/vim-snippets'
-Plug 'mattn/emmet-vim'
+"Plug 'mattn/emmet-vim'
 call plug#end()
 
 " Colors
 "set background=dark
 "colorscheme base16-railscasts
 "colorscheme apprentice
-colorscheme default
+"colorscheme default
 
 " syntax
 syntax on
-set number
+set rnu
 filetype plugin indent on
+"set ruler
+set formatoptions-=cro "don't continue comment marks
+" Relative numbering
+function! NumberToggle()
+  if(&relativenumber == 1)
+    set nornu
+    set number
+  else
+    set rnu
+  endif
+endfunc
 
 " search
 set hlsearch
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-set ignorecase
 set smartcase
+set incsearch
+set gdefault 
+set magic
 
 " tabs
 set tabstop=4
@@ -39,7 +55,6 @@ set shiftwidth=4
 set expandtab
 autocmd Filetype html setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype css setlocal ts=2 sw=2 sts=2 expandtab
-
 
 " aliases
 :command WQ wq
@@ -65,28 +80,10 @@ set undodir=~/.vim/tmp/undo//
 set undofile
 
 
-" Syntastic
-highlight SignColumn ctermbg=16
-highlight SyntasticStyleErrorSign ctermfg=7 ctermbg=15
-highlight SyntasticError ctermbg=7
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_html_checkers = ['eslint']
-let g:syntastic_css_checkers = ['stylelint']
+""""""PLUGINS"""""""
 
-" YouCompleteMe
-"let g:ycm_python_binary_path = '/usr/bin/python3'
+" Neomake
+autocmd! BufWritePost * Neomake
 
-" Indent Guides
-"let g:indent_guides_auto_colors = 0
-"let g:indent_guides_start_level = 2
-"let g:indent_guides_guides_size = 1
-"hi IndentGuidesEven ctermbg=238
-"hi IndentGuidesOdd ctermbg=236
+" Airline
+let g:airline_powerline_fonts = 1

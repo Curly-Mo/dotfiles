@@ -52,7 +52,7 @@ nnoremap <F2> :set invpaste paste?<CR>
 set pastetoggle=<F10>
 set showmode
 " clipboard
-set clipboard=unnamed
+set clipboard+=unnamedplus
 
 " set tempfile location
 "silent !mkdir -p ~/.vim/tmp/backup > /dev/null 2>&1

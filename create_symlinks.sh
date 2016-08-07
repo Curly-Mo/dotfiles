@@ -11,7 +11,7 @@ for d in $dotdirs ; do
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
-        stow $d --verbose=2 -d $script_dir --target $HOME
+        stow $d --verbose=2 --no-folding -d $script_dir --target $HOME
     fi
     echo
 done
