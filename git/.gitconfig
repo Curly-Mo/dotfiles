@@ -1,6 +1,6 @@
 [user]
 	name = Colin Fahy
-	email = cpfahy@gmail.com
+	email = colin@cfahy.com
 [diff]
 	tool = vimdiff
 [difftool]
@@ -8,11 +8,8 @@
 [core]
 	editor = vim
 	askpass = /usr/bin/ksshaskpass
+	excludesfile = /home/colin/.gitignore
 [push]
 	default = simple
 [credential]
 	helper = cache --timeout=2600000
-[filter "lfs"]
-	clean = git-lfs clean -- %f
-	smudge = git-lfs smudge -- %f
-	required = true

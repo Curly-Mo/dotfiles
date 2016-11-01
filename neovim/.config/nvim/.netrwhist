@@ -1,0 +1,7 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =5
+let g:netrw_dirhist_1='/home/colin/drive/workspace/flask-rest-template/app/users'
+let g:netrw_dirhist_2='/home/colin/drive/workspace/captcha/.git'
+let g:netrw_dirhist_3='/home/colin/drive/workspace/captcha/src/middleware'
+let g:netrw_dirhist_4='/home/colin/drive/workspace/captcha/src/lib'
+let g:netrw_dirhist_5='/home/colin/dotfiles'

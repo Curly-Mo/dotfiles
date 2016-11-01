@@ -4,6 +4,7 @@
 alias grep="grep --color=always"
 alias ..="cd .."
 alias vim="nvim"
+alias vi="vim"
 
 # ls
 alias ls='ls -Gh --color=auto --group-directories-first'
@@ -17,9 +18,13 @@ alias lr='ls -ltu'
 alias rm='rm -I'
 
 # python virtualenvs
-#alias personal='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/personal/bin/activate'
-alias venv3='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/venv3/bin/activate'
-alias venv2='export PYTHONSTARTUP=/Users/cfahy/.pystartup; source ~/.virtualenv/venv2/bin/activate'
+#alias personal='export PYTHONSTARTUP=/home/cfahy/.pystartup; source ~/.virtualenv/personal/bin/activate'
+alias venv3='export PYTHONSTARTUP=/home/colin/.pystartup; source ~/.virtualenv/venv3/bin/activate'
+alias venv2='export PYTHONSTARTUP=/home/colin/.pystartup; source ~/.virtualenv/venv2/bin/activate'
+alias py3='source activate py3'
+alias py2='source activate py2'
+alias ipy='ipython'
+alias ipy34='/home/colin/miniconda3/envs/py34/bin/ipython'
 
 # sudo
 alias pacman='sudo pacman'
@@ -35,3 +40,6 @@ alias top='htop'
 # raspi
 alias pi='ssh -t pi@musinformatics.ddns.net screen -RR'
 
+# NYU
+alias citygram='ssh citygram.smusic.nyu.edu'
+alias hpc='ssh cpf247@hpc.nyu.edu'

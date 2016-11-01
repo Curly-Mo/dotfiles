@@ -61,6 +61,10 @@ function _virtualenv_prompt_info() {
             local name=$(basename $VIRTUAL_ENV)
         fi
         echo "$_ZSH_THEME_VIRTUAL_ENV_PROMPT_PREFIX$name$_ZSH_THEME_VIRTUAL_ENV_PROMPT_SUFFIX "
+    else
+      if [ -n "${CONDA_DEFAULT_ENV}" ]; then
+        echo "$_ZSH_THEME_VIRTUAL_ENV_PROMPT_PREFIX${CONDA_DEFAULT_ENV}$_ZSH_THEME_VIRTUAL_ENV_PROMPT_SUFFIX "
+      fi
     fi
 }
 

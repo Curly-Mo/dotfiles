@@ -1,0 +1,27 @@
+#!/usr/bin/env zsh
+#Create conda environment and init files
+autoenvfilename='.env'
+condaenvfilename='environment.yml'
+foldername=$(basename $PWD)
+
+# Create the conda environment
+conda create -n $foldername python
+echo "$foldername created."
+
+# Create conda environment.yml file and autoenv activation file
+# based on directory name.
+
+source activate $foldername
+if [ ! -f $condaenvfilename ]; then
+  conda env export > $condaenvfilename
+  echo "$condaenvfilename created."
+else
+  echo "$condaenvfilename already exists."
+fi
+
+if [ ! -f $autoenvfilename ]; then
+  printf "env_name=$foldername\nif [ \"\${CONDA_DEFAULT_ENV}\" != \"\$env_name\" ]; then\n  source activate \$env_name\nfi" > $autoenvfilename
+  echo "$autoenvfilename created."
+else
+  echo "$autoenvfilename already exists."
+fi

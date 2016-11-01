@@ -47,7 +47,7 @@ export PS1="[\[\033[0;35m\]\t\[\033[0m\]] \u@\h:\[\033[0;36m\]\w\[\033[0m\] \[\0
 source ~/.virtualenv/venv3/bin/activate
 
 #medleydb
-#export MEDLEYDB_PATH="/Users/cfahy/medleydb/Database/"
+#export MEDLEYDB_PATH="/home/cfahy/medleydb/Database/"
 
 #Store last directory
 declare -r PROMPT_COMMAND='printf %s "$PWD" > ~/.lastdir'
@@ -62,3 +62,6 @@ export PYTHONSTARTUP=/home/colin/.pystartup
 
 # torch7
 #. /home/colin/packages/torch/install/bin/torch-activate
+
+# Python
+export PATH="/home/colin/miniconda3/bin:$PATH"
