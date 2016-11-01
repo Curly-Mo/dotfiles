@@ -21,6 +21,10 @@ colorscheme default
 " syntax
 syntax on
 set number
+" Turn off auto-commenting
+au FileType * setlocal formatoptions-=c
+au FileType * setlocal formatoptions-=r
+au FileType * setlocal formatoptions-=o
 filetype plugin indent on
 
 " search

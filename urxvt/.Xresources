@@ -60,12 +60,13 @@ URxvt*scrollTtyKeypress: true
 !
 ! extensions
 !
-URxvt.perl-ext-common: default,tabbedex,matcher,clipboard
+URxvt.perl-ext-common: default,matcher,clipboard
+!URxvt.perl-ext-common: default,tabbedex,matcher,clipboard
 ! tabs
 URxvt.tabbed.autohide: true
-URxvt.keysym.M-t: perl:tabbedex:new_tab
-URxvt.keysym.M-Right: perl:tabbedex:next_tab
-URxvt.keysym.M-Left: perl:tabbedex:prev_tab
+!URxvt.keysym.M-t: perl:tabbedex:new_tab
+!URxvt.keysym.M-Right: perl:tabbedex:next_tab
+!URxvt.keysym.M-Left: perl:tabbedex:prev_tab
 URxvt.keysym.Control-t: perl:tabbedex:new_tab
 URxvt.keysym.Control-Tab: perl:tabbedex:next_tab
 ! urxvt does weird stuff with ctrl-shift and shift-tab
@@ -82,6 +83,10 @@ URxvt.keysym.M-v: perl:clipboard:paste
 URxvt.url-launcher: /usr/bin/google-chrome-stable
 URxvt.matcher.button: 1
 
+! Disable these keybindings
+Urxvt.keysym.Control-Left: command:\000
+Urxvt.keysym.Control-Right: command:\000
+Urxvt.keysym.Shift-Up: command:\000
 
 ! Compile xft: Attempt to find a visual with the given bit depth; option -depth.
 ! URxvt*depth: bitdepth

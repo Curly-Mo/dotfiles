@@ -1,3 +1,14 @@
+# tmux
+if [[ -z "$TMUX" ]] ;then
+    ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
+    if [[ -z "$ID" ]] ;then # if not available create a new one
+        exec tmux new-session
+    else
+        exec tmux attach-session -t "$ID" # if available attach to it
+    fi
+    return
+fi
+
 # Load zplug
 export ZPLUG_HOME=~/packages/zplug
 source $ZPLUG_HOME/init.zsh
@@ -34,16 +45,6 @@ zplug "zplug/zplug"
 
 # Source plugins and add commands to $PATH
 zplug load
-
-# tmux
-#if [[ -z "$TMUX" ]] ;then
-#    ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
-#    if [[ -z "$ID" ]] ;then # if not available create a new one
-#        exec tmux new-session
-#    else
-#        exec tmux attach-session -t "$ID" # if available attach to it
-#    fi
-#fi
 
 # Alias definitions
 if [ -f ~/.aliases ]; then

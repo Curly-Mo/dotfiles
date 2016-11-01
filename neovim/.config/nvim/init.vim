@@ -26,6 +26,10 @@ call plug#end()
 " syntax
 syntax on
 set rnu
+" Turn off auto-commenting
+autocmd FileType * setlocal formatoptions-=c
+autocmd FileType * setlocal formatoptions-=r
+autocmd FileType * setlocal formatoptions-=o
 filetype plugin indent on
 "set ruler
 set formatoptions-=cro "don't continue comment marks
