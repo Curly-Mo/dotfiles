@@ -14,7 +14,7 @@
 ! xft fonts
 !URxvt*font: xft:inconsolata:size=16
 !URxvt*font: xft:Roboto Mono:size=14
-URxvt*font: xft:Roboto Mono for Powerline:size=14
+URxvt*font: xft:Roboto Mono for Powerline:size=14, xft:Symbola
 !URxvt*font: xft:fira mono:size=14
 
 !
@@ -31,7 +31,7 @@ URxvt*borderLess: false
 ! scrollbar
 !
 ! enable scrollbar
-URxvt*scrollBar: true     
+URxvt*scrollBar: false
 ! scrollbar style
 URxvt*scrollstyle: plain
 ! scrollbar to the right

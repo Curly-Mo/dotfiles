@@ -71,7 +71,7 @@ set pastetoggle=<F10>
 set noshowmode
 " clipboard
 set clipboard+=unnamedplus
-set mouse=r
+set mouse=a
 
 " set tempfile location
 "silent !mkdir -p ~/.vim/tmp/backup > /dev/null 2>&1
