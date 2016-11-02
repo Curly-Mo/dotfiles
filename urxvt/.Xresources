@@ -63,16 +63,16 @@ URxvt*scrollTtyKeypress: true
 URxvt.perl-ext-common: default,matcher,clipboard
 !URxvt.perl-ext-common: default,tabbedex,matcher,clipboard
 ! tabs
-URxvt.tabbed.autohide: true
+!URxvt.tabbed.autohide: true
 !URxvt.keysym.M-t: perl:tabbedex:new_tab
 !URxvt.keysym.M-Right: perl:tabbedex:next_tab
 !URxvt.keysym.M-Left: perl:tabbedex:prev_tab
-URxvt.keysym.Control-t: perl:tabbedex:new_tab
-URxvt.keysym.Control-Tab: perl:tabbedex:next_tab
+!URxvt.keysym.Control-t: perl:tabbedex:new_tab
+!URxvt.keysym.Control-Tab: perl:tabbedex:next_tab
 ! urxvt does weird stuff with ctrl-shift and shift-tab
-URxvt.keysym.Control-Shift-ISO_Left_Tab: perl:tabbedex:prev_tab
-URxvt.iso14755: False
-URxvt.iso14755_52: False
+!URxvt.keysym.Control-Shift-ISO_Left_Tab: perl:tabbedex:prev_tab
+!URxvt.iso14755: False
+!URxvt.iso14755_52: False
 ! clipboard
 URxvt.clipboard.copycmd: xsel --input --clipboard
 URxvt.clipboard.pastecmd: xsel --output --clipboard
