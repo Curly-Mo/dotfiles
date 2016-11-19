@@ -74,3 +74,15 @@ fortune showerthoughts
 
 # torch7
 . /home/colin/packages/torch/install/bin/torch-activate
+
+# setup special keys
+bindkey  "\e[1~"  beginning-of-line
+bindkey  "\e[4~"  end-of-line
+bindkey  "\e[7~"  beginning-of-line
+bindkey  "\e[8~"  end-of-line
+bindkey  "\eOH"   beginning-of-line
+bindkey  "\eOF"   end-of-line
+bindkey  "\e[H"   beginning-of-line
+bindkey  "\e[F"   end-of-line
+bindkey  "\e[3~"  delete-char
+bindkey  "\e[2~"  overwrite-mode
