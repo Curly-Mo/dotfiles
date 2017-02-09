@@ -5,6 +5,7 @@ Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
 Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'romainl/Apprentice'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
@@ -103,7 +104,7 @@ highlight SignColumn ctermbg=None
 
 " Airline
 let g:airline_powerline_fonts = 1
-let g:airline_theme='apprentice'
+let g:airline_theme='simple'
 
 let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
 let g:airline_section_b = airline#section#create(['hunks', 'branch'])
@@ -112,5 +113,6 @@ let g:airline_section_b = airline#section#create(['hunks', 'branch'])
 let g:deoplete#enable_at_startup = 1
 set completeopt-=preview
 " set python bin
-let g:python_host_prog = '/home/colin/miniconda3/envs/py2/bin/python'
-let g:python3_host_prog = '/home/colin/miniconda3/envs/py3/bin/python'
+"let g:python_host_prog = '/home/colin/miniconda3/envs/py2/bin/python'
+"let g:python3_host_prog = '/home/colin/miniconda3/envs/py3/bin/python'
+let g:python3_host_prog = '/bin/python3.6'

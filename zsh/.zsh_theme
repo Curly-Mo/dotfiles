@@ -1,4 +1,6 @@
 # Colin's ZSH Theme
+
+#Must install: https://github.com/olivierverdier/zsh-git-prompt#haskell-optional
 GIT_PROMPT_EXECUTABLE="haskell"
 
 PROMPT='

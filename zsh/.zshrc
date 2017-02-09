@@ -15,7 +15,8 @@ export ZSH_CACHE_DIR=~/.cache/zsh
 
 #  Theme
 #zplug "themes/tonotdo", from:oh-my-zsh
-zplug "~/.zsh_theme", from:local
+#zplug "~/.zsh_theme", from:local, defer:2
+zplug "~/dotfiles", from:local, use:"zsh/.zsh_theme"
 
 # Load Oh My Zsh Libs
 zplug "lib/history", from:oh-my-zsh
@@ -34,9 +35,9 @@ zplug "plugins/cp", from:oh-my-zsh
 #zplug "plugins/virtualenv", from:oh-my-zsh
 #zplug "plugins/pyenv", from:oh-my-zsh
 # Other Plugins
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
+zplug "zsh-users/zsh-syntax-highlighting", defer:2
 #zplug "rupa/z", use:z.sh
-zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, nice:10
+zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, defer:2
 zplug "horosgrisa/autoenv"
 
 # Update self
@@ -70,10 +71,10 @@ bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
 
 # Welcome message
-fortune showerthoughts
+#fortune showerthoughts
 
 # torch7
-. /home/colin/packages/torch/install/bin/torch-activate
+#. /home/colin/packages/torch/install/bin/torch-activate
 
 # setup special keys
 bindkey  "\e[1~"  beginning-of-line
