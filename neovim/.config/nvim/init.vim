@@ -7,6 +7,7 @@ Plug 'zchee/deoplete-jedi'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'romainl/Apprentice'
+Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentice-airline' }
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
 "Plug 'tpope/vim-fugitive'
@@ -22,7 +23,7 @@ call plug#end()
 " Colors
 "set background=dark
 "colorscheme base16-railscasts
-"colorscheme apprentice
+silent! colorscheme apprentice
 "colorscheme default
 
 " syntax
@@ -55,9 +56,9 @@ set gdefault
 set magic
 
 " tabs
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
 set expandtab
 autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
 
@@ -104,7 +105,8 @@ highlight SignColumn ctermbg=None
 
 " Airline
 let g:airline_powerline_fonts = 1
-let g:airline_theme='simple'
+"let g:airline_theme='simple'
+let g:airline_theme='apprentice'
 
 let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
 let g:airline_section_b = airline#section#create(['hunks', 'branch'])
@@ -115,4 +117,6 @@ set completeopt-=preview
 " set python bin
 "let g:python_host_prog = '/home/colin/miniconda3/envs/py2/bin/python'
 "let g:python3_host_prog = '/home/colin/miniconda3/envs/py3/bin/python'
-let g:python3_host_prog = '/bin/python3.6'
+let g:python_host_prog = '/usr/local/bin/python'
+
+:imap `` <Esc>

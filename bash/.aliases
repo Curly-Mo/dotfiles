@@ -7,24 +7,24 @@ alias vim="nvim"
 alias vi="vim"
 
 # ls
-alias ls='ls -Gh --color=auto --group-directories-first'
+alias ls='gls -Gh --color=auto --group-directories-first'
 alias ll='ls -la'
 alias la='ls -A'
 alias l='ls -CF'
 alias ltr='ls -ltr'
 alias lr='ls -ltu'
-function rc(){
-  if [ -z "$1" ]; then
-    set -- "ls"
-  fi
-  $1 `find . -maxdepth 1 -type f -printf '%Ts\t%f\n' | sort -nr | cut -f2 | head -1`
-}
+#function rc(){
+#  if [ -z "$1" ]; then
+#    set -- "ls"
+#  fi
+#  $1 `find . -maxdepth 1 -type f -printf '%Ts\t%f\n' | sort -nr | cut -f2 | head -1`
+#}
 
 # vim
-alias vr="vim `find . -maxdepth 1 -type f -printf '%Ts\t%f\n' | sort -nr | cut -f2 | head -1`"
+#alias vr="vim `find . -maxdepth 1 -type f -printf '%Ts\t%f\n' | sort -nr | cut -f2 | head -1`"
 
 # I'm an idiot
-alias rm='rm -I'
+#alias rm='rm -I'
 
 # python virtualenvs
 #alias personal='export PYTHONSTARTUP=/home/cfahy/.pystartup; source ~/.virtualenv/personal/bin/activate'
@@ -41,7 +41,7 @@ alias pacmatic='sudo pacmatic'
 alias sudont='sudo $(fc -nl -1)'
 
 # xdg
-alias open='xdg-open'
+#alias open='xdg-open'
 
 # tools
 alias top='htop'
@@ -52,3 +52,6 @@ alias pi='ssh -t pi@musinformatics.ddns.net screen -RR'
 # NYU
 alias citygram='ssh citygram.smusic.nyu.edu'
 alias hpc='ssh cpf247@hpc.nyu.edu'
+
+# git
+alias gremaster='git stash && git fetch && git rebase origin/master && git stash pop'

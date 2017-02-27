@@ -50,11 +50,11 @@ fi
 function parse_git_branch {
   git branch --no-color 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }                                                                                                                                                             
-#Prompt
+#Prompt 
 export PS1="[\[\033[0;35m\]\t\[\033[0m\]] \u@\h:\[\033[0;36m\]\w\[\033[0m\] \[\033[0;33m\]\$(parse_git_branch) \n\[\033[0m\]$ "
 
 #Python Virtual Environment
-source ~/.virtualenv/venv3/bin/activate
+#source ~/.virtualenv/venv3/bin/activate
 
 #medleydb
 #export MEDLEYDB_PATH="/home/cfahy/medleydb/Database/"
@@ -65,7 +65,7 @@ declare -r PROMPT_COMMAND='printf %s "$PWD" > ~/.lastdir'
 cd "$(<~/.lastdir)"
 
 # Python
-export PYTHONSTARTUP=/home/colin/.pystartup
+#export PYTHONSTARTUP=/home/colin/.pystartup
 # matplotlib
 #export DYLD_FALLBACK_LIBRARY_PATH=/usr/local/Cellar/libpng/1.5.18/lib/:$DYLD_FALLBACK_LIBRARY_PATH
 
@@ -74,4 +74,8 @@ export PYTHONSTARTUP=/home/colin/.pystartup
 #. /home/colin/packages/torch/install/bin/torch-activate
 
 # Python
-export PATH="/home/colin/miniconda3/bin:$PATH"
+#export PATH="/home/colin/miniconda3/bin:$PATH"
+
+if [ -f ~/.localrc ]; then
+    . ~/.localrc
+fi

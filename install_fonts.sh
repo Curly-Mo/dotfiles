@@ -1,6 +1,10 @@
 #!/bin/bash
-# Create symlinks in $HOME using GNU stow
 
-git clone https://github.com/powerline/fonts.git ~/packages/fonts
-cd ~/packages/fonts
+read -p "Please enter location to install fonts: (default: ~/packages/fonts)" fonts_dir
+[ -z "${fonts_dir}" ] && fonts_dir='~/packages/fonts'
+echo "Downloading fonts into {$fonts_dir}..."
+
+git clone https://github.com/powerline/fonts.git ${fonts_dir}
+echo "Installing fonts from {$fonts_dir}..."
+cd ${fonts_dir}
 ./install.sh

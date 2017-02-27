@@ -41,10 +41,13 @@ zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, defer:2
 zplug "horosgrisa/autoenv"
 
 # Update self
-zplug "zplug/zplug"
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # Source plugins and add commands to $PATH
 zplug load
+
+autoload -U colors && colors
+setopt promptsubst
 
 # Alias definitions
 if [ -f ~/.aliases ]; then
@@ -53,25 +56,27 @@ fi
 
 # vim-mode
 bindkey -v
-bindkey '^R' history-incremental-pattern-search-backward
+bindkey '^R' history-incremental-search-backward
 bindkey '^[[A' up-line-or-search
 bindkey '^[[B' down-line-or-search
 
 #Python Virtual Environment
-export PYTHONSTARTUP=/home/colin/.pystartup
+#export PYTHONSTARTUP=/home/colin/.pystartup
 # Hack to stop conda from fucking up my ps1
-export CONDA_PS1_BACKUP="$PS1"
+#export CONDA_PS1_BACKUP="$PS1"
 #source ~/.virtualenv/venv3/bin/activate
 # AutoEnv
 # source /usr/share/autoenv-git/activate.sh
-export LD_LIBRARY_PATH="/usr/lib:$LD_LIBRARY_PATH"
+#export LD_LIBRARY_PATH="/usr/lib:$LD_LIBRARY_PATH"
 
 # Fn navigation keys
 bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
 
 # Welcome message
-#fortune showerthoughts
+if [[ -o login ]]; then
+  fortune showerthoughts
+fi
 
 # torch7
 #. /home/colin/packages/torch/install/bin/torch-activate
@@ -87,3 +92,8 @@ bindkey  "\e[H"   beginning-of-line
 bindkey  "\e[F"   end-of-line
 bindkey  "\e[3~"  delete-char
 bindkey  "\e[2~"  overwrite-mode
+
+
+if [ -f ~/.localrc ]; then
+    . ~/.localrc
+fi
