@@ -3,8 +3,10 @@
 # various
 alias grep="grep --color=always"
 alias ..="cd .."
-alias vim="nvim"
 alias vi="vim"
+if hash nvim 2>/dev/null; then
+    alias vim="nvim"
+fi
 
 # ls
 alias ls='gls -Gh --color=auto --group-directories-first'

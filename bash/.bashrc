@@ -60,6 +60,7 @@ export PS1="[\[\033[0;35m\]\t\[\033[0m\]] \u@\h:\[\033[0;36m\]\w\[\033[0m\] \[\0
 #export MEDLEYDB_PATH="/home/cfahy/medleydb/Database/"
 
 #Store last directory
+mkdir -p $HOME/.lastdir
 declare -r PROMPT_COMMAND='printf %s "$PWD" > ~/.lastdir'
 #Init in last directory
 cd "$(<~/.lastdir)"

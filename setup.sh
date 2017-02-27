@@ -28,3 +28,5 @@ $HOME/.tmux/plugins/tpm/bin/install_plugins
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ${script_dir}/simple_symlinks.sh
+
+mkdir -p ${HOME}/.lastdir
