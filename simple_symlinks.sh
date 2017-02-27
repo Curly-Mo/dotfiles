@@ -21,7 +21,7 @@ for d in $dotdirs ; do
             echo ${dest}
             mkdir -p ${dir}
             ln -s ${f} ${dest} 2>/dev/null
-            if $!; then
+            if [ $? -ne 0 ]; then
                 actual=$(readlink -f -- ${dest} 2>/dev/null || realpath ${dest})
                 if [ "${actual}" = ${f} ]; then
 					echo Already linked
