@@ -29,4 +29,8 @@ $HOME/.tmux/plugins/tpm/bin/install_plugins
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ${script_dir}/simple_symlinks.sh
 
-mkdir -p ${HOME}/.lastdir
+# Make necessary directories
+touch $HOME/.lastdir
+mkdir -p $HOME/.vim/tmp/backup
+mkdir -p $HOME/.vim/tmp/swap
+mkdir -p $HOME/.vim/tmp/undo
