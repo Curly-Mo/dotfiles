@@ -5,10 +5,7 @@ git clone https://github.com/zplug/zplug $ZPLUG_HOME
 source $ZPLUG_HOME/init.zsh
 # Install plugins if there are plugins that have not been installed
 if ! zplug check --verbose; then
-    printf "Install zplug plugins? [y/N]: "
-    if read -q; then
-        echo; zplug install
-    fi
+    echo; zplug install
 fi
 
 if hash nvim 2>/dev/null; then
