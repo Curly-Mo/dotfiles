@@ -6,9 +6,10 @@ echo "Installing zplug into $ZPLUG_HOME..."
 git clone https://github.com/zplug/zplug $ZPLUG_HOME
 source $ZPLUG_HOME/init.zsh
 # Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    echo; zplug install
-fi
+#if ! zplug check --verbose; then
+    #echo
+    zplug install
+#fi
 
 if hash nvim 2>/dev/null; then
     echo "Installing vim-plug (for neovim)..."
@@ -36,6 +37,6 @@ mkdir -p $HOME/.vim/tmp/undo
 
 mkdir -p $(dirname ${script_dir}/logs/haskell.log)
 echo 'sudo required if you want to install haskell tools'
-sudo -i && ${script_dir}/haskell_git_prompt.sh >> ${script_dir}/logs/haskell.log 2>&1 &
+sudo echo Thanks && ${script_dir}/haskell_git_prompt.sh >> ${script_dir}/logs/haskell.log 2>&1 &
 
 echo Make sure zsh is working properly, then \`chsh -s \$\(which zsh\)\`
