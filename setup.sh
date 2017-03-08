@@ -34,6 +34,7 @@ mkdir -p $HOME/.vim/tmp/swap
 mkdir -p $HOME/.vim/tmp/undo
 
 mkdir -p $(dirname ${script_dir}/logs/haskell.log)
-${script_dir}/haskell_git_prompt.sh >> ${script_dir}/logs/haskell.log 2>&1 &
+echo 'sudo required if you want to install haskell tools'
+sudo -i && ${script_dir}/haskell_git_prompt.sh >> ${script_dir}/logs/haskell.log 2>&1 &
 
 echo Make sure zsh is working properly, then \`chsh -s \$\(which zsh\)\`
