@@ -5,11 +5,6 @@ read REPLY
 echo "Installing zplug into $ZPLUG_HOME..."
 git clone https://github.com/zplug/zplug $ZPLUG_HOME
 source $ZPLUG_HOME/init.zsh
-# Install plugins if there are plugins that have not been installed
-#if ! zplug check --verbose; then
-    #echo
-    zplug install
-#fi
 
 if hash nvim 2>/dev/null; then
     echo "Installing vim-plug (for neovim)..."
@@ -28,6 +23,13 @@ $HOME/.tmux/plugins/tpm/bin/install_plugins
 
 script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 ${script_dir}/simple_symlinks.sh
+
+source $HOME/.zshrc
+# Install plugins if there are plugins that have not been installed
+if ! zplug check --verbose; then
+    echo
+    zplug install
+fi
 
 # Make necessary directories
 touch $HOME/.lastdir
