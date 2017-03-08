@@ -26,10 +26,10 @@ ${script_dir}/simple_symlinks.sh
 
 source $HOME/.zshrc
 # Install plugins if there are plugins that have not been installed
-if ! zplug check --verbose; then
-    echo
+#if ! zplug check --verbose; then
+    echo installing zplugins
     zplug install
-fi
+#fi
 
 # Make necessary directories
 touch $HOME/.lastdir
