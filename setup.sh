@@ -1,5 +1,6 @@
 #!/bin/zsh
-read -p "Please enter location to install zplug: (default: $HOME/packages/zplug)" ZPLUG_HOME
+echo -n "Please enter location to install zplug: (default: $HOME/packages/zplug)"
+read REPLY
 [ -z "${ZPLUG_HOME}" ] && ZPLUG_HOME="${HOME}/packages/zplug"
 echo "Installing zplug into $ZPLUG_HOME..."
 git clone https://github.com/zplug/zplug $ZPLUG_HOME
