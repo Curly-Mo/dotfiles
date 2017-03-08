@@ -1,3 +1,4 @@
+#!/bin/zsh
 read -p "Please enter location to install zplug: (default: $HOME/packages/zplug)" ZPLUG_HOME
 [ -z "${ZPLUG_HOME}" ] && ZPLUG_HOME="${HOME}/packages/zplug"
 echo "Installing zplug into $ZPLUG_HOME..."
@@ -31,3 +32,8 @@ touch $HOME/.lastdir
 mkdir -p $HOME/.vim/tmp/backup
 mkdir -p $HOME/.vim/tmp/swap
 mkdir -p $HOME/.vim/tmp/undo
+
+mkdir -p $(dirname ${script_dir}/logs/haskell.log)
+${script_dir}/haskell_git_prompt.sh >> ${script_dir}/logs/haskell.log 2>&1 &
+
+echo Make sure zsh is working properly, then \`chsh -s \$\(which zsh\)\`
