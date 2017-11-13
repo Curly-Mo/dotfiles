@@ -1,4 +1,5 @@
 export VISUAL="vim"
+export EDITOR="vim"
 
 # Ruby
 #PATH="$(ruby -e 'print Gem.user_dir')/bin:$PATH"

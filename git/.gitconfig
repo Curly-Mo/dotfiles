@@ -1,6 +1,3 @@
-[user]
-	name = Colin Fahy
-	email = colin@cfahy.com
 [diff]
 	tool = vimdiff
 [difftool]
@@ -13,3 +10,5 @@
 	default = simple
 [credential]
 	helper = cache --timeout=2600000
+[include]
+  path = ~/.gituser

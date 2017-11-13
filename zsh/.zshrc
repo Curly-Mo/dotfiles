@@ -57,8 +57,8 @@ fi
 # vim-mode
 bindkey -v
 bindkey '^R' history-incremental-search-backward
-bindkey '^[[A' up-line-or-search
-bindkey '^[[B' down-line-or-search
+#bindkey '^[[A' up-line-or-search
+#bindkey '^[[B' down-line-or-search
 
 #Python Virtual Environment
 #export PYTHONSTARTUP=/home/colin/.pystartup
@@ -75,7 +75,7 @@ bindkey "^[[8~" end-of-line
 
 # Welcome message
 if [[ -o login ]]; then
-  fortune showerthoughts
+  fortune showerthoughts | lolcat
 fi
 
 # torch7
