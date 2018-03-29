@@ -97,3 +97,7 @@ bindkey  "\e[2~"  overwrite-mode
 if [ -f ~/.localrc ]; then
     . ~/.localrc
 fi
+
+if [ -f ~/.zsh_functions ]; then
+    . ~/.zsh_functions
+fi

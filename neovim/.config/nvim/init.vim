@@ -44,6 +44,8 @@ Plug 'wellle/targets.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'universal-ctags/ctags'
 Plug 'derekwyatt/vim-scala'
+Plug 'tweekmonster/impsort.vim'
+" Plug 'python-mode/python-mode'
 call plug#end()
 
 " Colors
@@ -131,6 +133,9 @@ nnoremap <C-S-RIGHT> <C-W><C-L>
 nnoremap <C-S-UP> <C-W><C-K>
 nnoremap <C-S-DOWN> <C-W><C-J>
 
+" status
+set shortmess=a
+
 """"""PLUGINS"""""""
 
 " " Neomake
@@ -146,7 +151,10 @@ nnoremap <C-S-DOWN> <C-W><C-J>
 
 " Ale
 let g:ale_completion_enabled = 1
+let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_insert_leave = 1
+let g:ale_lint_on_save = 1
+let g:ale_sign_column_always = 1
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠'
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
@@ -182,8 +190,12 @@ let g:deoplete#enable_at_startup = 1
 "autocmd VimEnter * inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
 "inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 "inoremap <silent><expr><CR> pumvisible() ? deoplete#mappings#close_popup()."\<CR>" : "\<CR>"
+let g:deoplete#omni#input_patterns = {}
+"let g:deoplete#omni#input_patterns.scala='[^. *\t]\.\w*'
 
 " nvim Completion Manager
+let g:cm_smart_enable=0
+imap <C-Tab> let g:cm_smart_enable=0<CR>
 autocmd VimEnter * inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
 inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
 set shortmess+=c
@@ -220,6 +232,7 @@ au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " Ensime
 autocmd BufWritePost *.scala silent :EnTypeCheck
 au FileType scala nnoremap <localleader>dt :EnType<CR>
+au FileType scala nnoremap <localleader>ds :EnTypeCheck<CR>
 au FileType scala nnoremap <localleader>df :EnDeclarationSplit v<CR>
 au FileType scala nnoremap <localleader>dd :EnDocBrowse<CR>
 au FileType scala nnoremap <localleader>0 :EnSuggestImport<CR>
@@ -263,8 +276,17 @@ nnoremap <localleader>ll :Neoformat<CR>
 let g:neoformat_enabled_scala = ['scalafmt']
 let g:neoformat_scala_scalafmt = {
             \ 'exe': 'scalafmt',
-            \ 'args': ['--stdin 2>/dev/null'],
+            \ 'args': ['--stdin 2>/dev/null --config-str "maxColumn=101"'],
             \ 'stdin': 1, 
+            \ }
+let g:neoformat_enabled_python = ['yapf', 'autopep8']
+let g:neoformat_python_autopep8 = {
+            \ 'exe': 'autopep8',
+            \ 'args': ['--max-line-length 120'],
+            \ }
+let g:neoformat_python_yapf = {
+            \ 'exe': 'yapf',
+            \ 'args': ["--style='{based_on_style: google, column_limit: 120, split_arguments_when_comma_terminated: true}'"],
             \ }
 
 " Rainbow Parens
@@ -308,3 +330,6 @@ call camelcasemotion#CreateMotionMappings('<leader>')
 
 " ctags
 nnoremap <C-]> :execute "ptag " . expand("<cword>")<CR>
+
+" pymode
+"let g:pymode_rope_autoimport=1
