@@ -56,6 +56,7 @@ fi
 
 # vim-mode
 bindkey -v
+export KEYTIMEOUT=1
 bindkey '^R' history-incremental-search-backward
 #bindkey '^[[A' up-line-or-search
 #bindkey '^[[B' down-line-or-search
@@ -101,3 +102,8 @@ fi
 if [ -f ~/.zsh_functions ]; then
     . ~/.zsh_functions
 fi
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

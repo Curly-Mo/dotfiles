@@ -1,4 +1,4 @@
-upto ()
+up()
 {
   if [ -z "$1" ]; then
     echo "Usage: upto [directory]";
@@ -8,7 +8,7 @@ upto ()
   cd "${PWD/\/$upto\/*//$upto}"
 }
 
-_upto()
+_up()
 {
   local cur=${COMP_WORDS[COMP_CWORD]}
   local d=${PWD//\//\ }
@@ -17,11 +17,15 @@ _upto()
 complete -F _upto upto
 
 # Jump down to first matching subdirectory
-dto() {
+down() {
   if [ -z "$1" ]; then
     echo "Usage: jd [directory]";
     return 1
   else
     cd **/$@([1])
   fi  
+}
+
+ppgrep() {
+  pgrep -f "$@" | xargs ps -efp;
 }

@@ -79,3 +79,6 @@ cd "$(<~/.lastdir)"
 if [ -f ~/.localrc ]; then
     . ~/.localrc
 fi
+
+# vi-mode
+set -o vi

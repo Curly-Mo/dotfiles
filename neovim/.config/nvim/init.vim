@@ -1,5 +1,12 @@
 " Load plugins with vim-plug
 call plug#begin('~/.config/nvim/plugged')
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-speeddating'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-unimpaired'
 " Plug 'neomake/neomake'
 Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 Plug 'zchee/deoplete-jedi'
@@ -7,12 +14,9 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'romainl/Apprentice'
 Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentice-airline' }
-Plug 'tpope/vim-surround'
-Plug 'tpope/vim-obsession'
 Plug 'artur-shaik/vim-javacomplete2'
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
-Plug 'tpope/vim-fugitive'
 "Plug 'chriskempson/base16-vim'
 Plug 'haya14busa/incsearch.vim'
 Plug 'nathanaelkane/vim-indent-guides'
@@ -33,9 +37,6 @@ Plug 'vim-scripts/L9'
 Plug 'vim-scripts/FuzzyFinder'
 Plug 'airblade/vim-gitgutter'
 Plug 'justinmk/vim-sneak'
-Plug 'tpope/vim-commentary'
-Plug 'tpope/vim-speeddating'
-Plug 'tpope/vim-repeat'
 Plug 'roxma/nvim-completion-manager'
 Plug 'w0rp/ale'
 Plug 'sheerun/vim-polyglot'
@@ -45,7 +46,15 @@ Plug 'bkad/CamelCaseMotion'
 Plug 'universal-ctags/ctags'
 Plug 'derekwyatt/vim-scala'
 Plug 'tweekmonster/impsort.vim'
-" Plug 'python-mode/python-mode'
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'lervag/vimtex'
+Plug 'NLKNguyen/vim-maven-syntax'
+Plug 'mechatroner/rainbow_csv'
+" Needed for vim_clang_format
+Plug 'kana/vim-operator-user'
+Plug 'rhysd/vim-clang-format'
+Plug 'plytophogy/vim-diffchanges'
+Plug 'editorconfig/editorconfig-vim'
 call plug#end()
 
 " Colors
@@ -159,6 +168,7 @@ let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠'
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+nmap <S-L> <Plug>(ale_fix)
 let g:ale_echo_msg_error_str = '✖'
 let g:ale_echo_msg_warning_str = '⚠'
 let g:ale_echo_msg_format = '%s [%linter%] %severity%'
@@ -166,15 +176,30 @@ highlight ALEErrorSign ctermfg=196
 highlight ALEWarningSign ctermbg=None ctermfg=227
 let g:ale_linters = {
 \   'python': ['flake8', 'pyflakes'],
+\   'java': ['checkstyle'],
 \}
+let g:ale_fixers = {
+\   'python': ['yapf'],
+\   'java': ['google_java_format', 'remove_trailing_lines', 'trim_whitespace'],
+\}
+let g:ale_python_yapf_options = "--style='{based_on_style: google, column_limit: 120, split_arguments_when_comma_terminated: true}'"
+augroup FiletypeGroup
+  autocmd!
+  au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
+augroup END
+let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
+let g:ale_linter_aliases = {'jsx': 'css'}
 
 " Airline
 let g:airline_powerline_fonts = 1
 "let g:airline_theme='simple'
 let g:airline_theme='apprentice'
-
-let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
-let g:airline_section_b = airline#section#create(['hunks', 'branch'])
+let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_min_count = 2
+let g:airline#extensions#tabline#buf_min_count = 2
+" let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
+" let g:airline_section_b = airline#section#create(['hunks'])
 
 "" Deoplete
 let g:deoplete#enable_at_startup = 1
@@ -202,8 +227,8 @@ set shortmess+=c
 " Forward deoplete to NCM
 " register as ncm source
 au User CmSetup call cm#register_source({'name' : 'deoplete',
-        \ 'priority': 7,  
-        \ 'abbreviation': '', 
+        \ 'priority': 7,
+        \ 'abbreviation': '',
         \ })
 " hack deoplete's mapping
 inoremap <silent> <Plug>_ <C-r>=g:Deoplete_ncm()<CR>
@@ -215,15 +240,17 @@ endfunc
 
 " Java
 let g:JavaComplete_JavaCompiler="/usr/bin/javac"
+let g:JavaComplete_StaticImportsAtTop = 1
+let g:JavaComplete_ClasspathGenerationOrder = ['Maven', 'Eclipse', 'Gradle']
 autocmd FileType java setlocal omnifunc=javacomplete#Complete
-nmap <F4> <Plug>(JavaComplete-Imports-AddSmart)
-imap <F4> <Plug>(JavaComplete-Imports-AddSmart)
-nmap <F5> <Plug>(JavaComplete-Imports-Add)
-imap <F5> <Plug>(JavaComplete-Imports-Add)
-nmap <F6> <Plug>(JavaComplete-Imports-AddMissing)
-imap <F6> <Plug>(JavaComplete-Imports-AddMissing)
-nmap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
-imap <F7> <Plug>(JavaComplete-Imports-RemoveUnused)
+nmap <localleader>4 <Plug>(JavaComplete-Imports-AddSmart)
+imap <localleader>4 <Plug>(JavaComplete-Imports-AddSmart)
+nmap <localleader>5 <Plug>(JavaComplete-Imports-Add)
+imap <localleader>5 <Plug>(JavaComplete-Imports-Add)
+nmap <localleader>6 <Plug>(JavaComplete-Imports-AddMissing)
+imap <localleader>6 <Plug>(JavaComplete-Imports-AddMissing)
+nmap <localleader>7 <Plug>(JavaComplete-Imports-RemoveUnused)
+imap <localleader>7 <Plug>(JavaComplete-Imports-RemoveUnused)
 
 " Scala
 let g:scala_scaladoc_indent = 1
@@ -231,11 +258,13 @@ let g:scala_sort_across_groups = 1
 au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " Ensime
 autocmd BufWritePost *.scala silent :EnTypeCheck
-au FileType scala nnoremap <localleader>dt :EnType<CR>
-au FileType scala nnoremap <localleader>ds :EnTypeCheck<CR>
-au FileType scala nnoremap <localleader>df :EnDeclarationSplit v<CR>
-au FileType scala nnoremap <localleader>dd :EnDocBrowse<CR>
-au FileType scala nnoremap <localleader>0 :EnSuggestImport<CR>
+" autocmd BufWritePost *java silent :EnTypeCheck
+au FileType scala,java nnoremap <localleader>dt :EnType<CR>
+au FileType scala,java nnoremap <localleader>ds :EnTypeCheck<CR>
+au FileType scala,java nnoremap <localleader>df :EnDeclarationSplit v<CR>
+au FileType scala,java nnoremap <localleader>dd :EnDocBrowse<CR>
+au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
+au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
 
 " Tagbar
 map <C-l> :TagbarToggle<CR>
@@ -266,18 +295,28 @@ let g:netrw_altv = 1
 let g:netrw_winsize = 18
 
 " Neoformat
-nnoremap <localleader>ll :Neoformat<CR>
-"let g:neoformat_enabled_java = ['google']
-"let g:neoformat_java_google = {
-"            \ 'exe': 'java',
-"            \ 'args': ['-jar /usr/local/bin/google-java-format -'],
-"            \ 'stdin': 1, 
-"            \ }
+" noremap <localleader>ll :Neoformat<CR>
+let g:neoformat_enabled_java = ['uncrustify', 'clang_format', 'google']
+let g:neoformat_java_clang_format = {
+            \ 'exe': '/usr/local/bin/clang-format',
+            \ 'args': ["--style='/Users/colinfahy/.clang-format'"],
+            \ 'stdin': 1,
+            \ }
+let g:neoformat_java_google = {
+            \ 'exe': '/usr/local/bin/google-java-format',
+            \ 'args': ['-'],
+            \ 'stdin': 1,
+            \ }
+let g:neoformat_java_uncrustify = {
+            \ 'exe': '/usr/local/bin/uncrustify',
+            \ 'args': ['-q', '-l JAVA', '-c /Users/colinfahy/.uncrustify'],
+            \ 'stdin': 1,
+            \ }
 let g:neoformat_enabled_scala = ['scalafmt']
 let g:neoformat_scala_scalafmt = {
             \ 'exe': 'scalafmt',
             \ 'args': ['--stdin 2>/dev/null --config-str "maxColumn=101"'],
-            \ 'stdin': 1, 
+            \ 'stdin': 1,
             \ }
 let g:neoformat_enabled_python = ['yapf', 'autopep8']
 let g:neoformat_python_autopep8 = {
@@ -333,3 +372,24 @@ nnoremap <C-]> :execute "ptag " . expand("<cword>")<CR>
 
 " pymode
 "let g:pymode_rope_autoimport=1
+
+" codefmt
+nnoremap <localleader>ll :FormatCode<CR>
+vnoremap <localleader>ll :FormatLines<CR>
+au FileType java nnoremap <localleader>ll :FormatCode clang-format<CR>
+au FileType java vnoremap <localleader>ll :FormatLines clang-format<CR>
+" Glaive
+call glaive#Install()
+" Glaive codefmt clang_format_style='{BasedOnStyle: Google, ColumnLimit: 100, BinPackParameters: true, AllowAllParametersOfDeclarationOnNextLine: false, ExperimentalAutoDetectBinPacking: true, AlignAfterOpenBracket: Align}'
+
+" vim_clang_format
+let g:clang_format#code_style='google'
+
+" rainbow csv
+nnoremap <localleader>csv :RainbowDelim<CR>
+
+" vimdiff
+highlight DiffAdd    cterm=bold ctermfg=231 ctermbg=103
+highlight DiffDelete cterm=bold ctermfg=231 ctermbg=103
+highlight DiffChange cterm=bold ctermfg=231 ctermbg=103
+highlight DiffText   cterm=bold ctermfg=231 ctermbg=131
