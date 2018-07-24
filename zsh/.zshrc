@@ -1,3 +1,6 @@
+# custom shell functions
+fpath+=~/.zfunc
+
 # tmux
 if [[ -z "$TMUX" ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
@@ -21,27 +24,27 @@ zplug "~/dotfiles", from:local, use:"zsh/.zsh_theme"
 # Load Oh My Zsh Libs
 zplug "lib/history", from:oh-my-zsh
 zplug "lib/directories", from:oh-my-zsh
-zplug "lib/prompt_info_functions", from:oh-my-zsh
+# zplug "lib/prompt_info_functions", from:oh-my-zsh
 zplug "lib/completion", from:oh-my-zsh
 # Load Oh My Zsh Plugins
 #zplug "plugins/git", from:oh-my-zsh, nice:10
-zplug "plugins/vi-mode", from:oh-my-zsh
+# zplug "plugins/vi-mode", from:oh-my-zsh
 #zplug "plugins/archlinux", from:oh-my-zsh
 zplug "plugins/last-working-dir", from:oh-my-zsh
-zplug "plugins/cp", from:oh-my-zsh
+# zplug "plugins/cp", from:oh-my-zsh
 # Python Plugins
 #zplug "plugins/pip", from:oh-my-zsh
 #zplug "plugins/python", from:oh-my-zsh
 #zplug "plugins/virtualenv", from:oh-my-zsh
-#zplug "plugins/pyenv", from:oh-my-zsh
+zplug "plugins/pyenv", from:oh-my-zsh
 # Other Plugins
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 #zplug "rupa/z", use:z.sh
 zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, defer:2
-zplug "horosgrisa/autoenv"
+# zplug "horosgrisa/autoenv"
 
 # Update self
-zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+# zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
 # Source plugins and add commands to $PATH
 zplug load
@@ -106,4 +109,4 @@ fi
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

@@ -2,14 +2,14 @@
 call plug#begin('~/.vim/plugged')
 "Plug 'chriskempson/base16-vim'
 "Plug 'romainl/Apprentice'
-Plug 'scrooloose/syntastic'
+" Plug 'scrooloose/syntastic'
 Plug 'haya14busa/incsearch.vim'
 "Plug 'Valloric/YouCompleteMe', { 'do': './install.py' }
 "Plug 'nathanaelkane/vim-indent-guides'
 "Plug 'vim-airline/vim-airline'
 "Plug 'SirVer/ultisnips'
 "Plug 'honza/vim-snippets'
-Plug 'mattn/emmet-vim'
+" Plug 'mattn/emmet-vim'
 call plug#end()
 
 " Colors
@@ -69,20 +69,20 @@ set undofile
 
 
 " Syntastic
-highlight SignColumn ctermbg=16
-highlight SyntasticStyleErrorSign ctermfg=7 ctermbg=15
-highlight SyntasticError ctermbg=7
-set statusline+=%#warningmsg#
-set statusline+=%{SyntasticStatuslineFlag()}
-set statusline+=%*
-let g:syntastic_always_populate_loc_list = 1
-let g:syntastic_auto_loc_list = 0
-let g:syntastic_check_on_open = 0
-let g:syntastic_check_on_wq = 0
-let g:syntastic_python_checkers = ['pylint']
-let g:syntastic_javascript_checkers = ['eslint']
-let g:syntastic_html_checkers = ['eslint']
-let g:syntastic_css_checkers = ['stylelint']
+" highlight SignColumn ctermbg=16
+" highlight SyntasticStyleErrorSign ctermfg=7 ctermbg=15
+" highlight SyntasticError ctermbg=7
+" set statusline+=%#warningmsg#
+" set statusline+=%{SyntasticStatuslineFlag()}
+" set statusline+=%*
+" let g:syntastic_always_populate_loc_list = 1
+" let g:syntastic_auto_loc_list = 0
+" let g:syntastic_check_on_open = 0
+" let g:syntastic_check_on_wq = 0
+" let g:syntastic_python_checkers = ['pylint']
+" let g:syntastic_javascript_checkers = ['eslint']
+" let g:syntastic_html_checkers = ['eslint']
+" let g:syntastic_css_checkers = ['stylelint']
 
 " YouCompleteMe
 "let g:ycm_python_binary_path = '/usr/bin/python3'
@@ -93,3 +93,9 @@ let g:syntastic_css_checkers = ['stylelint']
 "let g:indent_guides_guides_size = 1
 "hi IndentGuidesEven ctermbg=238
 "hi IndentGuidesOdd ctermbg=236
+
+" vimdiff
+highlight DiffAdd    cterm=bold ctermfg=231 ctermbg=103
+highlight DiffDelete cterm=bold ctermfg=231 ctermbg=103
+highlight DiffChange cterm=bold ctermfg=231 ctermbg=103
+highlight DiffText   cterm=bold ctermfg=231 ctermbg=131

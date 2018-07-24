@@ -1,2 +1,3 @@
 [[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
 urxvtd --quiet --opendisplay --fork
+setxkbmap -option caps:escape

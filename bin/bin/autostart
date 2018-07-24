@@ -1,3 +1,9 @@
-#!/bin/sh
-urxvtc &
-libinput-gestures &
+#!/bin/bash
+(sleep 2s && urxvt) &
+
+# jack and it's dependencies
+# /usr/bin/cadence-session-start --system-start
+# /home/colin/bin/discover_daily
+/usr/bin/snapclient -s pulse &
+# screensaver
+/home/colin/bin/myscreensaver

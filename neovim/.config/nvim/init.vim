@@ -8,8 +8,8 @@ Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 " Plug 'neomake/neomake'
-Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-Plug 'zchee/deoplete-jedi'
+" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'zchee/deoplete-jedi'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'romainl/Apprentice'
@@ -20,8 +20,8 @@ Plug 'godlygeek/tabular'
 "Plug 'chriskempson/base16-vim'
 Plug 'haya14busa/incsearch.vim'
 Plug 'nathanaelkane/vim-indent-guides'
-Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'SirVer/ultisnips'
+" Plug 'honza/vim-snippets'
 "Plug 'mattn/emmet-vim'
 Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -30,7 +30,7 @@ Plug 'google/vim-maktaba'
 Plug 'google/vim-glaive'
 Plug 'google/vim-codefmt'
 Plug 'sbdchd/neoformat'
-Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins' }
+Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins', 'for': ['scala', 'java'] }
 Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
 Plug 'vim-scripts/L9'
@@ -54,7 +54,9 @@ Plug 'mechatroner/rainbow_csv'
 Plug 'kana/vim-operator-user'
 Plug 'rhysd/vim-clang-format'
 Plug 'plytophogy/vim-diffchanges'
-Plug 'editorconfig/editorconfig-vim'
+" Plug 'editorconfig/editorconfig-vim'
+Plug 'raimon49/requirements.txt.vim'
+Plug 'ambv/black'
 call plug#end()
 
 " Colors
@@ -175,9 +177,11 @@ let g:ale_echo_msg_format = '%s [%linter%] %severity%'
 highlight ALEErrorSign ctermfg=196
 highlight ALEWarningSign ctermbg=None ctermfg=227
 let g:ale_linters = {
-\   'python': ['flake8', 'pyflakes'],
+\   'python': ['flake8', 'pylint'],
 \   'java': ['checkstyle'],
+\   'jsx': ['stylelint', 'eslint'],
 \}
+let g:ale_python_flake8_options = "--max-line-length=120"
 let g:ale_fixers = {
 \   'python': ['yapf'],
 \   'java': ['google_java_format', 'remove_trailing_lines', 'trim_whitespace'],
@@ -187,7 +191,6 @@ augroup FiletypeGroup
   autocmd!
   au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
 augroup END
-let g:ale_linters = {'jsx': ['stylelint', 'eslint']}
 let g:ale_linter_aliases = {'jsx': 'css'}
 
 " Airline
@@ -202,21 +205,21 @@ let g:airline#extensions#tabline#buf_min_count = 2
 " let g:airline_section_b = airline#section#create(['hunks'])
 
 "" Deoplete
-let g:deoplete#enable_at_startup = 1
-"set completeopt-=preview
-"" set python bin
-""let g:python_host_prog = '/home/colin/miniconda3/envs/py2/bin/python'
-""let g:python3_host_prog = '/home/colin/miniconda3/envs/py3/bin/python'
-""let g:python_host_prog = '/usr/local/bin/python'
-""let g:python_host_prog = '/Users/colinfahy/anaconda3/bin/python3'
-"let g:python_host_prog = '/Users/colinfahy/anaconda3/envs/py2/bin/python'
-"let g:python3_host_prog = '/Users/colinfahy/anaconda3/envs/py3/bin/python'
-"let g:deoplete#sources#jedi#python_path = '/usr/local/bin/python'
-"autocmd VimEnter * inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
-"inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-"inoremap <silent><expr><CR> pumvisible() ? deoplete#mappings#close_popup()."\<CR>" : "\<CR>"
-let g:deoplete#omni#input_patterns = {}
-"let g:deoplete#omni#input_patterns.scala='[^. *\t]\.\w*'
+"let g:deoplete#enable_at_startup = 1
+""set completeopt-=preview
+""" set python bin
+"""let g:python_host_prog = '/home/colin/miniconda3/envs/py2/bin/python'
+"""let g:python3_host_prog = '/home/colin/miniconda3/envs/py3/bin/python'
+"""let g:python_host_prog = '/usr/local/bin/python'
+"""let g:python_host_prog = '/Users/colinfahy/anaconda3/bin/python3'
+""let g:python_host_prog = '/Users/colinfahy/anaconda3/envs/py2/bin/python'
+""let g:python3_host_prog = '/Users/colinfahy/anaconda3/envs/py3/bin/python'
+""let g:deoplete#sources#jedi#python_path = '/usr/local/bin/python'
+""autocmd VimEnter * inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
+""inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+""inoremap <silent><expr><CR> pumvisible() ? deoplete#mappings#close_popup()."\<CR>" : "\<CR>"
+"let g:deoplete#omni#input_patterns = {}
+""let g:deoplete#omni#input_patterns.scala='[^. *\t]\.\w*'
 
 " nvim Completion Manager
 let g:cm_smart_enable=0
@@ -376,6 +379,8 @@ nnoremap <C-]> :execute "ptag " . expand("<cword>")<CR>
 " codefmt
 nnoremap <localleader>ll :FormatCode<CR>
 vnoremap <localleader>ll :FormatLines<CR>
+au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
+au FileType python vnoremap <localleader>ll :FormatLines yapf<CR>
 au FileType java nnoremap <localleader>ll :FormatCode clang-format<CR>
 au FileType java vnoremap <localleader>ll :FormatLines clang-format<CR>
 " Glaive
@@ -393,3 +398,7 @@ highlight DiffAdd    cterm=bold ctermfg=231 ctermbg=103
 highlight DiffDelete cterm=bold ctermfg=231 ctermbg=103
 highlight DiffChange cterm=bold ctermfg=231 ctermbg=103
 highlight DiffText   cterm=bold ctermfg=231 ctermbg=131
+
+" black
+let g:black_skip_string_normalization = 1
+let g:black_line_length = 120
