@@ -1,11 +1,11 @@
 up()
 {
   if [ -z "$1" ]; then
-    echo "Usage: upto [directory]";
+    echo "Usage: up [directory]";
     return
   fi
-  local upto=$1
-  cd "${PWD/\/$upto\/*//$upto}"
+  local up=$1
+  cd "${PWD/\/$up\/*//$up}"
 }
 
 _up()
@@ -14,7 +14,7 @@ _up()
   local d=${PWD//\//\ }
   COMPREPLY=( $( compgen -W "$d" -- "$cur" ) )
 }
-complete -F _upto upto
+complete -F _up up
 
 # Jump down to first matching subdirectory
 down() {
@@ -28,4 +28,15 @@ down() {
 
 ppgrep() {
   pgrep -f "$@" | xargs ps -efp;
+}
+
+attach() {
+  if [[ -z "$TMUX" ]] ;then
+    ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
+    if [[ -z "$ID" ]] ;then # if not available create a new one
+      tmux new-session
+    else
+      tmux attach-session -t "$ID" # if available attach to it
+    fi
+  fi
 }
