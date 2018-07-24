@@ -11,46 +11,52 @@ if [[ -z "$TMUX" ]] ;then
     fi
 fi
 
-# Load zplug
-export ZPLUG_HOME=~/packages/zplug
-source $ZPLUG_HOME/init.zsh
-export ZSH_CACHE_DIR=~/.cache/zsh
+# Load zplugin
+source ~/.zplugin/bin/zplugin.zsh
 
-#  Theme
-#zplug "themes/tonotdo", from:oh-my-zsh
-#zplug "~/.zsh_theme", from:local, defer:2
-zplug "~/dotfiles", from:local, use:"zsh/.zsh_theme"
-
+# Oh my zsh themes
+# zplugin ice wait"0" lucid
+# zplugin snippet OMZ::lib/git.zsh
+# zplugin ice wait"0" atload"unalias grv" lucid
+# zplugin snippet OMZ::plugins/git/git.plugin.zsh
+# Custom theme
+zplugin light _local/my_theme
 # Load Oh My Zsh Libs
-zplug "lib/history", from:oh-my-zsh
-zplug "lib/directories", from:oh-my-zsh
-# zplug "lib/prompt_info_functions", from:oh-my-zsh
-zplug "lib/completion", from:oh-my-zsh
+export ZSH_CACHE_DIR=~/.cache/zsh
+setopt promptsubst
+zplugin ice wait"0" lucid
+zplugin snippet OMZ::"lib/history.zsh"
+zplugin ice wait"0" lucid
+zplugin snippet OMZ::"lib/directories.zsh"
+zplugin ice wait"0" lucid
+zplugin snippet OMZ::"lib/prompt_info_functions.zsh"
+zplugin ice wait"0" lucid
+zplugin snippet OMZ::"lib/completion.zsh"
+zplugin ice wait"0" lucid
+# zplugin snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
 # Load Oh My Zsh Plugins
 #zplug "plugins/git", from:oh-my-zsh, nice:10
-# zplug "plugins/vi-mode", from:oh-my-zsh
-#zplug "plugins/archlinux", from:oh-my-zsh
-zplug "plugins/last-working-dir", from:oh-my-zsh
-# zplug "plugins/cp", from:oh-my-zsh
-# Python Plugins
-#zplug "plugins/pip", from:oh-my-zsh
-#zplug "plugins/python", from:oh-my-zsh
-#zplug "plugins/virtualenv", from:oh-my-zsh
-zplug "plugins/pyenv", from:oh-my-zsh
-# Other Plugins
-zplug "zsh-users/zsh-syntax-highlighting", defer:2
-#zplug "rupa/z", use:z.sh
-zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, defer:2
-# zplug "horosgrisa/autoenv"
+zplugin ice wait"0" lucid
+zplugin snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
+zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
+zplugin ice wait"0" lucid
+zplugin snippet OMZ::"plugins/pyenv/pyenv.plugin.zsh"
+zplugin ice pick"zshrc.sh"
+zplugin light olivierverdier/zsh-git-prompt
 
-# Update self
-# zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+# Plugins
+zplugin ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh"
+zplugin light trapd00r/LS_COLORS
 
-# Source plugins and add commands to $PATH
-zplug load
+zplugin ice wait"0" lucid blockf
+zplugin light zsh-users/zsh-completions
 
-autoload -U colors && colors
-setopt promptsubst
+zplugin ice wait"0" lucid atload"_zsh_autosuggest_start"
+zplugin light zsh-users/zsh-autosuggestions
+
+zplugin ice wait"0" lucid atinit"zpcompinit; zpcdreplay"
+zplugin light zdharma/fast-syntax-highlighting
+# End zplugin config
 
 # Alias definitions
 if [ -f ~/.aliases ]; then
@@ -64,15 +70,6 @@ bindkey '^R' history-incremental-search-backward
 #bindkey '^[[A' up-line-or-search
 #bindkey '^[[B' down-line-or-search
 
-#Python Virtual Environment
-#export PYTHONSTARTUP=/home/colin/.pystartup
-# Hack to stop conda from fucking up my ps1
-#export CONDA_PS1_BACKUP="$PS1"
-#source ~/.virtualenv/venv3/bin/activate
-# AutoEnv
-# source /usr/share/autoenv-git/activate.sh
-#export LD_LIBRARY_PATH="/usr/lib:$LD_LIBRARY_PATH"
-
 # Fn navigation keys
 bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
@@ -81,9 +78,6 @@ bindkey "^[[8~" end-of-line
 if [[ -o login ]]; then
   fortune showerthoughts | lolcat
 fi
-
-# torch7
-#. /home/colin/packages/torch/install/bin/torch-activate
 
 # setup special keys
 bindkey  "\e[1~"  beginning-of-line
