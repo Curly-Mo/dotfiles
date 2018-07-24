@@ -4,13 +4,15 @@
 #Must install: https://github.com/olivierverdier/zsh-git-prompt#haskell-optional
 #GIT_PROMPT_EXECUTABLE="haskell"
 
+VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]% %{$reset_color%}"
+
 PROMPT='
 $(_timestamp) $(_virtualenv_prompt_info)$(_user_host)${_current_dir}$(_ruby_version)
 %{$fg[$CARETCOLOR]%}▶%{$resetcolor%} '
 
 PROMPT2='%{$fg[$CARETCOLOR]%}◀%{$reset_color%} '
 
-RPROMPT='$(_vi_status)%{$(echotc UP 1)%}$(_git_time_since_commit) $(git_super_status) ${_return_status}%{$(echotc DO 1)%}'
+RPROMPT='%{$(echotc UP 1)%} ${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $(_git_time_since_commit) $(git_super_status) ${_return_status}%{$(echotc DO 1)%}'
 
 _current_dir="%F{030}%7~%{$reset_color%} "
 _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
@@ -40,11 +42,11 @@ function _user_host() {
   fi
 }
 
-function _vi_status() {
-  if {echo $fpath | grep -q "plugins/vi-mode"}; then
-    echo "$(vi_mode_prompt_info)"
-  fi
-}
+# function _vi_status() {
+#   if {echo $fpath | grep -q "plugins/vi-mode"}; then
+#     echo "$(vi_mode_prompt_info)"
+#   fi
+# }
 
 function _ruby_version() {
   if {echo $fpath | grep -q "plugins/rvm"}; then
