@@ -1,3 +1,6 @@
+# custom shell functions
+fpath+=~/.zfunc
+
 # tmux
 if [[ -z "$TMUX" ]] ;then
     ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session

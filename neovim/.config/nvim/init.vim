@@ -37,7 +37,7 @@ Plug 'google/vim-maktaba'
 Plug 'google/vim-glaive'
 Plug 'google/vim-codefmt'
 Plug 'sbdchd/neoformat'
-Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins' }
+Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins', 'for': ['scala', 'java'] }
 Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
 Plug 'vim-scripts/L9'
@@ -59,6 +59,8 @@ Plug 'NLKNguyen/vim-maven-syntax'
 Plug 'mechatroner/rainbow_csv'
 Plug 'plytophogy/vim-diffchanges'
 " Plug 'editorconfig/editorconfig-vim'
+Plug 'raimon49/requirements.txt.vim'
+Plug 'ambv/black'
 Plug 'embear/vim-localvimrc'
 Plug 'prabirshrestha/async.vim'
 Plug 'prabirshrestha/vim-lsp'
@@ -194,6 +196,7 @@ let g:ale_linters = {
 \   'java': ['checkstyle'],
 \   'jsx': ['stylelint', 'eslint'],
 \}
+let g:ale_python_flake8_options = "--max-line-length=120"
 let g:ale_fixers = {
 \   'python': ['yapf'],
 \   'java': ['google_java_format', 'remove_trailing_lines', 'trim_whitespace'],
@@ -394,6 +397,8 @@ nnoremap <C-]> :execute "ptag " . expand("<cword>")<CR>
 " codefmt
 nnoremap <localleader>ll :FormatCode<CR>
 vnoremap <localleader>ll :FormatLines<CR>
+au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
+au FileType python vnoremap <localleader>ll :FormatLines yapf<CR>
 au FileType java nnoremap <localleader>ll :FormatCode clang-format<CR>
 au FileType java vnoremap <localleader>ll :FormatLines clang-format<CR>
 au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
@@ -413,6 +418,10 @@ highlight DiffAdd    cterm=bold ctermbg=103
 highlight DiffDelete cterm=bold ctermbg=103
 highlight DiffChange cterm=bold ctermbg=103
 highlight DiffText   cterm=bold ctermbg=131
+
+" black
+let g:black_skip_string_normalization = 1
+let g:black_line_length = 120
 
 " localvimrc
 let g:localvimrc_whitelist='/Users/colinfahy/workspace/.*'
@@ -485,4 +494,3 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 "   \ <SID>check_back_space() ? "\<TAB>" :
 "   \ asyncomplete#force_refresh()
 " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
