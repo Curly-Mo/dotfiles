@@ -74,4 +74,4 @@ export PYTHONSTARTUP=/home/colin/.pystartup
 #. /home/colin/packages/torch/install/bin/torch-activate
 
 # Python
-export PATH="/home/colin/miniconda3/bin:$PATH"
+# export PATH="/home/colin/miniconda3/bin:$PATH"

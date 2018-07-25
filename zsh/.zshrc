@@ -15,7 +15,7 @@ export ZSH_CACHE_DIR=~/.cache/zsh
 
 #  Theme
 #zplug "themes/tonotdo", from:oh-my-zsh
-zplug "~/.zsh_theme", from:local
+zplug "~/dotfiles/zsh", from:local, use:".zsh_theme"
 
 # Load Oh My Zsh Libs
 zplug "lib/history", from:oh-my-zsh
@@ -23,7 +23,7 @@ zplug "lib/directories", from:oh-my-zsh
 zplug "lib/prompt_info_functions", from:oh-my-zsh
 zplug "lib/completion", from:oh-my-zsh
 # Load Oh My Zsh Plugins
-#zplug "plugins/git", from:oh-my-zsh, nice:10
+#zplug "plugins/git", from:oh-my-zsh, defer:1
 zplug "plugins/vi-mode", from:oh-my-zsh
 #zplug "plugins/archlinux", from:oh-my-zsh
 zplug "plugins/last-working-dir", from:oh-my-zsh
@@ -32,11 +32,11 @@ zplug "plugins/cp", from:oh-my-zsh
 #zplug "plugins/pip", from:oh-my-zsh
 #zplug "plugins/python", from:oh-my-zsh
 #zplug "plugins/virtualenv", from:oh-my-zsh
-#zplug "plugins/pyenv", from:oh-my-zsh
+zplug "plugins/pyenv", from:oh-my-zsh
 # Other Plugins
-zplug "zsh-users/zsh-syntax-highlighting", nice:10
+zplug "zsh-users/zsh-syntax-highlighting", defer:1
 #zplug "rupa/z", use:z.sh
-zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, nice:10
+zplug "olivierverdier/zsh-git-prompt", use:zshrc.sh, defer:1
 zplug "horosgrisa/autoenv"
 
 # Update self
@@ -59,7 +59,7 @@ bindkey '^[[B' down-line-or-search
 #Python Virtual Environment
 export PYTHONSTARTUP=/home/colin/.pystartup
 # Hack to stop conda from fucking up my ps1
-export CONDA_PS1_BACKUP="$PS1"
+#export CONDA_PS1_BACKUP="$PS1"
 #source ~/.virtualenv/venv3/bin/activate
 # AutoEnv
 # source /usr/share/autoenv-git/activate.sh
