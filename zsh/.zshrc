@@ -14,22 +14,24 @@ fi
 # Load zplugin
 source ~/.zplugin/bin/zplugin.zsh
 
+export ZSH_CACHE_DIR=~/.cache/zsh
+setopt promptsubst
+
 # Oh my zsh themes
 # zplugin ice wait"0" silent
 # zplugin snippet OMZ::lib/git.zsh
 # zplugin ice wait"0" atload"unalias grv" silent
 # zplugin snippet OMZ::plugins/git/git.plugin.zsh
+
 # Custom theme
 autoload -U colors
 colors
-zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_theme'
-zplugin snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
-# zplugin light _local/my_theme
 # source $HOME/dotfiles/zsh/.zsh_theme
+zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_theme'
+# zplugin ice wait"!0" silent
+zplugin snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
 
 # Load Oh My Zsh Libs
-export ZSH_CACHE_DIR=~/.cache/zsh
-setopt promptsubst
 # zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/history.zsh"
 zplugin ice wait"0" silent
@@ -42,7 +44,7 @@ zplugin snippet OMZ::"lib/completion.zsh"
 # Load Oh My Zsh Plugins
 # zplugin ice wait"0" silent
 # zplugin snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
-zplugin ice wait"0" silent
+zplugin ice wait"!0" silent
 zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
 zplugin ice wait"0" silent
 zplugin snippet OMZ::"plugins/pyenv/pyenv.plugin.zsh"
