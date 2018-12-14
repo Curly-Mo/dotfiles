@@ -483,3 +483,7 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 " let g:lsc_auto_map = {
 "     \ 'GoToDefinition': 'gd',
 "     \}
+
+" Smoother scrolling
+map <ScrollWheelUp> <C-Y>
+map <ScrollWheelDown> <C-E>
