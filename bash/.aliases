@@ -9,10 +9,10 @@ if hash nvim 2>/dev/null; then
 fi
 
 # ls
-if [ "$(uname)" = "Darwin" ]; then
+if [ -x "$(command -v gls)" ]; then
     alias ls='gls -Gh --color=auto --group-directories-first'
 else
-    alias ls='ls -Gh --color=auto --group-directories-first'
+    alias ls='ls -h --color=auto --group-directories-first'
 fi
 alias ll='ls -la'
 alias la='ls -A'

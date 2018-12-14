@@ -1,5 +1,5 @@
 # custom shell functions
-fpath+=~/.zfunc
+fpath+=~/.zsh_functions
 
 # tmux
 if [[ -z "$TMUX" ]] ;then
@@ -24,10 +24,8 @@ zplugin light _local/my_theme
 # Load Oh My Zsh Libs
 export ZSH_CACHE_DIR=~/.cache/zsh
 setopt promptsubst
-zplugin ice wait"0" lucid
+# zplugin ice wait"0" lucid
 zplugin snippet OMZ::"lib/history.zsh"
-zplugin ice wait"0" lucid
-zplugin snippet OMZ::"lib/directories.zsh"
 zplugin ice wait"0" lucid
 zplugin snippet OMZ::"lib/prompt_info_functions.zsh"
 zplugin ice wait"0" lucid
@@ -36,8 +34,8 @@ zplugin ice wait"0" lucid
 # zplugin snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
 # Load Oh My Zsh Plugins
 #zplug "plugins/git", from:oh-my-zsh, nice:10
-zplugin ice wait"0" lucid
-zplugin snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
+# zplugin ice wait"0" lucid
+# zplugin snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
 zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
 zplugin ice wait"0" lucid
 zplugin snippet OMZ::"plugins/pyenv/pyenv.plugin.zsh"
@@ -56,6 +54,15 @@ zplugin light zsh-users/zsh-autosuggestions
 
 zplugin ice wait"0" lucid atinit"zpcompinit; zpcdreplay"
 zplugin light zdharma/fast-syntax-highlighting
+
+# zplugin ice wait"0" lucid src"zsh-history-substring-search.zsh"
+# zplugin light zsh-users/zsh-history-substring-search
+# bindkey '^[[A' history-substring-search-up
+# bindkey '^[[B' history-substring-search-down
+
+# zplugin ice wait"0" lucid
+# zplugin light MichaelAquilina/zsh-you-should-use
+
 # End zplugin config
 
 # Alias definitions
@@ -76,7 +83,7 @@ bindkey "^[[8~" end-of-line
 
 # Welcome message
 if [[ -o login ]]; then
-  fortune showerthoughts | lolcat
+  # fortune showerthoughts | lolcat
 fi
 
 # setup special keys
@@ -96,11 +103,12 @@ if [ -f ~/.localrc ]; then
     . ~/.localrc
 fi
 
-if [ -f ~/.zsh_functions ]; then
-    . ~/.zsh_functions
+if [ -f ~/.zsh_functions/.zsh_functions ]; then
+    . ~/.zsh_functions/.zsh_functions
 fi
 
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+export PATH="/usr/local/opt/openssl/bin:$PATH"

@@ -14,58 +14,58 @@ Plug 'tpope/vim-tbone'
 Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
-" Plug 'neomake/neomake'
-" Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-" Plug 'zchee/deoplete-jedi'
+Plug 'tpope/vim-vinegar'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'romainl/Apprentice'
 Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentice-airline' }
-" Plug 'artur-shaik/vim-javacomplete2'
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
-"Plug 'chriskempson/base16-vim'
 Plug 'haya14busa/incsearch.vim'
-" Plug 'nathanaelkane/vim-indent-guides'
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
-"Plug 'mattn/emmet-vim'
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-Plug 'Xuyuanp/nerdtree-git-plugin'
+" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+" Plug 'Xuyuanp/nerdtree-git-plugin'
 " maktaba and glaive needed by codefmt
-Plug 'google/vim-maktaba'
-Plug 'google/vim-glaive'
-Plug 'google/vim-codefmt'
+" Plug 'google/vim-maktaba'
+" Plug 'google/vim-glaive'
+" Plug 'google/vim-codefmt'
 Plug 'sbdchd/neoformat'
-Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins', 'for': ['scala', 'java'] }
+" Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins', 'for': ['scala'] }
 Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
-Plug 'vim-scripts/L9'
-Plug 'vim-scripts/FuzzyFinder'
 Plug 'airblade/vim-gitgutter'
 Plug 'justinmk/vim-sneak'
-" Plug 'roxma/nvim-completion-manager'
 Plug 'w0rp/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'wellle/targets.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'universal-ctags/ctags'
-Plug 'derekwyatt/vim-scala'
+Plug 'derekwyatt/vim-scala', { 'for': ['scala'] }
 Plug 'tweekmonster/impsort.vim'
-Plug 'ludovicchabant/vim-gutentags'
-Plug 'lervag/vimtex'
+" Plug 'ludovicchabant/vim-gutentags'
+Plug 'lervag/vimtex', { 'for': ['tex'] }
 Plug 'NLKNguyen/vim-maven-syntax'
 Plug 'mechatroner/rainbow_csv'
 Plug 'plytophogy/vim-diffchanges'
-" Plug 'editorconfig/editorconfig-vim'
 Plug 'raimon49/requirements.txt.vim'
-Plug 'ambv/black'
+Plug 'ambv/black', { 'for': 'python', 'on': ['Black'] }
 Plug 'embear/vim-localvimrc'
-Plug 'prabirshrestha/async.vim'
-Plug 'prabirshrestha/vim-lsp'
-Plug 'prabirshrestha/asyncomplete.vim'
-Plug 'prabirshrestha/asyncomplete-lsp.vim'
+" You lose, vim-lsp
+" Plug 'prabirshrestha/async.vim'
+" Plug 'prabirshrestha/vim-lsp'
+" Plug 'prabirshrestha/asyncomplete.vim'
+" Plug 'prabirshrestha/asyncomplete-lsp.vim'
+Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh',}
+Plug 'ncm2/ncm2'
+Plug 'roxma/nvim-yarp' " required by ncm2
+Plug 'ncm2/ncm2-bufword'
+Plug 'ncm2/ncm2-path'
+Plug 'ncm2/ncm2-github'
+Plug 'ncm2/ncm2-tmux'
+" Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+Plug 'junegunn/fzf'
+Plug 'unblevable/quick-scope'
+Plug 'natebosch/vim-lsc'
 call plug#end()
 
 " Colors
@@ -78,7 +78,7 @@ set t_Co=256
 
 " syntax
 syntax on
-set relativenumber
+" set relativenumber
 set number
 " Turn off auto-commenting
 autocmd FileType * setlocal formatoptions-=c
@@ -164,20 +164,10 @@ set shortmess=a
 
 """"""PLUGINS"""""""
 
-" " Neomake
-" call neomake#configure#automake('nw', 750)
-" highlight NeomakeWarningSign ctermfg=227
-" let g:neomake_warning_sign={'text': '⚠', 'texthl': 'NeomakeWarningSign'}
-" highlight NeomakeErrorSign ctermfg=196
-" let g:neomake_error_sign={'text': '✖', 'texthl': 'NeomakeErrorSign'}
-" highlight SignColumn ctermbg=None
-" highlight NeomakeWarning ctermbg=None ctermfg=227
-" let g:neomake_python_enabled_makers = ['flake8']
-" let g:neomake_yaml_enabled_makers = ['yamllint']
-
 " Ale
 let g:ale_completion_enabled = 1
 let g:ale_lint_on_text_changed = 'never'
+let g:ale_lint_on_enter = 1
 let g:ale_lint_on_insert_leave = 1
 let g:ale_lint_on_save = 1
 let g:ale_sign_column_always = 1
@@ -191,15 +181,18 @@ let g:ale_echo_msg_warning_str = '⚠'
 let g:ale_echo_msg_format = '%s [%linter%] %severity%'
 highlight ALEErrorSign ctermfg=196
 highlight ALEWarningSign ctermbg=None ctermfg=227
+highlight ALEWarning ctermbg=Black
 let g:ale_linters = {
-\   'python': ['flake8', 'pyflakes', 'mypy'],
+\   'python': ['flake8', 'pyflakes', 'pyls'],
 \   'java': ['checkstyle'],
 \   'jsx': ['stylelint', 'eslint'],
 \}
 let g:ale_python_flake8_options = "--max-line-length=120"
 let g:ale_fixers = {
-\   'python': ['yapf'],
+\   'python': ['black', 'yapf'],
 \   'java': ['google_java_format', 'remove_trailing_lines', 'trim_whitespace'],
+\   'javascript': ['prettier', 'eslint'],
+\   'scala': ['scalafmt'],
 \}
 let g:ale_python_yapf_options = "--style='{based_on_style: google, column_limit: 120, split_arguments_when_comma_terminated: true}'"
 augroup FiletypeGroup
@@ -207,6 +200,11 @@ augroup FiletypeGroup
   au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
 augroup END
 let g:ale_linter_aliases = {'jsx': 'css'}
+nnoremap <silent> gk :ALEHover<CR>
+nnoremap <silent> gd :ALEGoToDefinition<CR>
+nnoremap <silent> gr :ALEFindReferences<CR>
+nnoremap <silent> gs :ALESymbolSearch<CR>
+
 
 " Airline
 let g:airline_powerline_fonts = 1
@@ -219,70 +217,20 @@ let g:airline#extensions#tabline#buf_min_count = 2
 " let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
 " let g:airline_section_b = airline#section#create(['hunks'])
 
-"" Deoplete
-"let g:deoplete#enable_at_startup = 1
-""set completeopt-=preview
-""" set python bin
-"""let g:python_host_prog = '/home/colin/miniconda3/envs/py2/bin/python'
-"""let g:python3_host_prog = '/home/colin/miniconda3/envs/py3/bin/python'
-"""let g:python_host_prog = '/usr/local/bin/python'
-"""let g:python_host_prog = '/Users/colinfahy/anaconda3/bin/python3'
-""let g:python_host_prog = '/Users/colinfahy/anaconda3/envs/py2/bin/python'
-""let g:python3_host_prog = '/Users/colinfahy/anaconda3/envs/py3/bin/python'
-""let g:deoplete#sources#jedi#python_path = '/usr/local/bin/python'
-""autocmd VimEnter * inoremap <silent><expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
-""inoremap <silent><expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-""inoremap <silent><expr><CR> pumvisible() ? deoplete#mappings#close_popup()."\<CR>" : "\<CR>"
-"let g:deoplete#omni#input_patterns = {}
-""let g:deoplete#omni#input_patterns.scala='[^. *\t]\.\w*'
-
-" nvim Completion Manager
-" let g:cm_smart_enable=0
-" imap <C-Tab> let g:cm_smart_enable=0<CR>
-" autocmd VimEnter * inoremap <expr> <Tab> pumvisible() ? "\<C-N>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" set shortmess+=c
-" " Forward deoplete to NCM
-" " register as ncm source
-" au User CmSetup call cm#register_source({'name' : 'deoplete',
-"         \ 'priority': 7,
-"         \ 'abbreviation': '',
-"         \ })
-" " hack deoplete's mapping
-" inoremap <silent> <Plug>_ <C-r>=g:Deoplete_ncm()<CR>
-" func! g:Deoplete_ncm()
-"   " forward to ncm
-"   call cm#complete('deoplete', cm#context(), g:deoplete#_context.complete_position + 1, g:deoplete#_context.candidates)
-"   return ''
-" endfunc
-
-" Java
-" let g:JavaComplete_JavaCompiler="/usr/bin/javac"
-" let g:JavaComplete_StaticImportsAtTop = 1
-" let g:JavaComplete_ClasspathGenerationOrder = ['Maven', 'Eclipse', 'Gradle']
-" autocmd FileType java setlocal omnifunc=javacomplete#Complete
-" nmap <localleader>4 <Plug>(JavaComplete-Imports-AddSmart)
-" imap <localleader>4 <Plug>(JavaComplete-Imports-AddSmart)
-" nmap <localleader>5 <Plug>(JavaComplete-Imports-Add)
-" imap <localleader>5 <Plug>(JavaComplete-Imports-Add)
-" nmap <localleader>6 <Plug>(JavaComplete-Imports-AddMissing)
-" imap <localleader>6 <Plug>(JavaComplete-Imports-AddMissing)
-" nmap <localleader>7 <Plug>(JavaComplete-Imports-RemoveUnused)
-" imap <localleader>7 <Plug>(JavaComplete-Imports-RemoveUnused)
-
 " Scala
 let g:scala_scaladoc_indent = 1
 let g:scala_sort_across_groups = 1
+let g:scala_first_party_namespaces = '\(com.spotify\)'
 au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " Ensime
-autocmd BufWritePost *.scala silent :EnTypeCheck
-" autocmd BufWritePost *java silent :EnTypeCheck
-au FileType scala,java nnoremap <localleader>dt :EnType<CR>
-au FileType scala,java nnoremap <localleader>ds :EnTypeCheck<CR>
-au FileType scala,java nnoremap <localleader>df :EnDeclarationSplit v<CR>
-au FileType scala,java nnoremap <localleader>dd :EnDocBrowse<CR>
-au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
-au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
+" autocmd BufWritePost *.scala silent :EnTypeCheck
+" " autocmd BufWritePost *java silent :EnTypeCheck
+" au FileType scala,java nnoremap <localleader>dt :EnType<CR>
+" au FileType scala,java nnoremap <localleader>ds :EnTypeCheck<CR>
+" au FileType scala,java nnoremap <localleader>df :EnDeclarationSplit v<CR>
+" au FileType scala,java nnoremap <localleader>dd :EnDocBrowse<CR>
+" au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
+" au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
 
 " Tagbar
 map <C-l> :TagbarToggle<CR>
@@ -300,20 +248,21 @@ function! OpenTagbar()
 endfunction
 
 "NerdTree
-nmap <C-h> :NERDTreeToggle<CR>
-"Close if all files closed
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-"Open if no files specified
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
-let NERDTreeMapOpenInTab='\r'
+"nmap <C-h> :NERDTreeToggle<CR>
+""Close if all files closed
+"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+""Open if no files specified
+"autocmd StdinReadPre * let s:std_in=1
+"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
+"let NERDTreeMapOpenInTab='\r'
+"let NERDTreeQuitOnOpen = 1
 
 "netrw Plugin-free file browser
-let g:netrw_banner = 0
-let g:netrw_liststyle = 3
-let g:netrw_browse_split = 4
-let g:netrw_altv = 1
-let g:netrw_winsize = 18
+" let g:netrw_banner = 0
+" let g:netrw_liststyle = 3
+" let g:netrw_browse_split = 4
+" let g:netrw_altv = 1
+" let g:netrw_winsize = 18
 
 " Neoformat
 " noremap <localleader>ll :Neoformat<CR>
@@ -395,16 +344,16 @@ nnoremap <C-]> :execute "ptag " . expand("<cword>")<CR>
 "let g:pymode_rope_autoimport=1
 
 " codefmt
-nnoremap <localleader>ll :FormatCode<CR>
-vnoremap <localleader>ll :FormatLines<CR>
-au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
-au FileType python vnoremap <localleader>ll :FormatLines yapf<CR>
-au FileType java nnoremap <localleader>ll :FormatCode clang-format<CR>
-au FileType java vnoremap <localleader>ll :FormatLines clang-format<CR>
-au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
-au FileType python vnoremap <localleader>ll :FormatLines yapf<CR>
-" Glaive
-call glaive#Install()
+" nnoremap <localleader>ll :FormatCode<CR>
+" vnoremap <localleader>ll :FormatLines<CR>
+" au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
+" au FileType python vnoremap <localleader>ll :FormatLines yapf<CR>
+" au FileType java nnoremap <localleader>ll :FormatCode clang-format<CR>
+" au FileType java vnoremap <localleader>ll :FormatLines clang-format<CR>
+" au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
+" au FileType python vnoremap <localleader>ll :FormatLines yapf<CR>
+" " Glaive
+" call glaive#Install()
 " Glaive codefmt clang_format_style='{BasedOnStyle: Google, ColumnLimit: 100, BinPackParameters: true, AllowAllParametersOfDeclarationOnNextLine: false, ExperimentalAutoDetectBinPacking: true, AlignAfterOpenBracket: Align}'
 
 " rainbow csv
@@ -494,3 +443,43 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 "   \ <SID>check_back_space() ? "\<TAB>" :
 "   \ asyncomplete#force_refresh()
 " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+" LanguageClient-neovim
+let g:LanguageClient_serverCommands = {
+    \ 'java': ['/usr/local/bin/jdtls'],
+    \ }
+    " \ 'scala': ['coursier', "launch", '-r', 'bintray:scalameta/maven', 'org.scalameta:metals_2.12:0.3.1', '-M', 'scala.meta.metals.Main'],
+    " \ 'scala': ['scalameta_lsp'],
+    " \ 'scala': ['metals-vim'],
+let g:LanguageClient_changeThrottle = 2.0
+let g:LanguageClient_diagnosticsEnable = 0
+nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" nnoremap <silent> gk :call LanguageClient#textDocument_hover()<CR>
+" nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+" nnoremap <silent> gr :call LanguageClient#textDocument_rename()<CR>
+autocmd FileType java nnoremap <buffer> <silent> gk :call LanguageClient#textDocument_hover()<CR>
+autocmd FileType java nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+autocmd FileType java nnoremap <buffer> <silent> gr :call LanguageClient#textDocument_rename()<CR>
+
+" ncm2
+" autocmd BufEnter * call ncm2#enable_for_buffer()
+" set completeopt=noinsert,menuone,noselect
+
+" which-key
+" nnoremap <silent> <leader> :WhichKey '\'<CR>
+" set timeoutlen=1000
+
+" fugitive
+let g:github_enterprise_urls = ['https://ghe.spotify.net']
+
+" quick-scope
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+" vim-lsc
+" let g:lsc_enable_autocomplete = v:false
+" let g:lsc_server_commands = {
+"     \ 'scala': 'metals-test.sh'
+"     \ }
+" let g:lsc_auto_map = {
+"     \ 'GoToDefinition': 'gd',
+"     \}
