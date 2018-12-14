@@ -12,7 +12,7 @@ $(_timestamp) $(_virtualenv_prompt_info)$(_user_host)${_current_dir}$(_ruby_vers
 
 PROMPT2='%{$fg[$CARETCOLOR]%}◀%{$reset_color%} '
 
-RPROMPT='%{$(echotc UP 1)%} ${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $(_git_time_since_commit) $(git_super_status) ${_return_status}%{$(echotc DO 1)%}'
+RPROMPT='%{$(echotc UP 1)%} ${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $(_git_time_since_commit) $(gitprompt) ${_return_status}%{$(echotc DO 1)%}'
 
 _current_dir="%F{030}%7~%{$reset_color%} "
 _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"

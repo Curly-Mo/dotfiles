@@ -15,52 +15,57 @@ fi
 source ~/.zplugin/bin/zplugin.zsh
 
 # Oh my zsh themes
-# zplugin ice wait"0" lucid
+# zplugin ice wait"0" silent
 # zplugin snippet OMZ::lib/git.zsh
-# zplugin ice wait"0" atload"unalias grv" lucid
+# zplugin ice wait"0" atload"unalias grv" silent
 # zplugin snippet OMZ::plugins/git/git.plugin.zsh
 # Custom theme
-zplugin light _local/my_theme
+autoload -U colors
+colors
+zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_theme'
+zplugin snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
+# zplugin light _local/my_theme
+# source $HOME/dotfiles/zsh/.zsh_theme
+
 # Load Oh My Zsh Libs
 export ZSH_CACHE_DIR=~/.cache/zsh
 setopt promptsubst
-# zplugin ice wait"0" lucid
+# zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/history.zsh"
-zplugin ice wait"0" lucid
+zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/prompt_info_functions.zsh"
-zplugin ice wait"0" lucid
+zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/completion.zsh"
-zplugin ice wait"0" lucid
+# zplugin ice wait"0" silent
 # zplugin snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
+
 # Load Oh My Zsh Plugins
-#zplug "plugins/git", from:oh-my-zsh, nice:10
-# zplugin ice wait"0" lucid
+# zplugin ice wait"0" silent
 # zplugin snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
+zplugin ice wait"0" silent
 zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
-zplugin ice wait"0" lucid
+zplugin ice wait"0" silent
 zplugin snippet OMZ::"plugins/pyenv/pyenv.plugin.zsh"
-zplugin ice pick"zshrc.sh"
-zplugin light olivierverdier/zsh-git-prompt
 
 # Plugins
 zplugin ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh"
 zplugin light trapd00r/LS_COLORS
 
-zplugin ice wait"0" lucid blockf
+zplugin ice wait"0" silent blockf
 zplugin light zsh-users/zsh-completions
 
-zplugin ice wait"0" lucid atload"_zsh_autosuggest_start"
+zplugin ice wait"0" silent atload"_zsh_autosuggest_start"
 zplugin light zsh-users/zsh-autosuggestions
 
-zplugin ice wait"0" lucid atinit"zpcompinit; zpcdreplay"
+zplugin ice wait"0" silent atinit"zpcompinit; zpcdreplay"
 zplugin light zdharma/fast-syntax-highlighting
 
-# zplugin ice wait"0" lucid src"zsh-history-substring-search.zsh"
+# zplugin ice wait"0" silent src"zsh-history-substring-search.zsh"
 # zplugin light zsh-users/zsh-history-substring-search
 # bindkey '^[[A' history-substring-search-up
 # bindkey '^[[B' history-substring-search-down
 
-# zplugin ice wait"0" lucid
+# zplugin ice wait"0" silent
 # zplugin light MichaelAquilina/zsh-you-should-use
 
 # End zplugin config
