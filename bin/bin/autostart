@@ -1,5 +1,5 @@
 #!/bin/bash
-(sleep 2s && urxvt) &
+(sleep 2s && alacritty) &
 
 # jack and it's dependencies
 # /usr/bin/cadence-session-start --system-start

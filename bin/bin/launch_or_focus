@@ -1,10 +1,10 @@
 #!/bin/bash
 CURR_WORKSPACE=$(wmctrl -d | grep \* | cut -d ' ' -f1)
 # current workspace
-WIN_ID=$(wmctrl -xl | awk -v desktop="$CURR_WORKSPACE" '$2 == desktop' | grep $1 | cut -d ' ' -f1 | tail -n 1)
+WIN_ID=$(wmctrl -xl | awk -v desktop="$CURR_WORKSPACE" '$2 == desktop' | grep --ignore-case $1 | cut -d ' ' -f1 | tail -n 1)
 # any workspace
 #WIN_ID=$(wmctrl -xl | grep $1 | cut -d ' ' -f1 | tail -n 1)
-echo $WIN_ID
+# echo $WIN_ID
 if [ "" = "$WIN_ID" ]  
 then
     app=$1
