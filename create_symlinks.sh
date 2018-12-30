@@ -24,13 +24,13 @@ for d in $dotdirs ; do
             if [ $? -ne 0 ]; then
                 actual=$(readlink -f -- ${dest} 2>/dev/null || realpath ${dest})
                 if [ "${actual}" = ${f} ]; then
-					echo Already linked
-				else
-					read -p "File exists, overwrite? " -n 1 -r
-					echo
-					if [[ $REPLY =~ ^[Yy]$ ]]; then
-						ln -sf ${f} ${dest}
-					fi
+                  echo Already linked
+                else
+                  read -p "File exists, overwrite? " -n 1 -r
+                  echo
+                  if [[ $REPLY =~ ^[Yy]$ ]]; then
+                    ln -sf ${f} ${dest}
+                  fi
                 fi
             fi
         done
