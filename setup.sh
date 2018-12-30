@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 echo "Installing zplugin..."
 mkdir $HOME/.zplugin
@@ -15,12 +15,12 @@ if hash nvim 2>/dev/null; then
     nvim +PlugInstall +qall
 fi
 
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+${script_dir}/create_symlinks.sh
+
 echo "Installing tmux plugins..."
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 $HOME/.tmux/plugins/tpm/bin/install_plugins
-
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-${script_dir}/create_symlinks.sh
 
 # Make necessary directories
 touch $HOME/.lastdir
