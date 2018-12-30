@@ -1,5 +1,5 @@
-# custom shell functions
-fpath+=~/.zsh_functions
+# uncomment for profiling
+# zmodload zsh/zprof
 
 # tmux
 if [[ -z "$TMUX" ]] ;then
@@ -62,6 +62,10 @@ zplugin light zsh-users/zsh-autosuggestions
 zplugin ice wait"0" silent atinit"zpcompinit; zpcdreplay"
 zplugin light zdharma/fast-syntax-highlighting
 
+# custom completions
+zplugin ice wait"0" silent
+zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_functions/.zsh_functions'
+
 # zplugin ice wait"0" silent src"zsh-history-substring-search.zsh"
 # zplugin light zsh-users/zsh-history-substring-search
 # bindkey '^[[A' history-substring-search-up
@@ -90,7 +94,7 @@ bindkey "^[[8~" end-of-line
 
 # Welcome message
 if [[ -o login ]]; then
-  # fortune showerthoughts | lolcat
+  fortune showerthoughts | lolcat
 fi
 
 # setup special keys
@@ -110,12 +114,12 @@ if [ -f ~/.localrc ]; then
     . ~/.localrc
 fi
 
-if [ -f ~/.zsh_functions/.zsh_functions ]; then
-    . ~/.zsh_functions/.zsh_functions
-fi
-
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 # [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 export PATH="/usr/local/opt/openssl/bin:$PATH"
+
+
+# uncomment for profiling
+# zprof
