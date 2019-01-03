@@ -29,7 +29,7 @@ Plug 'haya14busa/incsearch.vim'
 " Plug 'google/vim-glaive'
 " Plug 'google/vim-codefmt'
 Plug 'sbdchd/neoformat'
-" Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins', 'for': ['scala'] }
+Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins', 'for': ['scala'] }
 Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
@@ -48,7 +48,7 @@ Plug 'NLKNguyen/vim-maven-syntax'
 Plug 'mechatroner/rainbow_csv'
 Plug 'plytophogy/vim-diffchanges'
 Plug 'raimon49/requirements.txt.vim'
-Plug 'ambv/black', { 'for': 'python', 'on': ['Black'] }
+Plug 'ambv/black', { 'on': ['Black'] }
 Plug 'embear/vim-localvimrc'
 " You lose, vim-lsp
 " Plug 'prabirshrestha/async.vim'
@@ -223,14 +223,13 @@ let g:scala_sort_across_groups = 1
 let g:scala_first_party_namespaces = '\(com.spotify\)'
 au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " Ensime
-" autocmd BufWritePost *.scala silent :EnTypeCheck
-" " autocmd BufWritePost *java silent :EnTypeCheck
-" au FileType scala,java nnoremap <localleader>dt :EnType<CR>
-" au FileType scala,java nnoremap <localleader>ds :EnTypeCheck<CR>
-" au FileType scala,java nnoremap <localleader>df :EnDeclarationSplit v<CR>
-" au FileType scala,java nnoremap <localleader>dd :EnDocBrowse<CR>
-" au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
-" au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
+autocmd BufWritePost *.scala silent :EnTypeCheck
+au FileType scala,java nnoremap <localleader>dt :EnType<CR>
+au FileType scala,java nnoremap <localleader>ds :EnTypeCheck<CR>
+au FileType scala,java nnoremap <localleader>df :EnDeclarationSplit v<CR>
+au FileType scala,java nnoremap <localleader>dd :EnDocBrowse<CR>
+au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
+au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
 
 " Tagbar
 map <C-l> :TagbarToggle<CR>
@@ -488,3 +487,19 @@ let g:qs_max_chars=300
 " Smoother scrolling
 map <ScrollWheelUp> <C-Y>
 map <ScrollWheelDown> <C-E>
+
+" MacOS clipboard, slow startup time searchign for clipboard provider if not set
+if has('macunix')
+  let g:clipboard = {
+    \ 'name': 'pbcopy',
+    \ 'copy': {
+    \    '+': 'pbcopy',
+    \    '*': 'pbcopy',
+    \  },
+    \ 'paste': {
+    \    '+': 'pbpaste',
+    \    '*': 'pbpaste',
+    \ },
+    \ 'cache_enabled': 0,
+    \ }
+endif

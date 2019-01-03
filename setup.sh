@@ -1,44 +1,31 @@
-#!/bin/zsh
-echo -n "Please enter location to install zplug: (default: $HOME/packages/zplug)"
-read REPLY
-[ -z "${ZPLUG_HOME}" ] && ZPLUG_HOME="${HOME}/packages/zplug"
-echo "Installing zplug into $ZPLUG_HOME..."
-git clone https://github.com/zplug/zplug $ZPLUG_HOME
-source $ZPLUG_HOME/init.zsh
+#!/bin/bash
 
-if hash nvim 2>/dev/null; then
-    echo "Installing vim-plug (for neovim)..."
-    curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-    nvim +PlugInstall +qall
-fi
+echo "Installing zplugin..."
+mkdir $HOME/.zplugin
+git clone https://github.com/zdharma/zplugin.git $HOME/.zplugin/bin
+
 if hash vim 2>/dev/null; then
     echo "Installing vim-plug..."
     curl -fLo $HOME/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
     command vim +PlugInstall +qall
 fi
+if hash nvim 2>/dev/null; then
+    echo "Installing vim-plug (for neovim)..."
+    curl -fLo $HOME/.local/share/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    nvim +PlugInstall +qall
+fi
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+${script_dir}/create_symlinks.sh
 
 echo "Installing tmux plugins..."
 git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 $HOME/.tmux/plugins/tpm/bin/install_plugins
-
-script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-${script_dir}/simple_symlinks.sh
-
-source $HOME/.zshrc
-# Install plugins if there are plugins that have not been installed
-#if ! zplug check --verbose; then
-    echo installing zplugins
-    zplug install
-#fi
 
 # Make necessary directories
 touch $HOME/.lastdir
 mkdir -p $HOME/.vim/tmp/backup
 mkdir -p $HOME/.vim/tmp/swap
 mkdir -p $HOME/.vim/tmp/undo
-
-mkdir -p $(dirname ${script_dir}/.logs/haskell.log)
-echo 'sudo required if you want to install haskell tools'
-sudo echo Thanks && ${script_dir}/haskell_git_prompt.sh >> ${script_dir}/.logs/haskell.log 2>&1 &
 
 echo Make sure zsh is working properly, then \`chsh -s \$\(which zsh\)\`
