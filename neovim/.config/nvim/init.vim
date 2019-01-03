@@ -486,3 +486,19 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 " Smoother scrolling
 map <ScrollWheelUp> <C-Y>
 map <ScrollWheelDown> <C-E>
+
+" MacOS clipboard, slow startup time searchign for clipboard provider if not set
+if has('macunix')
+  let g:clipboard = {
+    \ 'name': 'pbcopy',
+    \ 'copy': {
+    \    '+': 'pbcopy',
+    \    '*': 'pbcopy',
+    \  },
+    \ 'paste': {
+    \    '+': 'pbpaste',
+    \    '*': 'pbpaste',
+    \ },
+    \ 'cache_enabled': 0,
+    \ }
+endif
