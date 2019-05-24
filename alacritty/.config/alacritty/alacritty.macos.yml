@@ -100,7 +100,7 @@ font:
     #style: Italic
 
   # Point size
-  size: 19.4
+  size: 21.5
 
   # Offset is the extra space around each character. `offset.y` can be thought of
   # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -448,3 +448,9 @@ key_bindings:
   - { key: F11,      mods: Command, chars: "\x1b[23;3~"                  }
   - { key: F12,      mods: Command, chars: "\x1b[24;3~"                  }
   - { key: NumpadEnter,             chars: "\n"                          }
+  - { key: Left, mods: Control|Shift, chars: "\x1b[1;6D" }
+  - { key: Right, mods: Control|Shift, chars: "\x1b[1;6C" }
+  - { key: Up, mods: Control|Shift, chars: "\x1b[1;6A" }
+  - { key: Down, mods: Control|Shift, chars: "\x1b[1;6B" }
+  - { key: Left, mods: Alt|Shift, chars: "\x1b[1;10D" }
+  - { key: Right, mods: Alt|Shift, chars: "\x1b[1;10C" }
