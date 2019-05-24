@@ -2,14 +2,17 @@
 # zmodload zsh/zprof
 
 # tmux
-if [[ -z "$TMUX" ]] ;then
-    ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
-    if [[ -z "$ID" ]] ;then # if not available create a new one
-        tmux new-session
-    else
-        tmux attach-session -t "$ID" # if available attach to it
-    fi
-fi
+tmux::reattach_or_new_session() {
+  if [[ -z "$TMUX" ]] ;then
+      ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
+      if [[ -z "$ID" ]] ;then # if not available create a new one
+          tmux -2 new-session
+      else
+          tmux attach-session -t "$ID" # if available attach to it
+      fi
+  fi
+}
+tmux::reattach_or_new_session
 
 # Load zplugin
 source ~/.zplugin/bin/zplugin.zsh
@@ -27,12 +30,12 @@ setopt promptsubst
 autoload -U colors
 colors
 # source $HOME/dotfiles/zsh/.zsh_theme
+# zplugin ice wait"!0" silent
 zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_theme'
 # zplugin ice wait"!0" silent
 zplugin snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
 
 # Load Oh My Zsh Libs
-# zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/history.zsh"
 zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/prompt_info_functions.zsh"
@@ -47,20 +50,33 @@ zplugin snippet OMZ::"lib/completion.zsh"
 zplugin ice wait"!0" silent
 zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
 zplugin ice wait"0" silent
-zplugin snippet OMZ::"plugins/pyenv/pyenv.plugin.zsh"
+zplugin light shihyuho/zsh-jenv-lazy
+# zplugin snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
+zplugin ice wait"0" silent
+zplugin light davidparsson/zsh-pyenv-lazy
+# zplugin snippet OMZ::"plugins/pyenv/pyenv.plugin.zsh"
 
 # Plugins
-zplugin ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh"
+zplugin ice wait"0" silent atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh"
 zplugin light trapd00r/LS_COLORS
 
 zplugin ice wait"0" silent blockf
 zplugin light zsh-users/zsh-completions
 
-zplugin ice wait"0" silent atload"_zsh_autosuggest_start"
+zplugin ice wait"1" silent atload"_zsh_autosuggest_start"
 zplugin light zsh-users/zsh-autosuggestions
 
-zplugin ice wait"0" silent atinit"zpcompinit; zpcdreplay"
+zplugin ice wait"1" silent atinit"zpcompinit; zpcdreplay"
 zplugin light zdharma/fast-syntax-highlighting
+
+# nvm wrapper like pyenv
+export NVM_DIR="$HOME/.nvm"
+export NVM_LAZY_LOAD=true
+zplugin ice wait"2" silent
+zplugin light lukechilds/zsh-nvm
+
+# zplugin ice wait"0" silent from"gh-r" as"program"
+# zplugin load junegunn/fzf-bin
 
 # custom completions
 zplugin ice wait"0" silent
@@ -74,12 +90,14 @@ zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_funct
 # zplugin ice wait"0" silent
 # zplugin light MichaelAquilina/zsh-you-should-use
 
-# End zplugin config
+# local stuff
+zplugin ice wait"0" silent if"[[ -f $HOME/.aliases ]]"
+zplugin snippet "$HOME/.aliases"
 
-# Alias definitions
-if [ -f ~/.aliases ]; then
-    . ~/.aliases
-fi
+zplugin ice wait"0" silent if"[[ -f $HOME/.localrc ]]"
+zplugin snippet "$HOME/.localrc"
+
+# End zplugin config
 
 # vim-mode
 bindkey -v
@@ -108,18 +126,6 @@ bindkey  "\e[H"   beginning-of-line
 bindkey  "\e[F"   end-of-line
 bindkey  "\e[3~"  delete-char
 bindkey  "\e[2~"  overwrite-mode
-
-
-if [ -f ~/.localrc ]; then
-    . ~/.localrc
-fi
-
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
-
-export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-export PATH="/usr/local/opt/openssl/bin:$PATH"
-
 
 # uncomment for profiling
 # zprof

@@ -6,7 +6,7 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-speeddating'
 Plug 'tpope/vim-repeat'
-Plug 'tpope/vim-unimpaired'
+" Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-markdown'
@@ -22,14 +22,7 @@ Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentic
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
-" Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
-" Plug 'Xuyuanp/nerdtree-git-plugin'
-" maktaba and glaive needed by codefmt
-" Plug 'google/vim-maktaba'
-" Plug 'google/vim-glaive'
-" Plug 'google/vim-codefmt'
 Plug 'sbdchd/neoformat'
-Plug 'ensime/ensime-vim', { 'do': 'UpdateRemotePlugins', 'for': ['scala'] }
 Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
@@ -48,33 +41,41 @@ Plug 'NLKNguyen/vim-maven-syntax'
 Plug 'mechatroner/rainbow_csv'
 Plug 'plytophogy/vim-diffchanges'
 Plug 'raimon49/requirements.txt.vim'
-Plug 'ambv/black', { 'on': ['Black'] }
+Plug 'ambv/black', { 'for': ['python'], 'on': ['Black'] }
 Plug 'embear/vim-localvimrc'
 " You lose, vim-lsp
 " Plug 'prabirshrestha/async.vim'
 " Plug 'prabirshrestha/vim-lsp'
 " Plug 'prabirshrestha/asyncomplete.vim'
 " Plug 'prabirshrestha/asyncomplete-lsp.vim'
-Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh',}
-Plug 'ncm2/ncm2'
-Plug 'roxma/nvim-yarp' " required by ncm2
-Plug 'ncm2/ncm2-bufword'
-Plug 'ncm2/ncm2-path'
-Plug 'ncm2/ncm2-github'
-Plug 'ncm2/ncm2-tmux'
-" Plug 'liuchengxu/vim-which-key', { 'on': ['WhichKey', 'WhichKey!'] }
+
+" You too lcnvm
+" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh',}
+" Plug 'ncm2/ncm2'
+" Plug 'roxma/nvim-yarp' " required by ncm2
+" Plug 'ncm2/ncm2-bufword'
+" Plug 'ncm2/ncm2-path'
+" Plug 'ncm2/ncm2-github'
+" Plug 'ncm2/ncm2-tmux'
+
 Plug 'junegunn/fzf'
 Plug 'unblevable/quick-scope'
 Plug 'natebosch/vim-lsc'
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+" find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+Plug 'andymass/vim-matchup'
+Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 call plug#end()
 
 " Colors
-"set background=dark
 colorscheme default
-"colorscheme base16-railscasts
+" colorscheme base16-railscasts
 " silent! colorscheme apprentice
-set t_Co=256
+" set t_Co=256
 " set termguicolors
+" set notermguicolors
+" set background=dark
+set background=light
 
 " syntax
 syntax on
@@ -97,7 +98,6 @@ function! NumberToggle()
     set rnu
   endif
 endfunc
-
 
 " search
 set hlsearch
@@ -165,7 +165,8 @@ set shortmess=a
 """"""PLUGINS"""""""
 
 " Ale
-let g:ale_completion_enabled = 1
+" disable completion to work with coc.vim
+let g:ale_completion_enabled = 0
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_lint_on_enter = 1
 let g:ale_lint_on_insert_leave = 1
@@ -186,15 +187,14 @@ let g:ale_linters = {
 \   'python': ['flake8', 'pyflakes', 'pyls'],
 \   'java': ['checkstyle'],
 \   'jsx': ['stylelint', 'eslint'],
+\   'proto': ['prototool-lint'],
 \}
-let g:ale_python_flake8_options = "--max-line-length=120"
 let g:ale_fixers = {
-\   'python': ['black', 'yapf'],
+\   'python': ['black'],
 \   'java': ['google_java_format', 'remove_trailing_lines', 'trim_whitespace'],
 \   'javascript': ['prettier', 'eslint'],
 \   'scala': ['scalafmt'],
 \}
-let g:ale_python_yapf_options = "--style='{based_on_style: google, column_limit: 120, split_arguments_when_comma_terminated: true}'"
 augroup FiletypeGroup
   autocmd!
   au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
@@ -204,7 +204,7 @@ nnoremap <silent> gk :ALEHover<CR>
 nnoremap <silent> gd :ALEGoToDefinition<CR>
 nnoremap <silent> gr :ALEFindReferences<CR>
 nnoremap <silent> gs :ALESymbolSearch<CR>
-
+" let g:ale_python_flake8_options = "--max-line-length=120"
 
 " Airline
 let g:airline_powerline_fonts = 1
@@ -214,8 +214,12 @@ let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
 let g:airline#extensions#tabline#buf_min_count = 2
+" let g:airline#extensions#tabline#fnamemod = ':.'
+let g:airline#extensions#tabline#formatter = 'short_path'
 " let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
 " let g:airline_section_b = airline#section#create(['hunks'])
+let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 
 " Scala
 let g:scala_scaladoc_indent = 1
@@ -223,13 +227,13 @@ let g:scala_sort_across_groups = 1
 let g:scala_first_party_namespaces = '\(com.spotify\)'
 au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " Ensime
-autocmd BufWritePost *.scala silent :EnTypeCheck
-au FileType scala,java nnoremap <localleader>dt :EnType<CR>
-au FileType scala,java nnoremap <localleader>ds :EnTypeCheck<CR>
-au FileType scala,java nnoremap <localleader>df :EnDeclarationSplit v<CR>
-au FileType scala,java nnoremap <localleader>dd :EnDocBrowse<CR>
-au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
-au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
+" autocmd BufWritePost *.scala silent :EnTypeCheck
+" au FileType scala,java nnoremap <localleader>dt :EnType<CR>
+" au FileType scala,java nnoremap <localleader>ds :EnTypeCheck<CR>
+" au FileType scala,java nnoremap <localleader>df :EnDeclarationSplit v<CR>
+" au FileType scala,java nnoremap <localleader>dd :EnDocBrowse<CR>
+" au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
+" au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
 
 " Tagbar
 map <C-l> :TagbarToggle<CR>
@@ -337,7 +341,7 @@ highlight IncSearch ctermfg=cyan term=underline
 call camelcasemotion#CreateMotionMappings('<leader>')
 
 " ctags
-nnoremap <C-]> :execute "ptag " . expand("<cword>")<CR>
+" nnoremap <C-]> :execute 'ptag ' . expand('<cword>')<CR>
 
 " pymode
 "let g:pymode_rope_autoimport=1
@@ -369,7 +373,7 @@ highlight DiffText   cterm=bold ctermbg=131
 
 " black
 let g:black_skip_string_normalization = 1
-let g:black_line_length = 120
+let g:black_linelength = 120
 
 " localvimrc
 let g:localvimrc_whitelist='/Users/colinfahy/workspace/.*'
@@ -378,59 +382,59 @@ let g:localvimrc_whitelist='/Users/colinfahy/workspace/.*'
 set updatetime=1000
 
 " vim-lsp config
-let g:lsp_signs_enabled = 1
-let g:lsp_diagnostics_echo_cursor = 1
-let g:lsp_signs_error = {'text': '✗'}
-let g:lsp_signs_warning = {'text': '⚠'}
-let g:lsp_signs_hint = {'text': '!!'}
-highlight LspErrorText ctermfg=196
-highlight LspWarningText ctermbg=None ctermfg=227
-" vim-lsp (language servers)
-" if executable('pyls')
+" let g:lsp_signs_enabled = 1
+" let g:lsp_diagnostics_echo_cursor = 1
+" let g:lsp_signs_error = {'text': '✗'}
+" let g:lsp_signs_warning = {'text': '⚠'}
+" let g:lsp_signs_hint = {'text': '!!'}
+" highlight LspErrorText ctermfg=196
+" highlight LspWarningText ctermbg=None ctermfg=227
+" " vim-lsp (language servers)
+" " if executable('pyls')
+" "   au User lsp_setup call lsp#register_server({
+" "     \ 'name': 'pyls',
+" "     \ 'cmd': {server_info->['pyls']},
+" "     \ 'whitelist': ['python'],
+" "     \ })
+" " endif
+" if executable('typescript-language-server')
 "   au User lsp_setup call lsp#register_server({
-"     \ 'name': 'pyls',
-"     \ 'cmd': {server_info->['pyls']},
-"     \ 'whitelist': ['python'],
+"     \ 'name': 'typescript-language-server',
+"     \ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+"     \ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
+"     \ 'whitelist': ['typescript', 'javascript', 'javascript.jsx']
 "     \ })
 " endif
-if executable('typescript-language-server')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'typescript-language-server',
-    \ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-    \ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
-    \ 'whitelist': ['typescript', 'javascript', 'javascript.jsx']
-    \ })
-endif
-if executable('css-languageserver')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'css-languageserver',
-    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver --stdio']},
-    \ 'whitelist': ['css', 'less', 'sass'],
-    \ })
-endif
-if executable('java')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'vscode-javac',
-    \ 'cmd': {server_info->[&shell, &shellcmdflag, 'java -jar /Users/colinfahy/packages/vscode-javac/out/fat-jar.jar']},
-    \ 'whitelist': ['java'],
-    \ })
-endif
-if executable('scalameta_lsp')
-  au User lsp_setup call lsp#register_server({
-    \ 'name': 'scalameta',
-    \ 'cmd': {server_info->['scalameta_lsp']},
-    \ 'whitelist': ['scala'],
-    \ })
-endif
+" if executable('css-languageserver')
+"   au User lsp_setup call lsp#register_server({
+"     \ 'name': 'css-languageserver',
+"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver --stdio']},
+"     \ 'whitelist': ['css', 'less', 'sass'],
+"     \ })
+" endif
+" if executable('java')
+"   au User lsp_setup call lsp#register_server({
+"     \ 'name': 'vscode-javac',
+"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'java -jar /Users/colinfahy/packages/vscode-javac/out/fat-jar.jar']},
+"     \ 'whitelist': ['java'],
+"     \ })
+" endif
+" if executable('scalameta_lsp')
+"   au User lsp_setup call lsp#register_server({
+"     \ 'name': 'scalameta',
+"     \ 'cmd': {server_info->['scalameta_lsp']},
+"     \ 'whitelist': ['scala'],
+"     \ })
+" endif
 
 " asyncomplete
-let g:asyncomplete_remove_duplicates = 1
-set completeopt-=preview " no preview window
-" autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif " autoclose preview window
-" tabcompletion
-inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
+" let g:asyncomplete_remove_duplicates = 1
+" set completeopt-=preview " no preview window
+" " autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif " autoclose preview window
+" " tabcompletion
+" inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 " load on tab only
 " let g:asyncomplete_auto_popup = 0
 " function! s:check_back_space() abort
@@ -444,21 +448,21 @@ inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
 " inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 " LanguageClient-neovim
-let g:LanguageClient_serverCommands = {
-    \ 'java': ['/usr/local/bin/jdtls'],
-    \ }
-    " \ 'scala': ['coursier', "launch", '-r', 'bintray:scalameta/maven', 'org.scalameta:metals_2.12:0.3.1', '-M', 'scala.meta.metals.Main'],
-    " \ 'scala': ['scalameta_lsp'],
-    " \ 'scala': ['metals-vim'],
-let g:LanguageClient_changeThrottle = 2.0
-let g:LanguageClient_diagnosticsEnable = 0
-nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" nnoremap <silent> gk :call LanguageClient#textDocument_hover()<CR>
-" nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-" nnoremap <silent> gr :call LanguageClient#textDocument_rename()<CR>
-autocmd FileType java nnoremap <buffer> <silent> gk :call LanguageClient#textDocument_hover()<CR>
-autocmd FileType java nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-autocmd FileType java nnoremap <buffer> <silent> gr :call LanguageClient#textDocument_rename()<CR>
+" let g:LanguageClient_serverCommands = {
+"     \ 'java': ['/usr/local/bin/jdtls'],
+"     \ }
+"     " \ 'scala': ['coursier', "launch", '-r', 'bintray:scalameta/maven', 'org.scalameta:metals_2.12:0.3.1', '-M', 'scala.meta.metals.Main'],
+"     " \ 'scala': ['scalameta_lsp'],
+"     " \ 'scala': ['metals-vim'],
+" let g:LanguageClient_changeThrottle = 2.0
+" let g:LanguageClient_diagnosticsEnable = 0
+" nnoremap <F5> :call LanguageClient_contextMenu()<CR>
+" " nnoremap <silent> gk :call LanguageClient#textDocument_hover()<CR>
+" " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
+" " nnoremap <silent> gr :call LanguageClient#textDocument_rename()<CR>
+" autocmd FileType java nnoremap <buffer> <silent> gk :call LanguageClient#textDocument_hover()<CR>
+" autocmd FileType java nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
+" autocmd FileType java nnoremap <buffer> <silent> gr :call LanguageClient#textDocument_rename()<CR>
 
 " ncm2
 " autocmd BufEnter * call ncm2#enable_for_buffer()
@@ -488,7 +492,7 @@ let g:qs_max_chars=300
 map <ScrollWheelUp> <C-Y>
 map <ScrollWheelDown> <C-E>
 
-" MacOS clipboard, slow startup time searchign for clipboard provider if not set
+" MacOS clipboard, slow startup time searching for clipboard provider if not set
 if has('macunix')
   let g:clipboard = {
     \ 'name': 'pbcopy',
@@ -503,3 +507,77 @@ if has('macunix')
     \ 'cache_enabled': 0,
     \ }
 endif
+
+" Markdown
+let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala']
+
+" coc.nvim
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+" 
+" set cmdheight=2
+set nobackup
+set nowritebackup
+" fix coc crashing
+let g:coc_node_path='/Users/colinfahy/.nvm/versions/node/v12.2.0/bin/node'
+" change buffers with unsaved changes
+set hidden
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Use <c-space> for trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Use `[c` and `]c` for navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <C-LeftMouse> <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Use K for show documentation in preview window
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocActionAsync('doHover')
+  endif
+endfunction
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+hi CocHighlightText ctermbg=236
+hi CocFloating ctermbg=blue
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+" Remap for format selected region
+vmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+vmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+" Support jsonc syntax highlighting
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+" vim-matchup
+hi MatchParen ctermfg=red guifg=blue ctermbg=none
+hi MatchWord ctermfg=red guifg=blue ctermbg=none
+
+" vim-commentary
+nmap <C-/> Commentary

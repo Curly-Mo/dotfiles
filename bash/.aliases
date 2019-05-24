@@ -1,7 +1,7 @@
 # Aliases sourced by .bashrc
 
 # various
-alias grep="grep --color=always"
+alias grep="grep --color=auto"
 alias ..="cd .."
 alias vi="vim"
 if hash nvim 2>/dev/null; then
@@ -68,3 +68,13 @@ alias hpc='ssh cpf247@hpc.nyu.edu'
 
 # git
 alias gremaster='git stash && git fetch && git rebase origin/master && git stash pop'
+alias status='git status'
+
+# gcloud
+alias gs='gsutil'
+
+# go to project root
+alias proot="cd \$(pwd | grep -o '\(.*workspace/[^/]*\)')"
+
+# go to workspace root
+alias work='cd $HOME/workspace'
