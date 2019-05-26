@@ -1,5 +1,6 @@
 #!/bin/bash
-(sleep 2s && alacritty) &
+# (sleep 2s && alacritty) &
+alacritty &
 
 # jack and it's dependencies
 # /usr/bin/cadence-session-start --system-start
