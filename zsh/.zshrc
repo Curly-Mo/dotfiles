@@ -19,6 +19,7 @@ source ~/.zplugin/bin/zplugin.zsh
 
 export ZSH_CACHE_DIR=~/.cache/zsh
 setopt promptsubst
+setopt globdots
 
 # Oh my zsh themes
 # zplugin ice wait"0" silent
@@ -51,13 +52,16 @@ zplugin ice wait"0" silent
 zplugin snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
 
 # Plugins
-zplugin ice wait"0" silent atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh"
+zplugin ice wait"0" silent atclone"dircolors -b LS_COLORS > clrs.zsh" atpull'%atclone' pick"clrs.zsh"
 zplugin light trapd00r/LS_COLORS
 
 zplugin ice wait"0" silent blockf
 zplugin light zsh-users/zsh-completions
 
-zplugin ice wait"1" silent atload"_zsh_autosuggest_start"
+# export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+# export ZSH_AUTOSUGGEST_USE_ASYNC=true
+# export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
+zplugin ice wait"1" silent atload"_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false"
 zplugin light zsh-users/zsh-autosuggestions
 
 zplugin ice wait"1" silent atinit"zpcompinit; zpcdreplay"
