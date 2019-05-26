@@ -518,8 +518,6 @@ let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typesc
 " set cmdheight=2
 set nobackup
 set nowritebackup
-" fix coc crashing
-let g:coc_node_path='/Users/colinfahy/.nvm/versions/node/v12.2.0/bin/node'
 " change buffers with unsaved changes
 set hidden
 function! s:check_back_space() abort
