@@ -41,8 +41,6 @@ zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/prompt_info_functions.zsh"
 zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/completion.zsh"
-# zplugin ice wait"0" silent
-# zplugin snippet OMZ::plugins/colored-man-pages/colored-man-pages.plugin.zsh
 
 # Load Oh My Zsh Plugins
 # zplugin ice wait"0" silent
@@ -50,11 +48,7 @@ zplugin snippet OMZ::"lib/completion.zsh"
 zplugin ice wait"!0" silent
 zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
 zplugin ice wait"0" silent
-zplugin light shihyuho/zsh-jenv-lazy
-# zplugin snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
-zplugin ice wait"0" silent
-zplugin light davidparsson/zsh-pyenv-lazy
-# zplugin snippet OMZ::"plugins/pyenv/pyenv.plugin.zsh"
+zplugin snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
 
 # Plugins
 zplugin ice wait"0" silent atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh"
@@ -68,6 +62,12 @@ zplugin light zsh-users/zsh-autosuggestions
 
 zplugin ice wait"1" silent atinit"zpcompinit; zpcdreplay"
 zplugin light zdharma/fast-syntax-highlighting
+
+zplugin ice wait"0" silent
+zplugin light davidparsson/zsh-pyenv-lazy
+
+zplugin ice wait"0" silent
+zplugin light shihyuho/zsh-jenv-lazy
 
 # nvm wrapper like pyenv
 export NVM_DIR="$HOME/.nvm"
