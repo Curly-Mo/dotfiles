@@ -1,9 +1,5 @@
 #!/bin/bash
 
-# x config, better off here than xinitrc
-[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
-urxvtd --quiet --opendisplay --fork
-
 setxkbmap -layout us -variant altgr-intl -option caps:escape
 # TODO: replace with xkb when you are smart enough
 xmodmap ~/.Xmodmap
