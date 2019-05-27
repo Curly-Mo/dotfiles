@@ -1,5 +1,4 @@
 #!/bin/bash
-# (sleep 2s && alacritty) &
 alacritty &
 
 # jack and it's dependencies
@@ -7,4 +6,4 @@ alacritty &
 # /home/colin/bin/discover_daily
 /usr/bin/snapclient -s pulse &
 # screensaver
-/home/colin/bin/myscreensaver
+/home/colin/bin/myscreensaver &
