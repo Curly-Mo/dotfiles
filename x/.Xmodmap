@@ -4,3 +4,5 @@ keycode  82 = XF86AudioPlay KP_Subtract KP_Subtract KP_Subtract KP_Subtract KP_S
 keycode 106 = XF86AudioLowerVolume KP_Divide KP_Divide KP_Divide KP_Divide KP_Divide XF86Ungrab
 keycode 107 = XF86AudioPrev Sys_Req Print Sys_Req
 keycode 127 = XF86AudioPlay Break Pause Break
+! fix for international right Alt key
+keycode 108 = Alt_R NoSymbol Alt_R NoSymbol Alt_R
