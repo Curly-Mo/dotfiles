@@ -4,7 +4,6 @@
 	prompt = false
 [core]
 	editor = vim
-	askpass = /usr/bin/ksshaskpass
 	excludesfile = /home/colin/.gitignore
 [push]
 	default = simple
