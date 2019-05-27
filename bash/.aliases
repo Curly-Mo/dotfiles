@@ -54,7 +54,7 @@ alias pacmatic='sudo pacmatic'
 alias sudont='sudo $(fc -nl -1)'
 
 # xdg
-#alias open='xdg-open'
+alias open='xdg-open'
 
 # tools
 alias top='htop'
