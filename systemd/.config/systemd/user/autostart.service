@@ -1,0 +1,8 @@
+[Unit]
+Description=Autostart my favorite things
+
+[Service]
+ExecStart=/usr/bin/env sh $HOME/bin/autostart
+
+[Install]
+WantedBy=default.target
