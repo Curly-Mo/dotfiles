@@ -79,6 +79,10 @@ export NVM_LAZY_LOAD=true
 zplugin ice wait"2" silent
 zplugin light lukechilds/zsh-nvm
 
+# Use this instead of git-prompt once I get it working
+# zplugin ice wait'1' silent pick"gitstatus.plugin.zsh"
+# zplugin light romkatv/gitstatus
+
 # zplugin ice wait"0" silent from"gh-r" as"program"
 # zplugin load junegunn/fzf-bin
 
@@ -100,6 +104,12 @@ zplugin snippet "$HOME/.aliases"
 
 zplugin ice wait"0" silent if"[[ -f $HOME/.localrc ]]"
 zplugin snippet "$HOME/.localrc"
+
+# Programs
+zplugin ice wait"1" silent as"program" pick"$ZPFX/bin/git-*"  make"PREFIX=$ZPFX" nocompile
+zplugin light tj/git-extras
+zplugin ice wait"2" silent
+zplugin snippet "https://github.com/tj/git-extras/blob/master/etc/git-extras-completion.zsh"
 
 # End zplugin config
 
