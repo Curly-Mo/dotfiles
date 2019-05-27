@@ -2,6 +2,8 @@
 Description=Autostart my favorite things
 
 [Service]
+Type=oneshot
+Environment=DISPLAY=:0
 ExecStart=/usr/bin/env sh $HOME/bin/autostart
 
 [Install]
