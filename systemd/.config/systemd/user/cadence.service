@@ -1,0 +1,9 @@
+[Unit]
+Description=Cadence for Jack
+
+[Service]
+Environment=DISPLAY=:0
+ExecStart=/usr/bin/cadence-session-start --maybe-system-start
+
+[Install]
+WantedBy=default.target
