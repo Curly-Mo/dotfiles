@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Alacritty
+Comment=alacritty
+Exec=alacritty
+Icon=alacritty
+Terminal=false
+StartupNotify=false
+Categories=Application;
+Hidden=true

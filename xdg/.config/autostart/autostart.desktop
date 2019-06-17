@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Autostart
+Comment=autostart
+Exec=autostart
+Icon=autostart
+Terminal=false
+StartupNotify=false
+Categories=Application;

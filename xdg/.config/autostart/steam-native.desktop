@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Steam-native
+Comment=steam-native
+Exec=steam-native
+Icon=steam-native
+Terminal=false
+StartupNotify=false
+Categories=Application;

@@ -44,8 +44,8 @@ zplugin ice wait"0" silent
 zplugin snippet OMZ::"lib/completion.zsh"
 
 # Load Oh My Zsh Plugins
-# zplugin ice wait"0" silent
-# zplugin snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
+zplugin ice wait"0" silent
+zplugin snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
 zplugin ice wait"!0" silent
 zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
 zplugin ice wait"0" silent
