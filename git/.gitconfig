@@ -1,20 +1,24 @@
 [core]
-	editor = vim
-	excludesfile = ~/.gitignore
+  editor = vim
+  excludesfile = ~/.gitignore
 [diff]
-	tool = vimdiff3
+  tool = vimdiff3
 [difftool]
-	prompt = false
+  prompt = false
+[difftool "vimdiff3"]
+	path = nvim
 [merge]
-  tool = vimdiff
+  tool = vimdiff3
+[mergetool "vimdiff3"]
+	path = nvim
 [push]
-	default = simple
+  default = simple
 [credential]
-	helper = cache --timeout=2600000
+  helper = cache --timeout=2600000
 [credential "https://github.com"]
-	username = Curly-Mo
+  username = Curly-Mo
 [credential "https://ghe.spotify.net"]
-	username = colinfahy
+  username = colinfahy
 [alias]
   remaster = "!f(){ git pull origin master --rebase --autostash; }; f"
   arc = "! f() { git tag archive/$1 $1 && git branch -d $1; }; f"

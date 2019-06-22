@@ -1,7 +1,10 @@
 " Load plugins with vim-plug
 call plug#begin('~/.config/nvim/plugged')
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+" Disable plugins in vimdiff
+if !&diff
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
 " end coc.nvim plugins
 " tpope
 Plug 'tpope/vim-fugitive'
@@ -55,6 +58,7 @@ Plug 'andymass/vim-matchup'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'jceb/vim-orgmode'
 Plug 'mattn/calendar-vim'
+endif
 call plug#end()
 
 " Colors
@@ -150,7 +154,7 @@ nnoremap <C-S-DOWN> <C-W><C-J>
 set diffopt+=vertical
 
 " status
-set shortmess=a
+" set shortmess=a
 
 """"""PLUGINS"""""""
 
@@ -328,7 +332,9 @@ map g/ <Plug>(incsearch-stay)
 highlight IncSearch ctermfg=cyan term=underline
 
 " CamelCaseMotion
+if !&diff
 call camelcasemotion#CreateMotionMappings('<leader>')
+endif
 
 " ctags
 " nnoremap <C-]> :execute 'ptag ' . expand('<cword>')<CR>
@@ -502,10 +508,11 @@ endif
 let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala']
 
 " coc.nvim
+" Disable for vimdiff
+if !&diff
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 " 
-let g:coc_node_path='/Users/colinfahy/.nvm/versions/node/v12.2.0/bin/node'
 " set cmdheight=2
 set nobackup
 set nowritebackup
@@ -563,6 +570,7 @@ nmap <leader>ac  <Plug>(coc-codeaction)
 nmap <leader>qf  <Plug>(coc-fix-current)
 " Support jsonc syntax highlighting
 autocmd FileType json syntax match Comment +\/\/.\+$+
+endif
 
 " vim-matchup
 hi MatchParen ctermfg=red guifg=blue ctermbg=none
