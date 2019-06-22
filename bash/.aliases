@@ -73,12 +73,15 @@ alias hpc='ssh cpf247@hpc.nyu.edu'
 # git
 alias gremaster='git stash && git fetch && git rebase origin/master && git stash pop'
 alias status='git status'
+# go to git project root
+alias groot="cd $(git rev-parse --show-toplevel)"
+
+# go to project root
+# alias proot="cd \$(pwd | grep -o '\(.*workspace/[^/]*\)')"
+alias proot="groot"
 
 # gcloud
 alias gs='gsutil'
-
-# go to project root
-alias proot="cd \$(pwd | grep -o '\(.*workspace/[^/]*\)')"
 
 # go to workspace root
 alias work='cd $HOME/workspace'
