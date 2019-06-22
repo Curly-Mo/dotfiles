@@ -1,17 +1,25 @@
-[diff]
-	tool = vimdiff
-[difftool]
-	prompt = false
 [core]
 	editor = vim
-	excludesfile = /home/colin/.gitignore
+	excludesfile = ~/.gitignore
+[diff]
+	tool = vimdiff3
+[difftool]
+	prompt = false
+[merge]
+  tool = vimdiff
 [push]
 	default = simple
 [credential]
 	helper = cache --timeout=2600000
-[include]
-  path = ~/.gituser
 [credential "https://github.com"]
 	username = Curly-Mo
 [credential "https://ghe.spotify.net"]
 	username = colinfahy
+[alias]
+  remaster = "!f(){ git pull origin master --rebase --autostash; }; f"
+  arc = "! f() { git tag archive/$1 $1 && git branch -d $1; }; f"
+  arcl = "! f() { git tag | grep '^archive/';}; f"
+  unarc = "! f() { git checkout -b $(echo $1 | sed -E 's/^archive\\///') && git tag -d $1; }; f "
+  cleanup = "!f() { git branch --merged master | egrep -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
+[include]
+  path = ~/.gituser
