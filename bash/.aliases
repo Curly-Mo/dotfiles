@@ -54,7 +54,11 @@ alias pacmatic='sudo pacmatic'
 alias sudont='sudo $(fc -nl -1)'
 
 # xdg
-alias open='xdg-open'
+if ! [ -x "$(command -v open)" ]; then
+  if [ -x "$(command -v xdg-open)" ] ; then
+    alias open='xdg-open'
+  fi
+fi
 
 # tools
 alias top='htop'
@@ -78,3 +82,20 @@ alias proot="cd \$(pwd | grep -o '\(.*workspace/[^/]*\)')"
 
 # go to workspace root
 alias work='cd $HOME/workspace'
+
+# python poetry activate
+alias poetry_shell='. "$(dirname $(poetry run which python))/activate"'
+
+# org-mode
+function org() {
+  NOTESDIR=$HOME/org
+  EXT=".org"
+  if [ "$#" -eq  "0" ]
+    then
+      DATE=$(date '+%Y-%m-%dT_%H.%M.%S')
+      FILENAME="$DATE"
+    else
+      FILENAME="$1"
+  fi
+  vim "$NOTESDIR/${FILENAME}${EXT}"
+}

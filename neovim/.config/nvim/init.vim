@@ -1,5 +1,9 @@
 " Load plugins with vim-plug
 call plug#begin('~/.config/nvim/plugged')
+Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
+" find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+" end coc.nvim plugins
+" tpope
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-obsession'
@@ -15,6 +19,7 @@ Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-vinegar'
+" end tpope
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'romainl/Apprentice'
@@ -43,28 +48,13 @@ Plug 'plytophogy/vim-diffchanges'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'ambv/black', { 'for': ['python'], 'on': ['Black'] }
 Plug 'embear/vim-localvimrc'
-" You lose, vim-lsp
-" Plug 'prabirshrestha/async.vim'
-" Plug 'prabirshrestha/vim-lsp'
-" Plug 'prabirshrestha/asyncomplete.vim'
-" Plug 'prabirshrestha/asyncomplete-lsp.vim'
-
-" You too lcnvm
-" Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh',}
-" Plug 'ncm2/ncm2'
-" Plug 'roxma/nvim-yarp' " required by ncm2
-" Plug 'ncm2/ncm2-bufword'
-" Plug 'ncm2/ncm2-path'
-" Plug 'ncm2/ncm2-github'
-" Plug 'ncm2/ncm2-tmux'
-
 Plug 'junegunn/fzf'
 Plug 'unblevable/quick-scope'
 Plug 'natebosch/vim-lsc'
-Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
-" find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
 Plug 'andymass/vim-matchup'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
+Plug 'jceb/vim-orgmode'
+Plug 'mattn/calendar-vim'
 call plug#end()
 
 " Colors
@@ -515,6 +505,7 @@ let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typesc
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 " 
+let g:coc_node_path='/Users/colinfahy/.nvm/versions/node/v12.2.0/bin/node'
 " set cmdheight=2
 set nobackup
 set nowritebackup
@@ -579,3 +570,6 @@ hi MatchWord ctermfg=red guifg=blue ctermbg=none
 
 " vim-commentary
 nmap <C-/> Commentary
+
+" org-mode
+let g:org_agenda_files = ['~/org/index.org', '~/org/project.org']
