@@ -11,3 +11,7 @@
 	helper = cache --timeout=2600000
 [include]
   path = ~/.gituser
+[credential "https://github.com"]
+	username = Curly-Mo
+[credential "https://ghe.spotify.net"]
+	username = colinfahy
