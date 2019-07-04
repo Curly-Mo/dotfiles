@@ -1,5 +1,5 @@
 {
-  "coc.preferences.diagnostic.displayByAle": true,
+  // "coc.preferences.diagnostic.displayByAle": true,
   "languageserver": {
     "metals": {
       "command": "metals-vim",
@@ -10,4 +10,7 @@
   // use microsoft python langauge server
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
+  "python.autoComplete.extraPaths": [
+    "${workspaceFolder}/voice-nyc-recommend-pipeline/src/main/python",
+  ],
 }
