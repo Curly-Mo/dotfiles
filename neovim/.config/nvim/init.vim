@@ -2,20 +2,22 @@
 call plug#begin('~/.config/nvim/plugged')
 " Disable plugins in vimdiff
 if !&diff
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
-Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
-Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
-Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+  Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
 " end coc.nvim plugins
+endif
+" These plugins are allowed in vimdiff mode
 " tpope
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-surround'
@@ -45,7 +47,7 @@ Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
 Plug 'justinmk/vim-sneak'
-Plug 'w0rp/ale'
+" Plug 'w0rp/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'wellle/targets.vim'
@@ -68,18 +70,24 @@ Plug 'andymass/vim-matchup'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'jceb/vim-orgmode'
 Plug 'mattn/calendar-vim'
-endif
 call plug#end()
 
 " Colors
+" set t_Co=16
+" if exists('+termguicolors')
+"   set termguicolors
+" endif
+" set notermguicolors
 colorscheme default
 " colorscheme base16-railscasts
 " silent! colorscheme apprentice
-" set t_Co=256
-" set termguicolors
-" set notermguicolors
 " set background=dark
 set background=light
+" vimdiff
+highlight DiffAdd    cterm=bold ctermbg=darkgrey
+highlight DiffDelete cterm=bold ctermbg=darkyellow
+highlight DiffChange cterm=bold ctermbg=darkcyan
+highlight DiffText   cterm=bold ctermbg=darkcyan ctermfg=blue
 
 " syntax
 syntax on
@@ -167,6 +175,78 @@ set diffopt+=vertical
 " set shortmess=a
 
 """"""PLUGINS"""""""
+
+if !&diff
+"""Plugins disable in vimdiff mode"""
+
+" coc.nvim
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+" 
+" set cmdheight=2
+set nobackup
+set nowritebackup
+" change buffers with unsaved changes
+set hidden
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+" Use <c-space> for trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Use `[c` and `]c` for navigate diagnostics
+nmap <silent> [c <Plug>(coc-diagnostic-prev)
+nmap <silent> ]c <Plug>(coc-diagnostic-next)
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> <C-LeftMouse> <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" Use K for show documentation in preview window
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocActionAsync('doHover')
+  endif
+endfunction
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+" Highlight symbol under cursor on CursorHold
+autocmd CursorHold * silent call CocActionAsync('highlight')
+hi CocHighlightText ctermbg=236
+hi CocFloating ctermbg=238
+hi Pmenu ctermbg=248
+hi PmenuSbar ctermbg=248
+hi PmenuThumb ctermbg=darkgrey
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+" Remap for format selected region
+vmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+" Use `:Format` to format current buffer
+command! -nargs=0 Format :call CocAction('format')
+" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+vmap <leader>a  <Plug>(coc-codeaction-selected)
+nmap <leader>a  <Plug>(coc-codeaction-selected)
+" Remap for do codeAction of current line
+nmap <leader>ac  <Plug>(coc-codeaction)
+" Fix autofix problem of current line
+nmap <leader>qf  <Plug>(coc-fix-current)
+" Support jsonc syntax highlighting
+autocmd FileType json syntax match Comment +\/\/.\+$+
+
+endif
+
+"""Plugins allowed in vimdiff mode"""
 
 " Ale
 " disable completion to work with coc.vim
@@ -342,9 +422,7 @@ map g/ <Plug>(incsearch-stay)
 highlight IncSearch ctermfg=cyan term=underline
 
 " CamelCaseMotion
-if !&diff
 call camelcasemotion#CreateMotionMappings('<leader>')
-endif
 
 " ctags
 " nnoremap <C-]> :execute 'ptag ' . expand('<cword>')<CR>
@@ -371,12 +449,6 @@ nnoremap <localleader>csv :RainbowDelim<CR>
 " csv
 :command CSV %!column -t
 
-" vimdiff
-highlight DiffAdd    cterm=bold ctermbg=103
-highlight DiffDelete cterm=bold ctermbg=103
-highlight DiffChange cterm=bold ctermbg=103
-highlight DiffText   cterm=bold ctermbg=131
-
 " black
 let g:black_skip_string_normalization = 1
 let g:black_linelength = 120
@@ -386,6 +458,9 @@ let g:localvimrc_whitelist='/Users/colinfahy/workspace/.*'
 
 " gitgutter
 set updatetime=1000
+highlight GitGutterAdd ctermfg=2 ctermbg=none
+highlight GitGutterChange ctermbg=none
+highlight GitGutterDelete ctermfg=1
 
 " vim-lsp config
 " let g:lsp_signs_enabled = 1
@@ -516,71 +591,6 @@ endif
 
 " Markdown
 let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala']
-
-" coc.nvim
-" Disable for vimdiff
-if !&diff
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" 
-" set cmdheight=2
-set nobackup
-set nowritebackup
-" change buffers with unsaved changes
-set hidden
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-" Use <c-space> for trigger completion.
-inoremap <silent><expr> <c-space> coc#refresh()
-" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
-" Coc only does snippet and additional edit on confirm.
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-" Use `[c` and `]c` for navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> <C-LeftMouse> <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
-" Use K for show documentation in preview window
-function! s:show_documentation()
-  if &filetype == 'vim'
-    execute 'h '.expand('<cword>')
-  else
-    call CocActionAsync('doHover')
-  endif
-endfunction
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-hi CocHighlightText ctermbg=236
-hi CocFloating ctermbg=blue
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-" Remap for format selected region
-vmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-vmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
-" Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
-" Support jsonc syntax highlighting
-autocmd FileType json syntax match Comment +\/\/.\+$+
-endif
 
 " vim-matchup
 hi MatchParen ctermfg=red guifg=blue ctermbg=none
