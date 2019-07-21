@@ -5,6 +5,8 @@
   tool = vimdiff3
 [difftool]
   prompt = false
+  # Be able to abort all diffs with `:cq` or `:cquit`
+  trustExitCode = true
 [difftool "vimdiff3"]
 	path = nvim
 [merge]
@@ -25,5 +27,9 @@
   arcl = "! f() { git tag | grep '^archive/';}; f"
   unarc = "! f() { git checkout -b $(echo $1 | sed -E 's/^archive\\///') && git tag -d $1; }; f "
   cleanup = "!f() { git branch --merged master | egrep -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
+  fresh = "!f() { git checkout master && git pull; }; f"
+  new = "!f() { git checkout master && git pull && git checkout -b $1; }; f"
 [include]
   path = ~/.gituser
+[color]
+	ui = auto
