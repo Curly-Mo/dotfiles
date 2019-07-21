@@ -1,5 +1,6 @@
 {
   // "coc.preferences.diagnostic.displayByAle": true,
+  // scala
   "languageserver": {
     "metals": {
       "command": "metals-vim",
@@ -13,4 +14,7 @@
   "python.autoComplete.extraPaths": [
     "${workspaceFolder}/voice-nyc-recommend-pipeline/src/main/python",
   ],
+  // coc-java
+  "java.home": "/Users/colinfahy/.jenv/versions/11.0",
+  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
 }

@@ -42,7 +42,7 @@ Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentic
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
-Plug 'sbdchd/neoformat'
+" Plug 'sbdchd/neoformat'
 Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
@@ -230,65 +230,69 @@ hi PmenuThumb ctermbg=darkgrey
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 " Remap for format selected region
-vmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+vmap <leader>f <Plug>(coc-format-selected)
+nmap <leader>f <Plug>(coc-format-selected)
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-vmap <leader>a  <Plug>(coc-codeaction-selected)
-nmap <leader>a  <Plug>(coc-codeaction-selected)
+vmap <leader>a <Plug>(coc-codeaction-selected)
+nmap <leader>a <Plug>(coc-codeaction-selected)
 " Remap for do codeAction of current line
-nmap <leader>ac  <Plug>(coc-codeaction)
+nmap <leader>ac <Plug>(coc-codeaction)
 " Fix autofix problem of current line
-nmap <leader>qf  <Plug>(coc-fix-current)
+nmap <leader>qf <Plug>(coc-fix-current)
 " Support jsonc syntax highlighting
 autocmd FileType json syntax match Comment +\/\/.\+$+
+" organize imports with command and hotkey
+command! -nargs=0 Org :call CocAction('runCommand', 'editor.action.organizeImport')
+nmap <leader>o :Org<CR>
+
 
 endif
 
 """Plugins allowed in vimdiff mode"""
 
-" Ale
-" disable completion to work with coc.vim
-let g:ale_completion_enabled = 0
-let g:ale_lint_on_text_changed = 'never'
-let g:ale_lint_on_enter = 1
-let g:ale_lint_on_insert_leave = 1
-let g:ale_lint_on_save = 1
-let g:ale_sign_column_always = 1
-let g:ale_sign_error = '✗'
-let g:ale_sign_warning = '⚠'
-nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-nmap <silent> <C-j> <Plug>(ale_next_wrap)
-nmap <S-L> <Plug>(ale_fix)
-let g:ale_echo_msg_error_str = '✖'
-let g:ale_echo_msg_warning_str = '⚠'
-let g:ale_echo_msg_format = '%s [%linter%] %severity%'
-highlight ALEErrorSign ctermfg=196
-highlight ALEWarningSign ctermbg=None ctermfg=227
-highlight ALEWarning ctermbg=Black
-let g:ale_linters = {
-\   'python': ['flake8', 'pyflakes', 'pyls'],
-\   'java': ['checkstyle'],
-\   'jsx': ['stylelint', 'eslint'],
-\   'proto': ['prototool-lint'],
-\}
-let g:ale_fixers = {
-\   'python': ['black'],
-\   'java': ['google_java_format', 'remove_trailing_lines', 'trim_whitespace'],
-\   'javascript': ['prettier', 'eslint'],
-\   'scala': ['scalafmt'],
-\}
-augroup FiletypeGroup
-  autocmd!
-  au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
-augroup END
-let g:ale_linter_aliases = {'jsx': 'css'}
-nnoremap <silent> gk :ALEHover<CR>
-nnoremap <silent> gd :ALEGoToDefinition<CR>
-nnoremap <silent> gr :ALEFindReferences<CR>
-nnoremap <silent> gs :ALESymbolSearch<CR>
-" let g:ale_python_flake8_options = "--max-line-length=120"
+" " Ale
+" " disable completion to work with coc.vim
+" let g:ale_completion_enabled = 0
+" let g:ale_lint_on_text_changed = 'never'
+" let g:ale_lint_on_enter = 1
+" let g:ale_lint_on_insert_leave = 1
+" let g:ale_lint_on_save = 1
+" let g:ale_sign_column_always = 1
+" let g:ale_sign_error = '✗'
+" let g:ale_sign_warning = '⚠'
+" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+" nmap <silent> <C-j> <Plug>(ale_next_wrap)
+" nmap <S-L> <Plug>(ale_fix)
+" let g:ale_echo_msg_error_str = '✖'
+" let g:ale_echo_msg_warning_str = '⚠'
+" let g:ale_echo_msg_format = '%s [%linter%] %severity%'
+" highlight ALEErrorSign ctermfg=196
+" highlight ALEWarningSign ctermbg=None ctermfg=227
+" highlight ALEWarning ctermbg=Black
+" let g:ale_linters = {
+" \   'python': ['flake8', 'pyflakes', 'pyls'],
+" \   'java': ['checkstyle'],
+" \   'jsx': ['stylelint', 'eslint'],
+" \   'proto': ['prototool-lint'],
+" \}
+" let g:ale_fixers = {
+" \   'python': ['black'],
+" \   'java': ['google_java_format', 'remove_trailing_lines', 'trim_whitespace'],
+" \   'javascript': ['prettier', 'eslint'],
+" \   'scala': ['scalafmt'],
+" \}
+" augroup FiletypeGroup
+"   autocmd!
+"   au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
+" augroup END
+" let g:ale_linter_aliases = {'jsx': 'css'}
+" nnoremap <silent> gk :ALEHover<CR>
+" nnoremap <silent> gd :ALEGoToDefinition<CR>
+" nnoremap <silent> gr :ALEFindReferences<CR>
+" nnoremap <silent> gs :ALESymbolSearch<CR>
+" " let g:ale_python_flake8_options = "--max-line-length=120"
 
 " Airline
 let g:airline_powerline_fonts = 1
@@ -353,37 +357,37 @@ endfunction
 
 " Neoformat
 " noremap <localleader>ll :Neoformat<CR>
-let g:neoformat_enabled_java = ['uncrustify', 'clang_format', 'google']
-let g:neoformat_java_clang_format = {
-            \ 'exe': '/usr/local/bin/clang-format',
-            \ 'args': ["--style='/Users/colinfahy/.clang-format'"],
-            \ 'stdin': 1,
-            \ }
-let g:neoformat_java_google = {
-            \ 'exe': '/usr/local/bin/google-java-format',
-            \ 'args': ['-'],
-            \ 'stdin': 1,
-            \ }
-let g:neoformat_java_uncrustify = {
-            \ 'exe': '/usr/local/bin/uncrustify',
-            \ 'args': ['-q', '-l JAVA', '-c /Users/colinfahy/.uncrustify'],
-            \ 'stdin': 1,
-            \ }
-let g:neoformat_enabled_scala = ['scalafmt']
-let g:neoformat_scala_scalafmt = {
-            \ 'exe': 'scalafmt',
-            \ 'args': ['--stdin 2>/dev/null --config-str "maxColumn=100"'],
-            \ 'stdin': 1,
-            \ }
-let g:neoformat_enabled_python = ['yapf', 'autopep8']
-let g:neoformat_python_autopep8 = {
-            \ 'exe': 'autopep8',
-            \ 'args': ['--max-line-length 120'],
-            \ }
-let g:neoformat_python_yapf = {
-            \ 'exe': 'yapf',
-            \ 'args': ["--style='{based_on_style: google, column_limit: 120, split_arguments_when_comma_terminated: true}'"],
-            \ }
+" let g:neoformat_enabled_java = ['uncrustify', 'clang_format', 'google']
+" let g:neoformat_java_clang_format = {
+"             \ 'exe': '/usr/local/bin/clang-format',
+"             \ 'args': ["--style='/Users/colinfahy/.clang-format'"],
+"             \ 'stdin': 1,
+"             \ }
+" let g:neoformat_java_google = {
+"             \ 'exe': '/usr/local/bin/google-java-format',
+"             \ 'args': ['-'],
+"             \ 'stdin': 1,
+"             \ }
+" let g:neoformat_java_uncrustify = {
+"             \ 'exe': '/usr/local/bin/uncrustify',
+"             \ 'args': ['-q', '-l JAVA', '-c /Users/colinfahy/.uncrustify'],
+"             \ 'stdin': 1,
+"             \ }
+" let g:neoformat_enabled_scala = ['scalafmt']
+" let g:neoformat_scala_scalafmt = {
+"             \ 'exe': 'scalafmt',
+"             \ 'args': ['--stdin 2>/dev/null --config-str "maxColumn=100"'],
+"             \ 'stdin': 1,
+"             \ }
+" let g:neoformat_enabled_python = ['yapf', 'autopep8']
+" let g:neoformat_python_autopep8 = {
+"             \ 'exe': 'autopep8',
+"             \ 'args': ['--max-line-length 120'],
+"             \ }
+" let g:neoformat_python_yapf = {
+"             \ 'exe': 'yapf',
+"             \ 'args': ["--style='{based_on_style: google, column_limit: 120, split_arguments_when_comma_terminated: true}'"],
+"             \ }
 
 " Rainbow Parens
 let g:rainbow_active = 1
