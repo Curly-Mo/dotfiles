@@ -131,8 +131,10 @@ autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
 :command WQ wq
 :command Wq wq
 :command Q q
-":command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
-:command W w
+" :command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+" :command W :execute '!sudo tee % > /dev/null'
+" :command W w
+:command W :execute ':SudoWrite'
 
 " paste
 nnoremap <F2> :set invpaste paste?<CR>
