@@ -16,6 +16,8 @@ if !&diff
   Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
   Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
 " end coc.nvim plugins
+Plug 'vim-ctrlspace/vim-ctrlspace'
+Plug 'Vigemus/iron.nvim'
 endif
 " These plugins are allowed in vimdiff mode
 " tpope
@@ -54,22 +56,22 @@ Plug 'wellle/targets.vim'
 Plug 'bkad/CamelCaseMotion'
 Plug 'universal-ctags/ctags'
 Plug 'derekwyatt/vim-scala', { 'for': ['scala'] }
-Plug 'tweekmonster/impsort.vim'
+Plug 'tweekmonster/impsort.vim', { 'on': ['ImpSort'] }
 " Plug 'ludovicchabant/vim-gutentags'
 Plug 'lervag/vimtex', { 'for': ['tex'] }
 Plug 'NLKNguyen/vim-maven-syntax'
 Plug 'mechatroner/rainbow_csv'
 Plug 'plytophogy/vim-diffchanges'
 Plug 'raimon49/requirements.txt.vim'
-Plug 'ambv/black', { 'for': ['python'], 'on': ['Black'] }
+Plug 'ambv/black', { 'on': ['Black'] }
 Plug 'embear/vim-localvimrc'
 Plug 'junegunn/fzf'
 Plug 'unblevable/quick-scope'
-Plug 'natebosch/vim-lsc'
 Plug 'andymass/vim-matchup'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'jceb/vim-orgmode'
 Plug 'mattn/calendar-vim'
+" Plug 'janko/vim-test'
 call plug#end()
 
 " Colors
@@ -87,7 +89,16 @@ set background=light
 highlight DiffAdd    cterm=bold ctermbg=darkgrey
 highlight DiffDelete cterm=bold ctermbg=darkyellow
 highlight DiffChange cterm=bold ctermbg=darkcyan
-highlight DiffText   cterm=bold ctermbg=darkcyan ctermfg=blue
+highlight DiffText   cterm=bold ctermbg=darkblue ctermfg=darkgrey
+" fold colors
+" set fillchars=fold:\ 
+highlight Folded ctermbg=235
+highlight FoldColumn ctermbg=black
+" vertical divider colors
+hi VertSplit ctermfg=Black ctermbg=248
+hi StatusLine ctermfg=236
+hi StatusLineNC ctermfg=236
+set fillchars+=vert:│
 
 " syntax
 syntax on
@@ -135,6 +146,10 @@ autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
 " :command W :execute '!sudo tee % > /dev/null'
 " :command W w
 :command W :execute ':SudoWrite'
+" reload vimrc
+:command! Reload source $MYVIMRC
+" csv
+:command! CSV %!column -t
 
 " paste
 nnoremap <F2> :set invpaste paste?<CR>
@@ -170,11 +185,14 @@ nnoremap <C-S-RIGHT> <C-W><C-L>
 nnoremap <C-S-UP> <C-W><C-K>
 nnoremap <C-S-DOWN> <C-W><C-J>
 
-" git
+" vimdiff settings
 set diffopt+=vertical
+set diffopt+=foldcolumn:1
 
 " status
 " set shortmess=a
+
+
 
 """"""PLUGINS"""""""
 
@@ -300,7 +318,7 @@ endif
 let g:airline_powerline_fonts = 1
 "let g:airline_theme='simple'
 let g:airline_theme='apprentice'
-let g:airline#extensions#ale#enabled = 1
+" let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
 let g:airline#extensions#tabline#buf_min_count = 2
@@ -308,6 +326,7 @@ let g:airline#extensions#tabline#buf_min_count = 2
 let g:airline#extensions#tabline#formatter = 'short_path'
 " let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
 " let g:airline_section_b = airline#section#create(['hunks'])
+let g:airline#extensions#coc#enabled = 1
 let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
 
@@ -428,7 +447,7 @@ map g/ <Plug>(incsearch-stay)
 highlight IncSearch ctermfg=cyan term=underline
 
 " CamelCaseMotion
-call camelcasemotion#CreateMotionMappings('<leader>')
+let g:camelcasemotion_key = '<leader>'
 
 " ctags
 " nnoremap <C-]> :execute 'ptag ' . expand('<cword>')<CR>
@@ -452,9 +471,6 @@ call camelcasemotion#CreateMotionMappings('<leader>')
 " rainbow csv
 nnoremap <localleader>csv :RainbowDelim<CR>
 
-" csv
-:command CSV %!column -t
-
 " black
 let g:black_skip_string_normalization = 1
 let g:black_linelength = 120
@@ -463,7 +479,7 @@ let g:black_linelength = 120
 let g:localvimrc_whitelist='/Users/colinfahy/workspace/.*'
 
 " gitgutter
-set updatetime=1000
+set updatetime=500
 highlight GitGutterAdd ctermfg=2 ctermbg=none
 highlight GitGutterChange ctermbg=none
 highlight GitGutterDelete ctermfg=1
@@ -566,15 +582,6 @@ let g:github_enterprise_urls = ['https://ghe.spotify.net']
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:qs_max_chars=300
 
-" vim-lsc
-" let g:lsc_enable_autocomplete = v:false
-" let g:lsc_server_commands = {
-"     \ 'scala': 'metals-test.sh'
-"     \ }
-" let g:lsc_auto_map = {
-"     \ 'GoToDefinition': 'gd',
-"     \}
-
 " Smoother scrolling
 map <ScrollWheelUp> <C-Y>
 map <ScrollWheelDown> <C-E>
@@ -607,3 +614,5 @@ nmap <C-/> Commentary
 
 " org-mode
 let g:org_agenda_files = ['~/org/index.org', '~/org/project.org']
+
+" iron.nvim

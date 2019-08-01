@@ -10,7 +10,7 @@ fi
 
 # ls
 if [ -x "$(command -v gls)" ]; then
-    alias ls='gls -Gh --color=auto --group-directories-first'
+    alias ls='gls -GFh --color=auto --group-directories-first'
 else
     alias ls='ls -h --color=auto --group-directories-first'
 fi
@@ -101,4 +101,9 @@ function org() {
       FILENAME="$1"
   fi
   vim "$NOTESDIR/${FILENAME}${EXT}"
+}
+
+# 
+newdir() {
+  mkdir -p -- "$1" && cd -- "$1"
 }
