@@ -67,6 +67,10 @@ zplugin light zsh-users/zsh-autosuggestions
 zplugin ice wait"1" silent atinit"zpcompinit; zpcdreplay"
 zplugin light zdharma/fast-syntax-highlighting
 
+# caused too many issues
+# zplugin ice wait"0" silent atload"zstyle ':history-search-multi-word' highlight-color 'fg=4,bold,bg=5'"
+# zplugin light zdharma/history-search-multi-word
+
 zplugin ice wait"0" silent
 zplugin light davidparsson/zsh-pyenv-lazy
 
