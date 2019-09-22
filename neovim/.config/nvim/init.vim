@@ -14,6 +14,7 @@ if !&diff
   Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
   Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
 " end coc.nvim plugins
 Plug 'vim-ctrlspace/vim-ctrlspace'
@@ -36,6 +37,7 @@ Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-projectionist'
 " end tpope
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
@@ -71,6 +73,7 @@ Plug 'andymass/vim-matchup'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'jceb/vim-orgmode'
 Plug 'mattn/calendar-vim'
+Plug 'freitass/todo.txt-vim'
 " Plug 'janko/vim-test'
 call plug#end()
 
@@ -96,8 +99,8 @@ highlight Folded ctermbg=235
 highlight FoldColumn ctermbg=black
 " vertical divider colors
 hi VertSplit ctermfg=Black ctermbg=248
-hi StatusLine ctermfg=236
-hi StatusLineNC ctermfg=236
+hi StatusLine ctermfg=236 ctermbg=248
+hi StatusLineNC ctermfg=236 ctermbg=248
 set fillchars+=vert:│
 
 " syntax
@@ -266,7 +269,9 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 " organize imports with command and hotkey
 command! -nargs=0 Org :call CocAction('runCommand', 'editor.action.organizeImport')
 nmap <leader>o :Org<CR>
-
+" add current working dir to python path for local imports
+let cwd = getcwd()
+autocmd FileType python let g:coc_user_config = {"python.autoComplete.extraPaths": [getcwd()],} 
 
 endif
 

@@ -11,10 +11,9 @@
   // use microsoft python langauge server
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
-  "python.autoComplete.extraPaths": [
-    "${workspaceFolder}/voice-nyc-recommend-pipeline/src/main/python",
-  ],
+  "python.pythonPath": "~/.pyenv/shims/python",
   // coc-java
-  "java.home": "/Users/colinfahy/.jenv/versions/11.0",
+  // "java.home": "/usr/bin/java",
+  "java.home": "~/.jenv/versions/11.0",
   "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
 }
