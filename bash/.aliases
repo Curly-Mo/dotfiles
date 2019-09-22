@@ -2,51 +2,46 @@
 
 # various
 alias grep="grep --color=auto"
-alias ..="cd .."
+
+# I'm an idiot
+alias rm='rm -I'
+
+
+# ls
+# if [ -x "$(command -v gls)" ]; then
+#     alias ls='gls -GFh --color=auto --group-directories-first'
+# else
+#     alias ls='ls -h --color=auto --group-directories-first'
+# fi
+alias ls='ls -Fh --color=auto --group-directories-first'
+alias ll='ls -lA'
+alias la='ls -A'
+alias l='ls -CF'
+alias ltr='ls -lAtr'
+alias lr='ls -ltu'
+alias tree='tree -C -L 4'
+# find
+alias today='find -maxdepth 1 -type f -mtime -1'
+alias latest='find . -maxdepth 1 -type f -printf "%Ts\t%f\n" | sort -nr | cut -f2 | head -1'
+function rc(){
+  local latest_file=$(latest)
+  $1 $(latest)
+}
+alias lf='latest | xargs -o'
+
+# vim
 alias vi="vim"
 if hash nvim 2>/dev/null; then
     alias vim="nvim"
 fi
-
-# ls
-if [ -x "$(command -v gls)" ]; then
-    alias ls='gls -GFh --color=auto --group-directories-first'
-else
-    alias ls='ls -h --color=auto --group-directories-first'
-fi
-alias ll='ls -la'
-alias la='ls -A'
-alias l='ls -CF'
-alias ltr='ls -ltr'
-alias lr='ls -ltu'
-#function rc(){
-#  if [ -z "$1" ]; then
-#    set -- "ls"
-#  fi
-#  $1 `find . -maxdepth 1 -type f -printf '%Ts\t%f\n' | sort -nr | cut -f2 | head -1`
-#}
-
-alias tree='tree -C -L 4'
-
-# vim
-#alias vr="vim `find . -maxdepth 1 -type f -printf '%Ts\t%f\n' | sort -nr | cut -f2 | head -1`"
 alias vimrc='vim ~/.nvimrc'
+alias vl='vim $(latest)'
 
-# I'm an idiot
-if [ "$(uname)" = "Darwin" ]; then
-    alias rm='rm -i'
-else
-    alias rm='rm -I'
-fi
-
-# python virtualenvs
-#alias personal='export PYTHONSTARTUP=/home/cfahy/.pystartup; source ~/.virtualenv/personal/bin/activate'
-alias venv3='export PYTHONSTARTUP=/home/colin/.pystartup; source ~/.virtualenv/venv3/bin/activate'
-alias venv2='export PYTHONSTARTUP=/home/colin/.pystartup; source ~/.virtualenv/venv2/bin/activate'
-alias py3='source activate py3'
-alias py2='source activate py2'
+# python
+# python poetry activate
+alias poetry_shell='. "$(dirname $(poetry run which python))/activate"'
+# ipython
 alias ipy='ipython'
-alias ipy34='/home/colin/miniconda3/envs/py34/bin/ipython'
 
 # sudo
 alias pacman='sudo pacman'
@@ -74,10 +69,7 @@ alias hpc='ssh cpf247@hpc.nyu.edu'
 alias gremaster='git stash && git fetch && git rebase origin/master && git stash pop'
 alias status='git status'
 # go to git project root
-alias groot="cd $(git rev-parse --show-toplevel)"
-
-# go to project root
-# alias proot="cd \$(pwd | grep -o '\(.*workspace/[^/]*\)')"
+alias groot='cd $(git rev-parse --show-toplevel)'
 alias proot="groot"
 
 # gcloud
@@ -86,24 +78,15 @@ alias gs='gsutil'
 # go to workspace root
 alias work='cd $HOME/workspace'
 
-# python poetry activate
-alias poetry_shell='. "$(dirname $(poetry run which python))/activate"'
-
-# org-mode
-function org() {
-  NOTESDIR=$HOME/org
-  EXT=".org"
-  if [ "$#" -eq  "0" ]
-    then
-      DATE=$(date '+%Y-%m-%dT_%H.%M.%S')
-      FILENAME="$DATE"
-    else
-      FILENAME="$1"
-  fi
-  vim "$NOTESDIR/${FILENAME}${EXT}"
-}
-
-# 
+# cd
+alias ..='cd ..'
+alias -- '-'='cd -'
 newdir() {
   mkdir -p -- "$1" && cd -- "$1"
 }
+
+# ps
+alias ps='ps -o pid,tty,start,time,%cpu,%mem,command'
+alias pse='command ps -e -o pid,ppid,user,tty,start,time,%cpu,%mem,command'
+alias psgrep='pse | grep -v "grep -i --color=auto" | command grep -i --color=auto'
+alias psme='ps -u $USER'
