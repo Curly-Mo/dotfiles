@@ -20,6 +20,7 @@ source ~/.zplugin/bin/zplugin.zsh
 export ZSH_CACHE_DIR=~/.cache/zsh
 setopt promptsubst
 setopt globdots
+setopt extendedglob
 
 # Oh my zsh themes
 # zplugin ice wait"0" silent
@@ -30,9 +31,10 @@ setopt globdots
 # Custom theme
 autoload -U colors
 colors
+# moved to local snippets
 # source $HOME/dotfiles/zsh/.zsh_theme
-# zplugin ice wait"!0" silent
-zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_theme'
+# # zplugin ice wait"!0" silent
+# zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_theme'
 # zplugin ice wait"!0" silent
 zplugin snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
 
@@ -50,6 +52,9 @@ zplugin ice wait"!0" silent
 zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
 zplugin ice wait"0" silent
 zplugin snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
+# nah, the alias expansion was too distracting
+# zplugin ice wait"0" silent
+# zplugin snippet OMZ::"plugins/globalias/globalias.plugin.zsh"
 
 # Plugins
 zplugin ice wait"0" silent atclone"dircolors -b LS_COLORS > clrs.zsh" atpull'%atclone' pick"clrs.zsh"
@@ -64,12 +69,12 @@ zplugin light zsh-users/zsh-completions
 zplugin ice wait"1" silent atload"_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false"
 zplugin light zsh-users/zsh-autosuggestions
 
-zplugin ice wait"1" silent atinit"zpcompinit; zpcdreplay"
-zplugin light zdharma/fast-syntax-highlighting
-
 # caused too many issues
 # zplugin ice wait"0" silent atload"zstyle ':history-search-multi-word' highlight-color 'fg=4,bold,bg=5'"
 # zplugin light zdharma/history-search-multi-word
+
+zplugin ice wait"0" silent
+zplugin light darvid/zsh-poetry
 
 zplugin ice wait"0" silent
 zplugin light davidparsson/zsh-pyenv-lazy
@@ -90,10 +95,6 @@ zplugin light lukechilds/zsh-nvm
 # zplugin ice wait"0" silent from"gh-r" as"program"
 # zplugin load junegunn/fzf-bin
 
-# custom completions
-zplugin ice wait"0" silent
-zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_functions/.zsh_functions'
-
 # zplugin ice wait"0" silent src"zsh-history-substring-search.zsh"
 # zplugin light zsh-users/zsh-history-substring-search
 # bindkey '^[[A' history-substring-search-up
@@ -102,18 +103,33 @@ zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_funct
 # zplugin ice wait"0" silent
 # zplugin light MichaelAquilina/zsh-you-should-use
 
+# completions
+zplugin ice wait"1" as"completion" silent
+zplugin snippet "https://github.com/jwilm/alacritty/blob/master/extra/completions/_alacritty"
+
 # local stuff
+zplugin ice silent if"[[ -f $HOME/.zsh_theme ]]"
+zplugin snippet "$HOME/.zsh_theme"
+
 zplugin ice wait"0" silent if"[[ -f $HOME/.aliases ]]"
 zplugin snippet "$HOME/.aliases"
 
 zplugin ice wait"0" silent if"[[ -f $HOME/.localrc ]]"
 zplugin snippet "$HOME/.localrc"
 
+# Load all my functions and completions
+zplugin ice wait"1" silent if"[[ -d $HOME/.zsh_functions ]]"
+zplugin light "$HOME/.zsh_functions"
+
 # Programs
 zplugin ice wait"1" silent as"program" pick"$ZPFX/bin/git-*"  make"PREFIX=$ZPFX" nocompile
 zplugin light tj/git-extras
 zplugin ice wait"2" silent
 zplugin snippet "https://github.com/tj/git-extras/blob/master/etc/git-extras-completion.zsh"
+
+# do this one last since it calls compinit
+zplugin ice wait"1" silent atinit"zpcompinit; zpcdreplay"
+zplugin light zdharma/fast-syntax-highlighting
 
 # End zplugin config
 
@@ -144,6 +160,30 @@ bindkey  "\e[H"   beginning-of-line
 bindkey  "\e[F"   end-of-line
 bindkey  "\e[3~"  delete-char
 bindkey  "\e[2~"  overwrite-mode
+# quit current buffer
+bindkey '^q' push-line-or-edit
+
+
+# TODO: Do I want this stuff? just trying it out
+# # Fuzzy matching of completions for when you mistype them:
+# zstyle ':completion:*' completer _complete _match _approximate
+# zstyle ':completion:*:match:*' original only
+# zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
+# # Pretty completions
+# zstyle ':completion:*:matches' group 'yes'
+# zstyle ':completion:*:options' description 'yes'
+# zstyle ':completion:*:options' auto-description '%d'
+# zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
+# zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
+# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+# zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+# zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
+# zstyle ':completion:*' group-name ''
+# zstyle ':completion:*' verbose yes
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+# zstyle ':completion:*' rehash true
 
 # uncomment for profiling
 # zprof
