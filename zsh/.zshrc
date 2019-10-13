@@ -122,7 +122,7 @@ zplugin ice wait"1" silent if"[[ -d $HOME/.zsh_functions ]]"
 zplugin light "$HOME/.zsh_functions"
 
 # Programs
-zplugin ice wait"1" silent as"program" pick"$ZPFX/bin/git-*"  make"PREFIX=$ZPFX" nocompile
+zplugin ice wait"1" silent as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX" nocompile
 zplugin light tj/git-extras
 zplugin ice wait"2" silent
 zplugin snippet "https://github.com/tj/git-extras/blob/master/etc/git-extras-completion.zsh"

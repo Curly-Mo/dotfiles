@@ -273,6 +273,10 @@ nmap <leader>o :Org<CR>
 let cwd = getcwd()
 autocmd FileType python let g:coc_user_config = {"python.autoComplete.extraPaths": [getcwd()],} 
 
+" ctrlspace
+set hidden
+let g:CtrlSpaceDefaultMappingKey = "<C-space> "
+
 endif
 
 """Plugins allowed in vimdiff mode"""
@@ -350,7 +354,7 @@ au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
 
 " Tagbar
-map <C-l> :TagbarToggle<CR>
+map <C-;> :TagbarToggle<CR>
 let g:tagbar_width = 25
 let g:tagbar_compact = 0
 let g:tagbar_indent = 1
@@ -488,6 +492,9 @@ set updatetime=500
 highlight GitGutterAdd ctermfg=2 ctermbg=none
 highlight GitGutterChange ctermbg=none
 highlight GitGutterDelete ctermfg=1
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [h <Plug>(GitGutterPrevHunk)
+" g:gitgutter_preview_win_floating = 0
 
 " vim-lsp config
 " let g:lsp_signs_enabled = 1
@@ -613,6 +620,10 @@ let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typesc
 " vim-matchup
 hi MatchParen ctermfg=red guifg=blue ctermbg=none
 hi MatchWord ctermfg=red guifg=blue ctermbg=none
+" let g:matchup_enabled = 0
+" let g:matchup_matchparen_enabled = 0
+" let g:matchup_motion_enabled = 0
+" let g:matchup_text_obj_enabled = 0
 
 " vim-commentary
 nmap <C-/> Commentary
