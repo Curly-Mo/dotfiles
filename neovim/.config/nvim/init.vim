@@ -1,4 +1,4 @@
-g Load plugins with vim-plug
+" Load plugins with vim-plug
 call plug#begin('~/.config/nvim/plugged')
 " Disable plugins in vimdiff
 if !&diff
