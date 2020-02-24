@@ -163,6 +163,10 @@ bindkey  "\e[2~"  overwrite-mode
 # quit current buffer
 bindkey '^q' push-line-or-edit
 
+# Stop stupid behavior of ctrl-d after a space
+exit_zsh() { exit }
+zle -N exit_zsh
+bindkey '^D' exit_zsh
 
 # TODO: Do I want this stuff? just trying it out
 # # Fuzzy matching of completions for when you mistype them:

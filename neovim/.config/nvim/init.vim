@@ -1,9 +1,10 @@
-" Load plugins with vim-plug
+g Load plugins with vim-plug
 call plug#begin('~/.config/nvim/plugged')
 " Disable plugins in vimdiff
 if !&diff
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+  Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
@@ -17,7 +18,7 @@ if !&diff
   Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
   Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
 " end coc.nvim plugins
-Plug 'vim-ctrlspace/vim-ctrlspace'
+Plug 'vim-ctrlspace/vim-ctrlspace', { 'on': ['CtrlSpace'] }
 Plug 'Vigemus/iron.nvim'
 endif
 " These plugins are allowed in vimdiff mode
@@ -41,7 +42,7 @@ Plug 'tpope/vim-projectionist'
 " end tpope
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'romainl/Apprentice'
+Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim' }
 Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentice-airline' }
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
@@ -50,7 +51,7 @@ Plug 'haya14busa/incsearch.vim'
 Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
-Plug 'justinmk/vim-sneak'
+" Plug 'justinmk/vim-sneak'
 " Plug 'w0rp/ale'
 Plug 'sheerun/vim-polyglot'
 Plug 'AndrewRadev/splitjoin.vim'
@@ -74,7 +75,10 @@ Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'jceb/vim-orgmode'
 Plug 'mattn/calendar-vim'
 Plug 'freitass/todo.txt-vim'
+Plug 'markonm/traces.vim'
 " Plug 'janko/vim-test'
+Plug 'Curly-Mo/phlebotinum'
+Plug 'tweekmonster/startuptime.vim', { 'on': ['StartupTime'] }
 call plug#end()
 
 " Colors
@@ -173,6 +177,11 @@ set undodir=~/.vim/tmp/undo//
 set undofile
 set undolevels=50000
 
+" Always open readonly if swapfile exists
+if has("autocmd")
+  autocmd SwapExists * let v:swapchoice = "o"
+endif
+
 " Remember last cursor position
 if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
@@ -242,6 +251,7 @@ function! s:show_documentation()
     call CocActionAsync('doHover')
   endif
 endfunction
+nmap <silent> gk :call <SID>show_documentation()<CR>
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -269,12 +279,19 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 " organize imports with command and hotkey
 command! -nargs=0 Org :call CocAction('runCommand', 'editor.action.organizeImport')
 nmap <leader>o :Org<CR>
+nmap <silent>go :Org<CR>
 " add current working dir to python path for local imports
 let cwd = getcwd()
 autocmd FileType python let g:coc_user_config = {"python.autoComplete.extraPaths": [getcwd()],} 
+" show action menu
+nmap <silent> ga :CocAction()<CR>
 
 " ctrlspace
-set hidden
+" set hidden
+" set nocompatible
+" set encoding=utf-8
+" set showtabline=0
+nmap <C-space> :CtrlSpace<CR>
 let g:CtrlSpaceDefaultMappingKey = "<C-space> "
 
 endif
@@ -336,8 +353,13 @@ let g:airline#extensions#tabline#formatter = 'short_path'
 " let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
 " let g:airline_section_b = airline#section#create(['hunks'])
 let g:airline#extensions#coc#enabled = 1
-let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
-let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+let airline#extensions#coc#error_symbol = '✗'
+let g:airline#extensions#coc#warning_symbol = '⚠'
+let g:airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
+let g:airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
+" let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
+" let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
+let g:airline_skip_empty_sections = 1
 
 " Scala
 let g:scala_scaladoc_indent = 1
@@ -593,6 +615,8 @@ let g:github_enterprise_urls = ['https://ghe.spotify.net']
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:qs_max_chars=300
+highlight QuickScopePrimary ctermfg=014 cterm=underline
+highlight QuickScopeSecondary ctermfg=010 cterm=underline
 
 " Smoother scrolling
 map <ScrollWheelUp> <C-Y>
@@ -618,8 +642,8 @@ endif
 let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala']
 
 " vim-matchup
-hi MatchParen ctermfg=red guifg=blue ctermbg=none
-hi MatchWord ctermfg=red guifg=blue ctermbg=none
+hi MatchParen ctermfg=012 ctermbg=none
+hi MatchWord ctermfg=012 ctermbg=none
 " let g:matchup_enabled = 0
 " let g:matchup_matchparen_enabled = 0
 " let g:matchup_motion_enabled = 0
@@ -632,3 +656,24 @@ nmap <C-/> Commentary
 let g:org_agenda_files = ['~/org/index.org', '~/org/project.org']
 
 " iron.nvim
+
+" vim-sneak
+" Won't play nicely with quickscope, quickscope wins for now
+" " replace 'f' with 1-char sneak
+" map f <Plug>Sneak_f
+" nmap F <Plug>Sneak_F
+" xmap f <Plug>Sneak_f
+" xmap F <Plug>Sneak_F
+" omap f <Plug>Sneak_f
+" omap F <Plug>Sneak_F
+" " replace 't' with 1-char Sneak
+" nmap t <Plug>Sneak_t
+" nmap T <Plug>Sneak_T
+" xmap t <Plug>Sneak_t
+" xmap T <Plug>Sneak_T
+" omap t <Plug>Sneak_t
+" omap T <Plug>Sneak_T
+" " sneak label-mode (like easymotion)
+" let g:sneak#label = 1
+" nmap s <Plug>SneakLabel_s
+" nmap S <Plug>SneakLabel_S

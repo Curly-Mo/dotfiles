@@ -22,13 +22,15 @@
 [credential "https://ghe.spotify.net"]
   username = colinfahy
 [alias]
-  remaster = "!f(){ git pull origin master --rebase --autostash; }; f"
-  arc = "! f() { git tag archive/$1 $1 && git branch -d $1; }; f"
-  arcl = "! f() { git tag | grep '^archive/';}; f"
-  unarc = "! f() { git checkout -b $(echo $1 | sed -E 's/^archive\\///') && git tag -d $1; }; f "
-  cleanup = "!f() { git branch --merged master | egrep -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
-  fresh = "!f() { git checkout master && git pull; }; f"
-  new = "!f() { git checkout master && git pull && git checkout -b $1; }; f"
+  remoteupstream = "!f() { if $(git remote | grep -q upstream); then echo upstream; else echo origin; fi; }; f"
+  echoexec = "!f() { echo $(tput setaf 2)'$' ${@:q}$(tput sgr0); $@; }; f"
+  remaster = "!f() { git echoexec git pull $(git remoteupstream) master --rebase --autostash; }; f"
+  arc = "! f() { git echoexec git tag archive/$1 $1 && git echoexec git branch -d $1; }; f"
+  arcl = "! f() { git echoexec git tag | grep '^archive/';}; f"
+  unarc = "! f() { git echoexec git checkout -b $(echo $1 | sed -E 's/^archive\\///') && git tag -d $1; }; f "
+  cleanup = "!f() { git echoexec git branch --merged master | egrep -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
+  fresh = "!f() { git echoexec git checkout master && git echoexec git pull $(git remoteupstream) master; }; f"
+  new = "!f() { git echoexec git checkout -b $1 master && git echoexec git pull $(git remoteupstream) master; }; f"
 [include]
   path = ~/.gituser
 [color]
