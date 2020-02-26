@@ -1,21 +1,39 @@
+# uncomment to enable `zpmod source-study`
+# requires `zinit module build` first
+# module_path+=( "/Users/colinfahy/.zinit/bin/zmodules/Src" )
+# zmodload zdharma/zplugin
+
 # uncomment for profiling
 # zmodload zsh/zprof
 
 # tmux
 tmux::reattach_or_new_session() {
-  if [[ -z "$TMUX" ]] ;then
-      ID="`tmux ls | grep -vm1 attached | cut -d: -f1`" # get the id of a deattached session
-      if [[ -z "$ID" ]] ;then # if not available create a new one
-          tmux -2 new-session
-      else
-          tmux attach-session -t "$ID" # if available attach to it
-      fi
+  if [[ -z "$TMUX" ]]; then
+    # get the id of a deattached session
+    ID="`tmux ls 2> /dev/null | grep -vm1 attached | cut -d: -f1`"
+    if [[ -z "$ID" ]]; then
+      # if not available create a new one
+      tmux -2 new-session
+    else
+      # if available attach to it
+      tmux attach-session -t "$ID"
+    fi
   fi
 }
 tmux::reattach_or_new_session
 
-# Load zplugin
-source ~/.zplugin/bin/zplugin.zsh
+### Added by Zinit's installer
+if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
+    print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma/zinit)…%f"
+    command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
+    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+        print -P "%F{33}▓▒░ %F{34}Installation successful.%f" || \
+        print -P "%F{160}▓▒░ The clone has failed.%f"
+fi
+source "$HOME/.zinit/bin/zinit.zsh"
+autoload -Uz _zinit
+(( ${+_comps} )) && _comps[zinit]=_zinit
+### End of Zinit installer's chunk
 
 export ZSH_CACHE_DIR=~/.cache/zsh
 setopt promptsubst
@@ -23,115 +41,116 @@ setopt globdots
 setopt extendedglob
 
 # Oh my zsh themes
-# zplugin ice wait"0" silent
-# zplugin snippet OMZ::lib/git.zsh
-# zplugin ice wait"0" atload"unalias grv" silent
-# zplugin snippet OMZ::plugins/git/git.plugin.zsh
+# zinit ice wait"0" silent
+# zinit snippet OMZ::lib/git.zsh
+# zinit ice wait"0" atload"unalias grv" silent
+# zinit snippet OMZ::plugins/git/git.plugin.zsh
 
 # Custom theme
 autoload -U colors
 colors
 # moved to local snippets
 # source $HOME/dotfiles/zsh/.zsh_theme
-# # zplugin ice wait"!0" silent
-# zplugin snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_theme'
-# zplugin ice wait"!0" silent
-zplugin snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
+# # zinit ice wait"!0" silent
+# zinit snippet 'https://github.com/Curly-Mo/dotfiles/blob/master/zsh/.zsh_theme'
+# zinit ice wait"!0" silent
+zinit snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
 
 # Load Oh My Zsh Libs
-zplugin snippet OMZ::"lib/history.zsh"
-zplugin ice wait"0" silent
-zplugin snippet OMZ::"lib/prompt_info_functions.zsh"
-zplugin ice wait"0" silent
-zplugin snippet OMZ::"lib/completion.zsh"
+zinit snippet OMZ::"lib/history.zsh"
+zinit ice wait"0" silent
+zinit snippet OMZ::"lib/prompt_info_functions.zsh"
+zinit ice wait"0" silent
+zinit snippet OMZ::"lib/completion.zsh"
 
 # Load Oh My Zsh Plugins
-zplugin ice wait"0" silent
-zplugin snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
-zplugin ice wait"!0" silent
-zplugin snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
-zplugin ice wait"0" silent
-zplugin snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
+zinit ice wait"0" silent
+zinit snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
+zinit ice wait"0" silent
+zinit snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
+zinit ice wait"0" silent
+zinit snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
 # nah, the alias expansion was too distracting
-# zplugin ice wait"0" silent
-# zplugin snippet OMZ::"plugins/globalias/globalias.plugin.zsh"
+# zinit ice wait"0" silent
+# zinit snippet OMZ::"plugins/globalias/globalias.plugin.zsh"
 
 # Plugins
-zplugin ice wait"0" silent atclone"dircolors -b LS_COLORS > clrs.zsh" atpull'%atclone' pick"clrs.zsh"
-zplugin light trapd00r/LS_COLORS
+zinit ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
+zinit light trapd00r/LS_COLORS
 
-zplugin ice wait"0" silent blockf
-zplugin light zsh-users/zsh-completions
+zinit ice wait"0" silent blockf
+zinit light zsh-users/zsh-completions
 
 # export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # export ZSH_AUTOSUGGEST_USE_ASYNC=true
 # export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
-zplugin ice wait"1" silent atload"_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false"
-zplugin light zsh-users/zsh-autosuggestions
+zinit ice wait"1" silent atload"_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false"
+zinit light zsh-users/zsh-autosuggestions
 
 # caused too many issues
-# zplugin ice wait"0" silent atload"zstyle ':history-search-multi-word' highlight-color 'fg=4,bold,bg=5'"
-# zplugin light zdharma/history-search-multi-word
+# zinit ice wait"0" silent atload"zstyle ':history-search-multi-word' highlight-color 'fg=4,bold,bg=5'"
+# zinit light zdharma/history-search-multi-word
 
-zplugin ice wait"0" silent
-zplugin light darvid/zsh-poetry
+zinit ice wait"0" silent
+zinit light darvid/zsh-poetry
 
-zplugin ice wait"0" silent
-zplugin light davidparsson/zsh-pyenv-lazy
+zinit ice wait"0" silent
+zinit light davidparsson/zsh-pyenv-lazy
 
-zplugin ice wait"0" silent
-zplugin light shihyuho/zsh-jenv-lazy
+zinit ice wait"0" silent
+zinit light shihyuho/zsh-jenv-lazy
 
 # nvm wrapper like pyenv
-export NVM_DIR="$HOME/.nvm"
-export NVM_LAZY_LOAD=true
-zplugin ice wait"2" silent
-zplugin light lukechilds/zsh-nvm
+# disabled because it's slow as fuck
+# export NVM_DIR="$HOME/.nvm"
+# export NVM_LAZY_LOAD=true
+# zinit ice wait"2" silent
+# zinit light lukechilds/zsh-nvm
 
 # Use this instead of git-prompt once I get it working
-# zplugin ice wait'1' silent pick"gitstatus.plugin.zsh"
-# zplugin light romkatv/gitstatus
+# zinit ice wait'1' silent pick"gitstatus.plugin.zsh"
+# zinit light romkatv/gitstatus
 
-# zplugin ice wait"0" silent from"gh-r" as"program"
-# zplugin load junegunn/fzf-bin
+# zinit ice wait"0" silent from"gh-r" as"program"
+# zinit load junegunn/fzf-bin
 
-# zplugin ice wait"0" silent src"zsh-history-substring-search.zsh"
-# zplugin light zsh-users/zsh-history-substring-search
+# zinit ice wait"0" silent src"zsh-history-substring-search.zsh"
+# zinit light zsh-users/zsh-history-substring-search
 # bindkey '^[[A' history-substring-search-up
 # bindkey '^[[B' history-substring-search-down
 
-# zplugin ice wait"0" silent
-# zplugin light MichaelAquilina/zsh-you-should-use
+# zinit ice wait"0" silent
+# zinit light MichaelAquilina/zsh-you-should-use
 
 # completions
-zplugin ice wait"1" as"completion" silent
-zplugin snippet "https://github.com/jwilm/alacritty/blob/master/extra/completions/_alacritty"
+zinit ice wait"1" as"completion" silent
+zinit snippet "https://github.com/jwilm/alacritty/blob/master/extra/completions/_alacritty"
 
 # local stuff
-zplugin ice silent if"[[ -f $HOME/.zsh_theme ]]"
-zplugin snippet "$HOME/.zsh_theme"
+zinit ice silent if"[[ -f $HOME/.zsh_theme ]]"
+zinit snippet "$HOME/.zsh_theme"
 
-zplugin ice wait"0" silent if"[[ -f $HOME/.aliases ]]"
-zplugin snippet "$HOME/.aliases"
+zinit ice wait"0" silent if"[[ -f $HOME/.aliases ]]"
+zinit snippet "$HOME/.aliases"
 
-zplugin ice wait"0" silent if"[[ -f $HOME/.localrc ]]"
-zplugin snippet "$HOME/.localrc"
+zinit ice wait"0" silent if"[[ -f $HOME/.localrc ]]"
+zinit snippet "$HOME/.localrc"
 
 # Load all my functions and completions
-zplugin ice wait"1" silent if"[[ -d $HOME/.zsh_functions ]]"
-zplugin light "$HOME/.zsh_functions"
+zinit ice wait"1" silent if"[[ -d $HOME/.zsh_functions ]]"
+zinit light "$HOME/.zsh_functions"
 
 # Programs
-zplugin ice wait"1" silent as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX" nocompile
-zplugin light tj/git-extras
-zplugin ice wait"2" silent
-zplugin snippet "https://github.com/tj/git-extras/blob/master/etc/git-extras-completion.zsh"
+# zinit ice wait"1" silent as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX" nocompile
+# zinit light tj/git-extras
+# zinit ice wait"2" silent
+# zinit snippet "https://github.com/tj/git-extras/blob/master/etc/git-extras-completion.zsh"
 
 # do this one last since it calls compinit
-zplugin ice wait"1" silent atinit"zpcompinit; zpcdreplay"
-zplugin light zdharma/fast-syntax-highlighting
+zinit ice wait"1" silent atinit"zpcompinit; zpcdreplay"
+zinit light zdharma/fast-syntax-highlighting
 
-# End zplugin config
+# End zinit config
 
 # vim-mode
 bindkey -v
