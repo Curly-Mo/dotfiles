@@ -33,8 +33,8 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-markdown'
-Plug 'tpope/vim-tbone'
-Plug 'tpope/vim-rhubarb'
+" Plug 'tpope/vim-tbone'
+Plug 'tpope/vim-rhubarb', { 'on': ['Gbrowse'] }
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-vinegar'
@@ -287,58 +287,12 @@ autocmd FileType python let g:coc_user_config = {"python.autoComplete.extraPaths
 nmap <silent> ga :CocAction()<CR>
 
 " ctrlspace
-" set hidden
-" set nocompatible
-" set encoding=utf-8
-" set showtabline=0
 nmap <C-space> :CtrlSpace<CR>
 let g:CtrlSpaceDefaultMappingKey = "<C-space> "
 
 endif
 
 """Plugins allowed in vimdiff mode"""
-
-" " Ale
-" " disable completion to work with coc.vim
-" let g:ale_completion_enabled = 0
-" let g:ale_lint_on_text_changed = 'never'
-" let g:ale_lint_on_enter = 1
-" let g:ale_lint_on_insert_leave = 1
-" let g:ale_lint_on_save = 1
-" let g:ale_sign_column_always = 1
-" let g:ale_sign_error = '✗'
-" let g:ale_sign_warning = '⚠'
-" nmap <silent> <C-k> <Plug>(ale_previous_wrap)
-" nmap <silent> <C-j> <Plug>(ale_next_wrap)
-" nmap <S-L> <Plug>(ale_fix)
-" let g:ale_echo_msg_error_str = '✖'
-" let g:ale_echo_msg_warning_str = '⚠'
-" let g:ale_echo_msg_format = '%s [%linter%] %severity%'
-" highlight ALEErrorSign ctermfg=196
-" highlight ALEWarningSign ctermbg=None ctermfg=227
-" highlight ALEWarning ctermbg=Black
-" let g:ale_linters = {
-" \   'python': ['flake8', 'pyflakes', 'pyls'],
-" \   'java': ['checkstyle'],
-" \   'jsx': ['stylelint', 'eslint'],
-" \   'proto': ['prototool-lint'],
-" \}
-" let g:ale_fixers = {
-" \   'python': ['black'],
-" \   'java': ['google_java_format', 'remove_trailing_lines', 'trim_whitespace'],
-" \   'javascript': ['prettier', 'eslint'],
-" \   'scala': ['scalafmt'],
-" \}
-" augroup FiletypeGroup
-"   autocmd!
-"   au BufNewFile,BufRead *.jsx set filetype=javascript.jsx
-" augroup END
-" let g:ale_linter_aliases = {'jsx': 'css'}
-" nnoremap <silent> gk :ALEHover<CR>
-" nnoremap <silent> gd :ALEGoToDefinition<CR>
-" nnoremap <silent> gr :ALEFindReferences<CR>
-" nnoremap <silent> gs :ALESymbolSearch<CR>
-" " let g:ale_python_flake8_options = "--max-line-length=120"
 
 " Airline
 let g:airline_powerline_fonts = 1
@@ -651,6 +605,7 @@ hi MatchWord ctermfg=012 ctermbg=none
 
 " vim-commentary
 nmap <C-/> Commentary
+vmap <C-/> Commentary
 
 " org-mode
 let g:org_agenda_files = ['~/org/index.org', '~/org/project.org']
@@ -677,3 +632,6 @@ let g:org_agenda_files = ['~/org/index.org', '~/org/project.org']
 " let g:sneak#label = 1
 " nmap s <Plug>SneakLabel_s
 " nmap S <Plug>SneakLabel_S
+
+" vim-rhubarb
+let g:github_enterprise_urls = ['https://ghe.spotify.net']
