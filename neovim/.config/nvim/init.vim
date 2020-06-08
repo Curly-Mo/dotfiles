@@ -16,7 +16,7 @@ if !&diff
   Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
 " end coc.nvim plugins
 Plug 'vim-ctrlspace/vim-ctrlspace', { 'on': ['CtrlSpace'] }
 Plug 'Vigemus/iron.nvim'
@@ -79,6 +79,7 @@ Plug 'markonm/traces.vim'
 " Plug 'janko/vim-test'
 Plug 'Curly-Mo/phlebotinum'
 Plug 'tweekmonster/startuptime.vim', { 'on': ['StartupTime'] }
+Plug 'nanotech/jellybeans.vim'
 call plug#end()
 
 " Colors
@@ -90,6 +91,7 @@ call plug#end()
 colorscheme default
 " colorscheme base16-railscasts
 " silent! colorscheme apprentice
+" silent! colorscheme phlebotinum
 " set background=dark
 set background=light
 " vimdiff
@@ -294,10 +296,20 @@ endif
 
 """Plugins allowed in vimdiff mode"""
 
+" jellybeans
+let g:jellybeans_use_term_italics = 1
+let g:jellybeans_overrides = {
+\    'background': { 'guifg': 'none', 'ctermbg': 'none', '256ctermbg': 'none' },
+\    'SpecialComment': { 'guifg': '97bedc', },
+\}
+let g:jellybeans_use_term_italics = 1
+" colorscheme jellybeans
+colorscheme phlebotinum
+
 " Airline
 let g:airline_powerline_fonts = 1
 "let g:airline_theme='simple'
-let g:airline_theme='apprentice'
+let g:airline_theme='phlebotinum'
 " let g:airline#extensions#ale#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
