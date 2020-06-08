@@ -22,6 +22,11 @@ tmux::reattach_or_new_session() {
 }
 tmux::reattach_or_new_session
 
+export ZSH_CACHE_DIR=~/.cache/zsh
+setopt promptsubst
+# setopt globdots
+setopt extendedglob
+
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma/zinit)…%f"
@@ -34,11 +39,6 @@ source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit installer's chunk
-
-export ZSH_CACHE_DIR=~/.cache/zsh
-setopt promptsubst
-setopt globdots
-setopt extendedglob
 
 # Oh my zsh themes
 # zinit ice wait"0" silent
@@ -186,6 +186,13 @@ bindkey '^q' push-line-or-edit
 exit_zsh() { exit }
 zle -N exit_zsh
 bindkey '^D' exit_zsh
+
+# AutoComplete
+# complete .. to ../
+zstyle ':completion:*' special-dirs true
+# autosuggest Shift-Tab
+zmodload zsh/complist # must be laoded before menuselect is available
+bindkey -M menuselect '^[[Z' reverse-menu-complete
 
 # TODO: Do I want this stuff? just trying it out
 # # Fuzzy matching of completions for when you mistype them:
