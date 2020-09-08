@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# This script shouldn't be needed for arch anymore, use powerline-fonts-git in aur
+
 read -p "Please enter location to install fonts: (default: ${HOME}/packages/fonts)" fonts_dir
 [ -z "${fonts_dir}" ] && fonts_dir="${HOME}/packages/fonts"
 echo "Downloading fonts into {$fonts_dir}..."

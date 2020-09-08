@@ -58,47 +58,57 @@ zinit snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zs
 
 # Load Oh My Zsh Libs
 zinit snippet OMZ::"lib/history.zsh"
-zinit ice wait"0" silent
+zinit ice wait"0" lucid
 zinit snippet OMZ::"lib/prompt_info_functions.zsh"
-zinit ice wait"0" silent
+zinit ice wait"0" lucid
 zinit snippet OMZ::"lib/completion.zsh"
 
 # Load Oh My Zsh Plugins
-zinit ice wait"0" silent
+zinit ice wait"0" lucid
 zinit snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
-zinit ice wait"0" silent
-zinit snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
-zinit ice wait"0" silent
+# zinit ice wait"0" lucid
+# zinit snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
+zinit ice wait"0" lucid
 zinit snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
 # nah, the alias expansion was too distracting
 # zinit ice wait"0" silent
 # zinit snippet OMZ::"plugins/globalias/globalias.plugin.zsh"
 
 # Plugins
+# zinit ice wait"0" lucid
+zinit light Curly-Mo/last-working-dir-tmux
+
 zinit ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
 zinit light trapd00r/LS_COLORS
 
-zinit ice wait"0" silent blockf
+zinit ice wait"0" lucid blockf
 zinit light zsh-users/zsh-completions
 
 # export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
 # export ZSH_AUTOSUGGEST_USE_ASYNC=true
 # export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
-zinit ice wait"1" silent atload"_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false"
+zinit ice wait"1" lucid atload"_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false"
 zinit light zsh-users/zsh-autosuggestions
 
 # caused too many issues
 # zinit ice wait"0" silent atload"zstyle ':history-search-multi-word' highlight-color 'fg=4,bold,bg=5'"
 # zinit light zdharma/history-search-multi-word
 
-zinit ice wait"0" silent
+zinit ice wait"0" lucid
 zinit light darvid/zsh-poetry
 
-zinit ice wait"0" silent
+zinit ice wait"0" lucid
 zinit light davidparsson/zsh-pyenv-lazy
 
-zinit ice wait"0" silent
+zinit ice wait"0" lucid
 zinit light shihyuho/zsh-jenv-lazy
+# jenv-lazy caused issues, fine I'll just load it non-lazily for now
+# zinit ice wait"10" lucid
+# zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
+
+export NVM_LAZY_LOAD=true
+zinit ice wait'0' lucid
+zinit light lukechilds/zsh-nvm
 
 # nvm wrapper like pyenv
 # disabled because it's slow as fuck
@@ -123,31 +133,31 @@ zinit light shihyuho/zsh-jenv-lazy
 # zinit light MichaelAquilina/zsh-you-should-use
 
 # completions
-zinit ice wait"1" as"completion" silent
+zinit ice wait"1" as"completion" lucid
 zinit snippet "https://github.com/jwilm/alacritty/blob/master/extra/completions/_alacritty"
 
 # local stuff
-zinit ice silent if"[[ -f $HOME/.zsh_theme ]]"
+zinit ice lucid if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
-zinit ice wait"0" silent if"[[ -f $HOME/.aliases ]]"
+zinit ice wait"0" lucid if"[[ -f $HOME/.aliases ]]"
 zinit snippet "$HOME/.aliases"
 
-zinit ice wait"0" silent if"[[ -f $HOME/.localrc ]]"
+zinit ice wait"0" lucid if"[[ -f $HOME/.localrc ]]"
 zinit snippet "$HOME/.localrc"
 
 # Load all my functions and completions
-zinit ice wait"1" silent if"[[ -d $HOME/.zsh_functions ]]"
+zinit ice wait"1" lucid if"[[ -d $HOME/.zsh_functions ]]"
 zinit light "$HOME/.zsh_functions"
 
 # Programs
-# zinit ice wait"1" silent as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX" nocompile
+# zinit ice wait"1" lucid as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX" nocompile
 # zinit light tj/git-extras
-# zinit ice wait"2" silent
+# zinit ice wait"2" lucid
 # zinit snippet "https://github.com/tj/git-extras/blob/master/etc/git-extras-completion.zsh"
 
 # do this one last since it calls compinit
-zinit ice wait"1" silent atinit"zpcompinit; zpcdreplay"
+zinit ice wait"1" lucid atinit"zpcompinit; zpcdreplay"
 zinit light zdharma/fast-syntax-highlighting
 
 # End zinit config
@@ -167,6 +177,10 @@ bindkey "^[[8~" end-of-line
 if [[ -o login ]]; then
   fortune showerthoughts | lolcat
 fi
+
+# History
+HISTSIZE=10000000
+SAVEHIST=10000000
 
 # setup special keys
 bindkey  "\e[1~"  beginning-of-line

@@ -1,0 +1,28 @@
+### APPLICATIONS ###
+alt + d
+  launch_or_focus alacritty
+alt + F2
+  launch_or_focus alacritty
+alt + f
+  launch_or_focus google-chrome
+alt + shift + s
+  launch_or_focus spotify
+alt + a
+  launch_or_focus slack
+alt + s
+  launch_or_focus idea
+
+### SELECTION ###
+alt + c
+  xclip -in -selection clipboard
+  
+#alt + v
+#  xte "keydown Shift_L" "key Insert" "keyup Shift_L"
+  #xdotool key --clearmodifiers shift+Insert
+  # xclip -o -selection clipboard | xdotool type --delay 0 --clearmodifiers
+  # sh -c 'xdotool type --clearmodifiers --delay 0 -- "$(xclip -o -selection clipboard)"'
+  # xsel | xvkbd -xsendevent -file -
+  # xclip -o -selection clipboard | xvkbd -xsendevent -file -
+  # sh -c 'xclip -o -selection clipboard | xvkbd -xsendevent -file -'
+  #sh -c 'sleep 0.1 && xdotool type --clearmodifiers --delay 0 -- "$(xclip -o -selection clipboard)"'
+  # xclip -out -selection clipboard

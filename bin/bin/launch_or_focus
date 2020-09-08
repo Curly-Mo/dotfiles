@@ -1,2 +1,44 @@
 #!/bin/bash
-wmctrl -x -a "$1" || $1
+readonly GLOBAL_APPS=('spotify' 'slack')
+APP=$1
+
+## current workspace only
+function launch_or_focus_current_workspace() {
+  # wmtctrl -d demarks active workspace with a * in 2nd column
+  CURR_WORKSPACE=$(wmctrl -d | awk '$2 == "*"' | cut -d ' ' -f1)
+  FILTERED_WINDOWS=$(wmctrl -xl | awk -v desktop="$CURR_WORKSPACE" '$2 == desktop')
+  FILTERED_WIN_IDS=( $(echo "$FILTERED_WINDOWS" | cut -d ' ' -f-4 | grep --ignore-case $APP | cut -d ' ' -f1) )
+  WIN_ID=$(echo "$FILTERED_WINDOWS" | grep --ignore-case $APP | cut -d ' ' -f1 | tail -n 1)
+  ALL_WIN_IDS_STACKING_ORDER=( $(xprop -root|grep "^_NET_CLIENT_LIST_STACKING" | tr "," " " | cut -d ' ' -f5-) )
+
+  # Make sure hex format matches with leading zero
+  ALL_WIN_IDS_STACKING_ORDER=( $(printf '0x%08x\n' "${ALL_WIN_IDS_STACKING_ORDER[@]}") )
+  # Try to launch most recently active window
+  for (( i=${#ALL_WIN_IDS_STACKING_ORDER[@]}-1 ; i>=0 ; i-- )); do
+    recent_win_id=${ALL_WIN_IDS_STACKING_ORDER[i]}
+    if [[ ${FILTERED_WIN_IDS[@]} =~ $recent_win_id ]]; then
+      wmctrl -i -a $recent_win_id
+      exit 0
+    fi
+  done
+
+  if [ -z "$WIN_ID" ]; then
+    shift
+    $APP $@ &
+  else
+    wmctrl -i -a $WIN_ID
+  fi
+}
+
+## any workspace
+function launch_or_focus_global_workspace() {
+  wmctrl -x -a "$APP" || $APP
+}
+
+
+if [[ ${GLOBAL_APPS[@]} =~ $APP ]]; then
+  launch_or_focus_global_workspace
+else
+  launch_or_focus_current_workspace
+fi
+

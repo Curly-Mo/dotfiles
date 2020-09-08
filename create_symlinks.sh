@@ -11,7 +11,6 @@ for d in $dotdirs ; do
     read -p "Confirm? " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
-        #stow $d --verbose=2 --no-folding -d $script_dir --target $HOME
         files=$(find ${d} -type f)
         for f in $files ; do
             rel=${f#${d}}

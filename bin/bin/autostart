@@ -3,34 +3,13 @@
 # Used to autostart dependent apps in a specific order
 # runs on desktop load from .config/autostart/autostart.desktop
 
-
 # Other various autostart things
-setxkbmap -layout us -variant altgr-intl -option caps:escape
+# setxkbmap -layout us -option caps:escape
 # TODO: replace with xkb when you are smart enough
-xmodmap ~/.Xmodmap
+# xmodmap ~/.Xmodmap
 
-# Things dependent on cadence (jack + pulseaudio)
-_cadence_started=$(cadence-session-start --system-start)
 dex $HOME/.config/autostart/google-chrome.desktop
-dex $HOME/.config/autostart/myscreensaver.desktop
-dex $HOME/.config/autostart/spotify.desktop
 dex $HOME/.config/autostart/alacritty.desktop
-/usr/bin/snapclient -s pulse &
-# if ${_cadence_started} ; then
-#   # start after cadence is started
-#   dex $HOME/.config/autostart/google-chrome.desktop
-#   dex $HOME/.config/autostart/myscreensaver.desktop
-#   dex $HOME/.config/autostart/spotify.desktop
-#   dex $HOME/.config/autostart/alacritty.desktop
-#   /usr/bin/snapclient -s pulse &
-# else
-#   # fallback
-#   dex $HOME/.config/autostart/google-chrome.desktop
-#   dex $HOME/.config/autostart/myscreensaver.desktop
-#   dex $HOME/.config/autostart/spotify.desktop
-#   dex $HOME/.config/autostart/alacritty.desktop
-#   /usr/bin/snapclient -s pulse &
-# fi
 
 # give terminal focus
 wmctrl -x -a alacritty

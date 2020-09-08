@@ -16,6 +16,8 @@ if !&diff
   Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'iamcco/coc-actions', {'do': 'yarn install --frozen-lockfile'}
   " Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
 " end coc.nvim plugins
 Plug 'vim-ctrlspace/vim-ctrlspace', { 'on': ['CtrlSpace'] }
@@ -80,6 +82,7 @@ Plug 'markonm/traces.vim'
 Plug 'Curly-Mo/phlebotinum'
 Plug 'tweekmonster/startuptime.vim', { 'on': ['StartupTime'] }
 Plug 'nanotech/jellybeans.vim'
+Plug 'nvim-treesitter/nvim-treesitter'
 call plug#end()
 
 " Colors
@@ -151,10 +154,16 @@ autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
 :command WQ wq
 :command Wq wq
 :command Q q
+:command CQ cq
+:command Cq cq
+:command Bd bd
+:command BD bd
 " :command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 " :command W :execute '!sudo tee % > /dev/null'
 " :command W w
 :command W :execute ':SudoWrite'
+:command Wd :execute ':Mkdir' | w
+:command WD :execute ':Mkdir' | :execute ':SudoWrite'
 " reload vimrc
 :command! Reload source $MYVIMRC
 " csv
@@ -589,20 +598,20 @@ map <ScrollWheelUp> <C-Y>
 map <ScrollWheelDown> <C-E>
 
 " MacOS clipboard, slow startup time searching for clipboard provider if not set
-if has('macunix')
-  let g:clipboard = {
-    \ 'name': 'pbcopy',
-    \ 'copy': {
-    \    '+': 'pbcopy',
-    \    '*': 'pbcopy',
-    \  },
-    \ 'paste': {
-    \    '+': 'pbpaste',
-    \    '*': 'pbpaste',
-    \ },
-    \ 'cache_enabled': 0,
-    \ }
-endif
+" if has('macunix')
+"   let g:clipboard = {
+"     \ 'name': 'pbcopy',
+"     \ 'copy': {
+"     \    '+': 'pbcopy',
+"     \    '*': 'pbcopy',
+"     \  },
+"     \ 'paste': {
+"     \    '+': 'pbpaste',
+"     \    '*': 'pbpaste',
+"     \ },
+"     \ 'cache_enabled': 0,
+"     \ }
+" endif
 
 " Markdown
 let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala']
@@ -647,3 +656,76 @@ let g:org_agenda_files = ['~/org/index.org', '~/org/project.org']
 
 " vim-rhubarb
 let g:github_enterprise_urls = ['https://ghe.spotify.net']
+
+" nvim-treesitter
+lua <<EOF
+require'nvim-treesitter.configs'.setup {
+    highlight = {
+      enable = true,                    -- false will disable the whole extension
+      disable = { "c", "rust" },        -- list of language that will be disabled
+      custom_captures = {               -- mapping of user defined captures to highlight groups
+        -- ["foo.bar"] = "Identifier"   -- highlight own capture @foo.bar with highlight group "Identifier", see :h nvim-treesitter-query-extensions
+      },
+    },
+    incremental_selection = {
+      enable = true,
+      disable = { "cpp", "lua" },
+      keymaps = {                       -- mappings for incremental selection (visual mappings)
+        init_selection = "gnn",         -- maps in normal mode to init the node/scope selection
+        node_incremental = "grn",       -- increment to the upper named parent
+        scope_incremental = "grc",      -- increment to the upper scope (as defined in locals.scm)
+        node_decremental = "grm",       -- decrement to the previous node
+      }
+    },
+    refactor = {
+      highlight_definitions = {
+        enable = true
+      },
+      highlight_current_scope = {
+        enable = false
+      },
+      smart_rename = {
+        enable = true,
+        keymaps = {
+          smart_rename = "grr"          -- mapping to rename reference under cursor
+        }
+      },
+      navigation = {
+        enable = true,
+        keymaps = {
+          goto_definition = "gnd",      -- mapping to go to definition of symbol under cursor
+          list_definitions = "gnD"      -- mapping to list all definitions in current file
+        }
+      }
+    },
+    textobjects = { -- syntax-aware textobjects
+      enable = true,
+      disable = {},
+      keymaps = {
+          ["iL"] = { -- you can define your own textobjects directly here
+            python = "(function_definition) @function",
+            cpp = "(function_definition) @function",
+            c = "(function_definition) @function",
+            java = "(method_declaration) @function"
+          },
+          -- or you use the queries from supported languages with textobjects.scm
+          ["af"] = "@function.outer",
+          ["if"] = "@function.inner",
+          ["aC"] = "@class.outer",
+          ["iC"] = "@class.inner",
+          ["ac"] = "@conditional.outer",
+          ["ic"] = "@conditional.inner",
+          ["ae"] = "@block.outer",
+          ["ie"] = "@block.inner",
+          ["al"] = "@loop.outer",
+          ["il"] = "@loop.inner",
+          ["is"] = "@statement.inner",
+          ["as"] = "@statement.outer",
+          ["ad"] = "@comment.outer",
+          ["am"] = "@call.outer",
+          ["im"] = "@call.inner"
+      }
+    },
+    ensure_installed = "all" -- one of "all", "language", or a list of languages
+}
+EOF

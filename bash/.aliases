@@ -13,14 +13,14 @@ alias rm='rm -I'
 # else
 #     alias ls='ls -h --color=auto --group-directories-first'
 # fi
-alias ls='ls -Fh --color=auto --group-directories-first'
+alias ls='ls -Fh --color=auto --group-directories-first --time-style long-iso'
 alias ll='ls -lA'
 alias la='ls -A'
 alias l='ls -CF'
 alias ltr='ls -lAtr'
 alias lr='ls -ltu'
 alias tree='tree -C -L 4'
-alias fp='command ls -d -1 --color=auto $(PWD)/*'
+alias fp='command ls -d -1 --color=auto'
 # find
 alias today='find -maxdepth 1 -type f -mtime -1'
 alias latest='find . -maxdepth 1 -type f -printf "%Ts\t%f\n" | sort -nr | cut -f2 | head -1'
@@ -48,6 +48,8 @@ alias ipy='ipython'
 alias pacman='sudo pacman'
 alias pacmatic='sudo pacmatic'
 alias sudont='sudo $(fc -nl -1)'
+alias serious='sudo $(fc -nl -1)'
+alias sudid='sudo $(fc -nl -1)'
 
 # xdg
 if ! [ -x "$(command -v open)" ]; then
@@ -78,6 +80,13 @@ alias gs='gsutil'
 
 # go to workspace root
 alias work='cd $HOME/workspace'
+alias vaf='cd $HOME/workspace/voice-artist-fulfillment-svc'
+alias squiddy='cd $HOME/workspace/squiddy-svc'
+# go to personal root
+alias personal='cd $HOME/personal'
+
+# go to package root
+alias packages='cd $HOME/packages'
 
 # cd
 alias ..='cd ..'
@@ -97,3 +106,18 @@ alias zhrc='vim $HOME/.zshrc'
 
 # ssh
 alias ssht='TERM=xterm-color ssh'
+
+# stuff
+alias dot='cd $HOME/dotfiles'
+
+# kde
+# nevermind kde sessions saving is borked
+# alias restart='qdbus org.kde.ksmserver /KSMServer saveCurrentSession && sudo reboot'
+
+# optimus-steam
+alias optisteam='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME="nvidia" __VK_LAYER_NV_optimus="NVIDIA_only" steam'
+
+# journalctl
+alias journalboot='journalctl -xb -p 5'
+alias journalthis='journalctl -xb -p 5'
+alias journallast='journalctl -x -b -1 -p 5'

@@ -1,8 +1,10 @@
 #!/bin/bash
 
 echo "Installing zplugin..."
-mkdir $HOME/.zplugin
-git clone https://github.com/zdharma/zplugin.git $HOME/.zplugin/bin
+mkdir $HOME/.zinit
+git clone https://github.com/zdharma/zinit.git $HOME/.zinit/bin
+
+touch $HOME/.lastdir
 
 if hash vim 2>/dev/null; then
     echo "Installing vim-plug..."
@@ -23,7 +25,6 @@ git clone https://github.com/tmux-plugins/tpm $HOME/.tmux/plugins/tpm
 $HOME/.tmux/plugins/tpm/bin/install_plugins
 
 # Make necessary directories
-touch $HOME/.lastdir
 mkdir -p $HOME/.vim/tmp/backup
 mkdir -p $HOME/.vim/tmp/swap
 mkdir -p $HOME/.vim/tmp/undo

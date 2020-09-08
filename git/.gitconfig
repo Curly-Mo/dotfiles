@@ -22,8 +22,8 @@
 [credential "https://ghe.spotify.net"]
   username = colinfahy
 [alias]
+  echoexec = "!f() { echo $(tput setaf 2)'$' ${@}$(tput sgr0); $@; }; f"
   remoteupstream = "!f() { if $(git remote | grep -q upstream); then echo upstream; else echo origin; fi; }; f"
-  echoexec = "!f() { echo $(tput setaf 2)'$' ${@:q}$(tput sgr0); $@; }; f"
   remaster = "!f() { git echoexec git pull $(git remoteupstream) master --rebase --autostash; }; f"
   arc = "! f() { git echoexec git tag archive/$1 $1 && git echoexec git branch -d $1; }; f"
   arcl = "! f() { git echoexec git tag | grep '^archive/';}; f"
@@ -35,3 +35,8 @@
   path = ~/.gituser
 [color]
 	ui = auto
+[pull]
+	rebase = false
+# Replace all git urls with https
+[url "https://"]
+	insteadOf = git://
