@@ -13,6 +13,7 @@
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
   "python.pythonPath": "~/.pyenv/shims/python",
+  "python.venvPath": "~/.pyenv",
   // coc-java
   // "java.home": "/usr/bin/java",
   // "java.home": "/usr/lib/jvm/java-11-openjdk",

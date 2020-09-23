@@ -18,10 +18,11 @@ if !&diff
   Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
   Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
   Plug 'iamcco/coc-actions', {'do': 'yarn install --frozen-lockfile'}
-  " Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
 " end coc.nvim plugins
 Plug 'vim-ctrlspace/vim-ctrlspace', { 'on': ['CtrlSpace'] }
 Plug 'Vigemus/iron.nvim'
+Plug 'ctrlpvim/ctrlp.vim'
 endif
 " These plugins are allowed in vimdiff mode
 " tpope
@@ -49,13 +50,10 @@ Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentic
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
-" Plug 'sbdchd/neoformat'
 Plug 'luochen1990/rainbow'
 Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
 " Plug 'justinmk/vim-sneak'
-" Plug 'w0rp/ale'
-Plug 'sheerun/vim-polyglot'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'wellle/targets.vim'
 Plug 'bkad/CamelCaseMotion'
@@ -74,7 +72,6 @@ Plug 'junegunn/fzf'
 Plug 'unblevable/quick-scope'
 Plug 'andymass/vim-matchup'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
-Plug 'jceb/vim-orgmode'
 Plug 'mattn/calendar-vim'
 Plug 'freitass/todo.txt-vim'
 Plug 'markonm/traces.vim'
@@ -82,28 +79,30 @@ Plug 'markonm/traces.vim'
 Plug 'Curly-Mo/phlebotinum'
 Plug 'tweekmonster/startuptime.vim', { 'on': ['StartupTime'] }
 Plug 'nanotech/jellybeans.vim'
-Plug 'nvim-treesitter/nvim-treesitter'
+" disable polyglot in favor of treesitter
+" Plug 'sheerun/vim-polyglot'
+Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 call plug#end()
 
 " Colors
-" set t_Co=16
-" if exists('+termguicolors')
-"   set termguicolors
-" endif
+if exists('+termguicolors')
+  set termguicolors
+endif
+colorscheme phlebotinum
 " set notermguicolors
-colorscheme default
+" colorscheme default
 " colorscheme base16-railscasts
 " silent! colorscheme apprentice
 " silent! colorscheme phlebotinum
 " set background=dark
-set background=light
+" set background=light
 " vimdiff
 highlight DiffAdd    cterm=bold ctermbg=darkgrey
 highlight DiffDelete cterm=bold ctermbg=darkyellow
 highlight DiffChange cterm=bold ctermbg=darkcyan
 highlight DiffText   cterm=bold ctermbg=darkblue ctermfg=darkgrey
 " fold colors
-" set fillchars=fold:\ 
+" set fillchars=fold:\
 highlight Folded ctermbg=235
 highlight FoldColumn ctermbg=black
 " vertical divider colors
@@ -225,7 +224,7 @@ if !&diff
 " coc.nvim
 " Use tab for trigger completion with characters ahead and navigate.
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-" 
+"
 " set cmdheight=2
 set nobackup
 set nowritebackup
@@ -293,7 +292,7 @@ nmap <leader>o :Org<CR>
 nmap <silent>go :Org<CR>
 " add current working dir to python path for local imports
 let cwd = getcwd()
-autocmd FileType python let g:coc_user_config = {"python.autoComplete.extraPaths": [getcwd()],} 
+autocmd FileType python let g:coc_user_config = {"python.autoComplete.extraPaths": [getcwd()],}
 " show action menu
 nmap <silent> ga :CocAction()<CR>
 
@@ -305,21 +304,11 @@ endif
 
 """Plugins allowed in vimdiff mode"""
 
-" jellybeans
-let g:jellybeans_use_term_italics = 1
-let g:jellybeans_overrides = {
-\    'background': { 'guifg': 'none', 'ctermbg': 'none', '256ctermbg': 'none' },
-\    'SpecialComment': { 'guifg': '97bedc', },
-\}
-let g:jellybeans_use_term_italics = 1
-" colorscheme jellybeans
-colorscheme phlebotinum
-
 " Airline
 let g:airline_powerline_fonts = 1
-"let g:airline_theme='simple'
 let g:airline_theme='phlebotinum'
-" let g:airline#extensions#ale#enabled = 1
+" let g:airline_theme='jellybeans'
+" let g:airline_theme='apprentice'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_min_count = 2
 let g:airline#extensions#tabline#buf_min_count = 2
@@ -419,25 +408,12 @@ endfunction
 " Rainbow Parens
 let g:rainbow_active = 1
 let g:rainbow_conf = {
-\ 'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick'],
+\ 'guifgs': [g:terminal_color_1, 'lightyellow', 'lightcyan', 'lightmagenta'],
 \ 'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
 \ 'operators': '_,_',
 \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
 \ 'separately': {
 \   '*': {},
-\   'tex': {
-\     'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/'],
-\   },
-\   'lisp': {
-\     'guifgs': ['royalblue3', 'darkorange3', 'seagreen3', 'firebrick', 'darkorchid3'],
-\   },
-\   'vim': {
-\     'parentheses': ['start=/(/ end=/)/', 'start=/\[/ end=/\]/', 'start=/{/ end=/}/ fold', 'start=/(/ end=/)/ containedin=vimFuncBody', 'start=/\[/ end=/\]/ containedin=vimFuncBody', 'start=/{/ end=/}/ fold containedin=vimFuncBody'],
-\   },
-\   'html': {
-\     'parentheses': ['start=/\v\<((area|base|br|col|embed|hr|img|input|keygen|link|menuitem|meta|param|source|track|wbr)[ >])@!\z([-_:a-zA-Z0-9]+)(\s+[-_:a-zA-Z0-9]+(\=("[^"]*"|'."'".'[^'."'".']*'."'".'|[^ '."'".'"><=`]*))?)*\>/ end=#</\z1># fold'],
-\   },
-\   'css': 0,
 \ }
 \}
 

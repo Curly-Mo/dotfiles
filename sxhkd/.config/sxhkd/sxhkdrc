@@ -5,11 +5,11 @@ alt + F2
   launch_or_focus alacritty
 alt + f
   launch_or_focus google-chrome
-alt + shift + s
+alt + s
   launch_or_focus spotify
 alt + a
   launch_or_focus slack
-alt + s
+alt + shift + s
   launch_or_focus idea
 
 ### SELECTION ###
