@@ -6,23 +6,24 @@ if !&diff
   " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
   Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'neoclide/coc-yank', {'do': 'yarn install --frozen-lockfile'}
   Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
   Plug 'iamcco/coc-actions', {'do': 'yarn install --frozen-lockfile'}
   Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'liuchengxu/vista.vim'
 " end coc.nvim plugins
-Plug 'vim-ctrlspace/vim-ctrlspace', { 'on': ['CtrlSpace'] }
-Plug 'Vigemus/iron.nvim'
-Plug 'ctrlpvim/ctrlp.vim'
+" Plug 'Vigemus/iron.nvim'
 endif
 " These plugins are allowed in vimdiff mode
 " tpope
@@ -51,16 +52,13 @@ Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
 Plug 'luochen1990/rainbow'
-Plug 'majutsushi/tagbar'
 Plug 'airblade/vim-gitgutter'
 " Plug 'justinmk/vim-sneak'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'wellle/targets.vim'
 Plug 'bkad/CamelCaseMotion'
-Plug 'universal-ctags/ctags'
 Plug 'derekwyatt/vim-scala', { 'for': ['scala'] }
 Plug 'tweekmonster/impsort.vim', { 'on': ['ImpSort'] }
-" Plug 'ludovicchabant/vim-gutentags'
 Plug 'lervag/vimtex', { 'for': ['tex'] }
 Plug 'NLKNguyen/vim-maven-syntax'
 Plug 'mechatroner/rainbow_csv'
@@ -68,7 +66,8 @@ Plug 'plytophogy/vim-diffchanges'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'ambv/black', { 'on': ['Black'] }
 Plug 'embear/vim-localvimrc'
-Plug 'junegunn/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'unblevable/quick-scope'
 Plug 'andymass/vim-matchup'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
@@ -82,6 +81,7 @@ Plug 'nanotech/jellybeans.vim'
 " disable polyglot in favor of treesitter
 " Plug 'sheerun/vim-polyglot'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 " Colors
@@ -89,26 +89,19 @@ if exists('+termguicolors')
   set termguicolors
 endif
 colorscheme phlebotinum
-" set notermguicolors
-" colorscheme default
-" colorscheme base16-railscasts
-" silent! colorscheme apprentice
-" silent! colorscheme phlebotinum
-" set background=dark
-" set background=light
 " vimdiff
-highlight DiffAdd    cterm=bold ctermbg=darkgrey
-highlight DiffDelete cterm=bold ctermbg=darkyellow
-highlight DiffChange cterm=bold ctermbg=darkcyan
-highlight DiffText   cterm=bold ctermbg=darkblue ctermfg=darkgrey
-" fold colors
-" set fillchars=fold:\
-highlight Folded ctermbg=235
-highlight FoldColumn ctermbg=black
-" vertical divider colors
-hi VertSplit ctermfg=Black ctermbg=248
-hi StatusLine ctermfg=236 ctermbg=248
-hi StatusLineNC ctermfg=236 ctermbg=248
+" highlight DiffAdd    cterm=bold ctermbg=darkgrey
+" highlight DiffDelete cterm=bold ctermbg=darkyellow
+" highlight DiffChange cterm=bold ctermbg=darkcyan
+" highlight DiffText   cterm=bold ctermbg=darkblue ctermfg=darkgrey
+" " fold colors
+" " set fillchars=fold:\
+" highlight Folded ctermbg=235
+" highlight FoldColumn ctermbg=black
+" " vertical divider colors
+" hi VertSplit ctermfg=Black ctermbg=248
+" hi StatusLine ctermfg=236 ctermbg=248
+" hi StatusLineNC ctermfg=236 ctermbg=248
 set fillchars+=vert:│
 
 " syntax
@@ -141,6 +134,8 @@ set smartcase
 set incsearch
 "set gdefault
 set magic
+" very magic mode for %s/
+cnoremap %s/ %s/\v
 
 " tabs
 set tabstop=2
@@ -215,7 +210,6 @@ set diffopt+=foldcolumn:1
 " set shortmess=a
 
 
-
 """"""PLUGINS"""""""
 
 if !&diff
@@ -265,11 +259,11 @@ nmap <silent> gk :call <SID>show_documentation()<CR>
 nnoremap <silent> K :call <SID>show_documentation()<CR>
 " Highlight symbol under cursor on CursorHold
 autocmd CursorHold * silent call CocActionAsync('highlight')
-hi CocHighlightText ctermbg=236
-hi CocFloating ctermbg=238
-hi Pmenu ctermbg=248
-hi PmenuSbar ctermbg=248
-hi PmenuThumb ctermbg=darkgrey
+" hi CocHighlightText ctermbg=236
+" hi CocFloating ctermbg=238
+" hi Pmenu ctermbg=248
+" hi PmenuSbar ctermbg=248
+" hi PmenuThumb ctermbg=darkgrey
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
 " Remap for format selected region
@@ -294,11 +288,7 @@ nmap <silent>go :Org<CR>
 let cwd = getcwd()
 autocmd FileType python let g:coc_user_config = {"python.autoComplete.extraPaths": [getcwd()],}
 " show action menu
-nmap <silent> ga :CocAction()<CR>
-
-" ctrlspace
-nmap <C-space> :CtrlSpace<CR>
-let g:CtrlSpaceDefaultMappingKey = "<C-space> "
+nmap <silent> ga <Plug>(coc-codeaction-selected)<CR>
 
 endif
 
@@ -339,76 +329,10 @@ au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
 " au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
 
-" Tagbar
-map <C-;> :TagbarToggle<CR>
-let g:tagbar_width = 25
-let g:tagbar_compact = 0
-let g:tagbar_indent = 1
-let g:tagbar_show_linenumbers = 0
-let g:tagbar_singleclick = 1
-let g:tagbar_sort = 0
-highlight TagbarHighlight ctermfg=051
-" start open
-" autocmd FileType python,java,scala call OpenTagbar()
-function! OpenTagbar()
-  call tagbar#autoopen(0)
-endfunction
-
-"NerdTree
-"nmap <C-h> :NERDTreeToggle<CR>
-""Close if all files closed
-"autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
-""Open if no files specified
-"autocmd StdinReadPre * let s:std_in=1
-"autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | endif
-"let NERDTreeMapOpenInTab='\r'
-"let NERDTreeQuitOnOpen = 1
-
-"netrw Plugin-free file browser
-" let g:netrw_banner = 0
-" let g:netrw_liststyle = 3
-" let g:netrw_browse_split = 4
-" let g:netrw_altv = 1
-" let g:netrw_winsize = 18
-
-" Neoformat
-" noremap <localleader>ll :Neoformat<CR>
-" let g:neoformat_enabled_java = ['uncrustify', 'clang_format', 'google']
-" let g:neoformat_java_clang_format = {
-"             \ 'exe': '/usr/local/bin/clang-format',
-"             \ 'args': ["--style='/Users/colinfahy/.clang-format'"],
-"             \ 'stdin': 1,
-"             \ }
-" let g:neoformat_java_google = {
-"             \ 'exe': '/usr/local/bin/google-java-format',
-"             \ 'args': ['-'],
-"             \ 'stdin': 1,
-"             \ }
-" let g:neoformat_java_uncrustify = {
-"             \ 'exe': '/usr/local/bin/uncrustify',
-"             \ 'args': ['-q', '-l JAVA', '-c /Users/colinfahy/.uncrustify'],
-"             \ 'stdin': 1,
-"             \ }
-" let g:neoformat_enabled_scala = ['scalafmt']
-" let g:neoformat_scala_scalafmt = {
-"             \ 'exe': 'scalafmt',
-"             \ 'args': ['--stdin 2>/dev/null --config-str "maxColumn=100"'],
-"             \ 'stdin': 1,
-"             \ }
-" let g:neoformat_enabled_python = ['yapf', 'autopep8']
-" let g:neoformat_python_autopep8 = {
-"             \ 'exe': 'autopep8',
-"             \ 'args': ['--max-line-length 120'],
-"             \ }
-" let g:neoformat_python_yapf = {
-"             \ 'exe': 'yapf',
-"             \ 'args': ["--style='{based_on_style: google, column_limit: 120, split_arguments_when_comma_terminated: true}'"],
-"             \ }
-
 " Rainbow Parens
 let g:rainbow_active = 1
 let g:rainbow_conf = {
-\ 'guifgs': [g:terminal_color_1, 'lightyellow', 'lightcyan', 'lightmagenta'],
+\ 'guifgs': [g:terminal_color_14, g:terminal_color_10, g:terminal_color_13, g:terminal_color_2],
 \ 'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
 \ 'operators': '_,_',
 \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
@@ -423,32 +347,13 @@ hi IndentGuidesOdd  ctermbg=black
 hi IndentGuidesEven ctermbg=235
 
 " IncSearch
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-highlight IncSearch ctermfg=cyan term=underline
+" map /  <Plug>(incsearch-forward)
+" map ?  <Plug>(incsearch-backward)
+" map g/ <Plug>(incsearch-stay)
+" highlight IncSearch ctermfg=cyan term=underline
 
 " CamelCaseMotion
 let g:camelcasemotion_key = '<leader>'
-
-" ctags
-" nnoremap <C-]> :execute 'ptag ' . expand('<cword>')<CR>
-
-" pymode
-"let g:pymode_rope_autoimport=1
-
-" codefmt
-" nnoremap <localleader>ll :FormatCode<CR>
-" vnoremap <localleader>ll :FormatLines<CR>
-" au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
-" au FileType python vnoremap <localleader>ll :FormatLines yapf<CR>
-" au FileType java nnoremap <localleader>ll :FormatCode clang-format<CR>
-" au FileType java vnoremap <localleader>ll :FormatLines clang-format<CR>
-" au FileType python nnoremap <localleader>ll :FormatCode yapf<CR>
-" au FileType python vnoremap <localleader>ll :FormatLines yapf<CR>
-" " Glaive
-" call glaive#Install()
-" Glaive codefmt clang_format_style='{BasedOnStyle: Google, ColumnLimit: 100, BinPackParameters: true, AllowAllParametersOfDeclarationOnNextLine: false, ExperimentalAutoDetectBinPacking: true, AlignAfterOpenBracket: Align}'
 
 " rainbow csv
 nnoremap <localleader>csv :RainbowDelim<CR>
@@ -469,105 +374,15 @@ nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
 " g:gitgutter_preview_win_floating = 0
 
-" vim-lsp config
-" let g:lsp_signs_enabled = 1
-" let g:lsp_diagnostics_echo_cursor = 1
-" let g:lsp_signs_error = {'text': '✗'}
-" let g:lsp_signs_warning = {'text': '⚠'}
-" let g:lsp_signs_hint = {'text': '!!'}
-" highlight LspErrorText ctermfg=196
-" highlight LspWarningText ctermbg=None ctermfg=227
-" " vim-lsp (language servers)
-" " if executable('pyls')
-" "   au User lsp_setup call lsp#register_server({
-" "     \ 'name': 'pyls',
-" "     \ 'cmd': {server_info->['pyls']},
-" "     \ 'whitelist': ['python'],
-" "     \ })
-" " endif
-" if executable('typescript-language-server')
-"   au User lsp_setup call lsp#register_server({
-"     \ 'name': 'typescript-language-server',
-"     \ 'cmd': { server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-"     \ 'root_uri': { server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_directory(lsp#utils#get_buffer_path(), '.git/..'))},
-"     \ 'whitelist': ['typescript', 'javascript', 'javascript.jsx']
-"     \ })
-" endif
-" if executable('css-languageserver')
-"   au User lsp_setup call lsp#register_server({
-"     \ 'name': 'css-languageserver',
-"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'css-languageserver --stdio']},
-"     \ 'whitelist': ['css', 'less', 'sass'],
-"     \ })
-" endif
-" if executable('java')
-"   au User lsp_setup call lsp#register_server({
-"     \ 'name': 'vscode-javac',
-"     \ 'cmd': {server_info->[&shell, &shellcmdflag, 'java -jar /Users/colinfahy/packages/vscode-javac/out/fat-jar.jar']},
-"     \ 'whitelist': ['java'],
-"     \ })
-" endif
-" if executable('scalameta_lsp')
-"   au User lsp_setup call lsp#register_server({
-"     \ 'name': 'scalameta',
-"     \ 'cmd': {server_info->['scalameta_lsp']},
-"     \ 'whitelist': ['scala'],
-"     \ })
-" endif
-
-" asyncomplete
-" let g:asyncomplete_remove_duplicates = 1
-" set completeopt-=preview " no preview window
-" " autocmd! CompleteDone * if pumvisible() == 0 | pclose | endif " autoclose preview window
-" " tabcompletion
-" inoremap <expr> <tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-" inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<cr>"
-" load on tab only
-" let g:asyncomplete_auto_popup = 0
-" function! s:check_back_space() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~ '\s'
-" endfunction
-" inoremap <expr> <TAB>
-"   \ pumvisible() ? "\<C-n>" :
-"   \ <SID>check_back_space() ? "\<TAB>" :
-"   \ asyncomplete#force_refresh()
-" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-" LanguageClient-neovim
-" let g:LanguageClient_serverCommands = {
-"     \ 'java': ['/usr/local/bin/jdtls'],
-"     \ }
-"     " \ 'scala': ['coursier', "launch", '-r', 'bintray:scalameta/maven', 'org.scalameta:metals_2.12:0.3.1', '-M', 'scala.meta.metals.Main'],
-"     " \ 'scala': ['scalameta_lsp'],
-"     " \ 'scala': ['metals-vim'],
-" let g:LanguageClient_changeThrottle = 2.0
-" let g:LanguageClient_diagnosticsEnable = 0
-" nnoremap <F5> :call LanguageClient_contextMenu()<CR>
-" " nnoremap <silent> gk :call LanguageClient#textDocument_hover()<CR>
-" " nnoremap <silent> gd :call LanguageClient#textDocument_definition()<CR>
-" " nnoremap <silent> gr :call LanguageClient#textDocument_rename()<CR>
-" autocmd FileType java nnoremap <buffer> <silent> gk :call LanguageClient#textDocument_hover()<CR>
-" autocmd FileType java nnoremap <buffer> <silent> gd :call LanguageClient#textDocument_definition()<CR>
-" autocmd FileType java nnoremap <buffer> <silent> gr :call LanguageClient#textDocument_rename()<CR>
-
-" ncm2
-" autocmd BufEnter * call ncm2#enable_for_buffer()
-" set completeopt=noinsert,menuone,noselect
-
-" which-key
-" nnoremap <silent> <leader> :WhichKey '\'<CR>
-" set timeoutlen=1000
-
 " fugitive
 let g:github_enterprise_urls = ['https://ghe.spotify.net']
 
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:qs_max_chars=300
-highlight QuickScopePrimary ctermfg=014 cterm=underline
-highlight QuickScopeSecondary ctermfg=010 cterm=underline
+highlight QuickScopePrimary guifg=#fac863 ctermfg=221 gui=underline cterm=underline
+highlight QuickScopeSecondary guifg=#fac863 ctermfg=221 gui=underline cterm=underline
+highlight QuickScopeSecondary guifg=#8fbfdc ctermfg=110 gui=underline cterm=underline
 
 " Smoother scrolling
 map <ScrollWheelUp> <C-Y>
@@ -593,21 +408,16 @@ map <ScrollWheelDown> <C-E>
 let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala']
 
 " vim-matchup
-hi MatchParen ctermfg=012 ctermbg=none
-hi MatchWord ctermfg=012 ctermbg=none
+" hi MatchParen guifg=#b1d8f6 ctermfg=012 ctermbg=none
+" hi MatchWord guifg=#b1d8f6 ctermfg=012 ctermbg=none
 " let g:matchup_enabled = 0
 " let g:matchup_matchparen_enabled = 0
 " let g:matchup_motion_enabled = 0
 " let g:matchup_text_obj_enabled = 0
 
 " vim-commentary
-nmap <C-/> Commentary
-vmap <C-/> Commentary
-
-" org-mode
-let g:org_agenda_files = ['~/org/index.org', '~/org/project.org']
-
-" iron.nvim
+nmap <M-/> :Commentary<CR>
+vmap <M-/> :Commentary<CR>
 
 " vim-sneak
 " Won't play nicely with quickscope, quickscope wins for now
@@ -638,14 +448,14 @@ lua <<EOF
 require'nvim-treesitter.configs'.setup {
     highlight = {
       enable = true,                    -- false will disable the whole extension
-      disable = { "c", "rust" },        -- list of language that will be disabled
+      disable = { },                    -- list of language that will be disabled
       custom_captures = {               -- mapping of user defined captures to highlight groups
         -- ["foo.bar"] = "Identifier"   -- highlight own capture @foo.bar with highlight group "Identifier", see :h nvim-treesitter-query-extensions
       },
     },
     incremental_selection = {
       enable = true,
-      disable = { "cpp", "lua" },
+      disable = { },
       keymaps = {                       -- mappings for incremental selection (visual mappings)
         init_selection = "gnn",         -- maps in normal mode to init the node/scope selection
         node_incremental = "grn",       -- increment to the upper named parent
@@ -705,3 +515,39 @@ require'nvim-treesitter.configs'.setup {
     ensure_installed = "all" -- one of "all", "language", or a list of languages
 }
 EOF
+
+" fzf
+" Mapping selecting mappings
+nnoremap <C-p> :<C-u>FZF<CR>
+nnoremap <leader>s :<C-u>FZF<CR>
+nnoremap <leader>f :Files<CR>
+nmap <leader><tab> <plug>(fzf-maps-n)
+xmap <leader><tab> <plug>(fzf-maps-x)
+omap <leader><tab> <plug>(fzf-maps-o)
+" Insert mode completion
+imap <c-x><c-k> <plug>(fzf-complete-word)
+imap <c-x><c-f> <plug>(fzf-complete-path)
+imap <c-x><c-l> <plug>(fzf-complete-line)
+" Path completion with custom source command
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+" Word completion with custom spec with popup layout option
+inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
+" TODO: experimental, remoe these
+let g:fzf_preview_use_dev_icons = 1
+let g:fzf_preview_command = 'bat --color=always --plain {-1}'
+
+" Vista.vim
+let g:vista_icon_indent = ["╰─▸", "├─▸"]
+" let g:vista_icon_indent = ["▸ ", ", "]
+let g:vista#renderer#enable_icon = 1
+let g:vista#renderer#icons = {
+\   "function": "\uf794",
+\   "variable": "\uf71b",
+\  }
+let g:vista_default_executive = 'coc'
+let g:vista_fzf_preview = ['right:50%']
+let g:vista_sidebar_width = 30
+map <M-;> :Vista!!<CR>
+autocmd FileType vista,vista_kind nnoremap <buffer> <silent>/ :<c-u>call vista#finder#fzf#Run()<CR>
+

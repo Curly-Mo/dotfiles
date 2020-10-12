@@ -1,0 +1,10 @@
+[Unit]
+Description=Barrier Client daemon
+After=network.target
+
+[Service]
+ExecStart=barrierc --enable-crypto --display :0 --debug INFO -f windoze
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

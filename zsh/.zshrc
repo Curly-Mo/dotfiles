@@ -117,10 +117,6 @@ zinit light lukechilds/zsh-nvm
 # zinit ice wait"2" silent
 # zinit light lukechilds/zsh-nvm
 
-# Use this instead of git-prompt once I get it working
-# zinit ice wait'1' silent pick"gitstatus.plugin.zsh"
-# zinit light romkatv/gitstatus
-
 # zinit ice wait"0" silent from"gh-r" as"program"
 # zinit load junegunn/fzf-bin
 

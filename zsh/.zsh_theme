@@ -1,9 +1,5 @@
 # Colin's ZSH Theme
 
-#Moved to .localrc (from haskell_git_prompt.sh)
-#Must install: https://github.com/olivierverdier/zsh-git-prompt#haskell-optional
-#GIT_PROMPT_EXECUTABLE="haskell"
-
 VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]% %{$reset_color%}"
 
 PROMPT='

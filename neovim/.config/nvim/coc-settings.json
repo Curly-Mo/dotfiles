@@ -14,10 +14,6 @@
   "python.formatting.provider": "black",
   "python.pythonPath": "~/.pyenv/shims/python",
   "python.venvPath": "~/.pyenv",
-  // coc-java
-  // "java.home": "/usr/bin/java",
-  // "java.home": "/usr/lib/jvm/java-11-openjdk",
-  // "java.home": "~/.jenv/versions/11",
-  "java.format.settings.url": "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
   "tsserver.npm": "/usr/bin/npm",
+  "metals.javaHome": "/home/colinfahy/.jenv/versions/11/"
 }

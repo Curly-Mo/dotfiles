@@ -1,10 +1,16 @@
 [Unit]
 Description=Simple X Hotkey Daemon
 Documentation=man:sxhkd(1)
+After=graphical.target
+StartLimitBurst=10
+StartLimitIntervalSec=60
 
 [Service]
 ExecStart=/usr/bin/sxhkd
 ExecReload=/usr/bin/kill -SIGUSR1 $MAINPID
+Restart=always
+RestartSec=1
+KillMode=process
 
 [Install]
 WantedBy=default.target
