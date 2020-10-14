@@ -170,7 +170,7 @@ bindkey "^[[7~" beginning-of-line
 bindkey "^[[8~" end-of-line
 
 # Welcome message
-if [[ -o login ]]; then
+if [[ -o login && -x "$(command -v fortune)" && -x "$(command -v lolcat)" ]]; then
   fortune showerthoughts | lolcat
 fi
 
