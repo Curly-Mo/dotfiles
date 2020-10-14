@@ -89,6 +89,7 @@ if exists('+termguicolors')
   set termguicolors
 endif
 colorscheme phlebotinum
+set cursorline
 " vimdiff
 " highlight DiffAdd    cterm=bold ctermbg=darkgrey
 " highlight DiffDelete cterm=bold ctermbg=darkyellow
