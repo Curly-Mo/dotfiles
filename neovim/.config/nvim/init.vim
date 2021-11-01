@@ -38,7 +38,7 @@ Plug 'tpope/vim-dadbod'
 Plug 'tpope/vim-eunuch'
 Plug 'tpope/vim-markdown'
 " Plug 'tpope/vim-tbone'
-Plug 'tpope/vim-rhubarb', { 'on': ['Gbrowse'] }
+Plug 'tpope/vim-rhubarb'
 Plug 'tpope/vim-abolish'
 Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-vinegar'
@@ -61,7 +61,7 @@ Plug 'derekwyatt/vim-scala', { 'for': ['scala'] }
 Plug 'tweekmonster/impsort.vim', { 'on': ['ImpSort'] }
 Plug 'lervag/vimtex', { 'for': ['tex'] }
 Plug 'NLKNguyen/vim-maven-syntax'
-Plug 'mechatroner/rainbow_csv'
+" Plug 'mechatroner/rainbow_csv'
 Plug 'plytophogy/vim-diffchanges'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'ambv/black', { 'on': ['Black'] }
@@ -78,32 +78,20 @@ Plug 'markonm/traces.vim'
 Plug 'Curly-Mo/phlebotinum'
 Plug 'tweekmonster/startuptime.vim', { 'on': ['StartupTime'] }
 Plug 'nanotech/jellybeans.vim'
-" disable polyglot in favor of treesitter
 " Plug 'sheerun/vim-polyglot'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
+" Plug 'nvim-treesitter/playground' " TODO: temporary to learn more about treesitter
 Plug 'ryanoasis/vim-devicons'
+Plug 'vim-scripts/ReplaceWithRegister'
+Plug 'machakann/vim-highlightedyank'
+Plug 'tommcdo/vim-exchange'
+" Plug 'nacro90/numb.nvim'
+" Plug 'petobens/poet-v'
+Plug 'lukhio/vim-mapping-conflicts'
+Plug 'alok/notational-fzf-vim'
+Plug 'phaazon/hop.nvim'
+Plug 'michaeljsmith/vim-indent-object'
 call plug#end()
-
-" Colors
-if exists('+termguicolors')
-  set termguicolors
-endif
-colorscheme phlebotinum
-set cursorline
-" vimdiff
-" highlight DiffAdd    cterm=bold ctermbg=darkgrey
-" highlight DiffDelete cterm=bold ctermbg=darkyellow
-" highlight DiffChange cterm=bold ctermbg=darkcyan
-" highlight DiffText   cterm=bold ctermbg=darkblue ctermfg=darkgrey
-" " fold colors
-" " set fillchars=fold:\
-" highlight Folded ctermbg=235
-" highlight FoldColumn ctermbg=black
-" " vertical divider colors
-" hi VertSplit ctermfg=Black ctermbg=248
-" hi StatusLine ctermfg=236 ctermbg=248
-" hi StatusLineNC ctermfg=236 ctermbg=248
-set fillchars+=vert:│
 
 " syntax
 syntax on
@@ -127,6 +115,33 @@ function! NumberToggle()
   endif
 endfunc
 
+" Colors
+if exists('+termguicolors')
+  set termguicolors
+endif
+colorscheme phlebotinum
+set cursorline
+" vimdiff
+" highlight DiffAdd    cterm=bold ctermbg=darkgrey
+" highlight DiffDelete cterm=bold ctermbg=darkyellow
+" highlight DiffChange cterm=bold ctermbg=darkcyan
+" highlight DiffText   cterm=bold ctermbg=darkblue ctermfg=darkgrey
+" " fold colors
+" " set fillchars=fold:\
+" highlight Folded ctermbg=235
+" highlight FoldColumn ctermbg=black
+" " vertical divider colors
+" hi VertSplit ctermfg=Black ctermbg=248
+" hi StatusLine ctermfg=236 ctermbg=248
+" hi StatusLineNC ctermfg=236 ctermbg=248
+set fillchars+=vert:│
+" print Syntax Highlight Group of what is under cursor
+function! s:syntax_query()
+  let s = synID(line('.'), col('.'), 1) | echo synIDattr(s, 'name') . ' -> ' . synIDattr(synIDtrans(s), 'name')
+  return s
+endfunc
+command! SynID call s:syntax_query()
+
 " search
 set hlsearch
 nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
@@ -136,7 +151,8 @@ set incsearch
 "set gdefault
 set magic
 " very magic mode for %s/
-cnoremap %s/ %s/\v
+" disable because it was confusing
+" cnoremap %s/ %s/\v
 
 " tabs
 set tabstop=2
@@ -148,7 +164,7 @@ autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
 " aliases
 :command WQ wq
 :command Wq wq
-:command Q q
+:command Q qa
 :command CQ cq
 :command Cq cq
 :command Bd bd
@@ -285,36 +301,88 @@ autocmd FileType json syntax match Comment +\/\/.\+$+
 command! -nargs=0 Org :call CocAction('runCommand', 'editor.action.organizeImport')
 nmap <leader>o :Org<CR>
 nmap <silent>go :Org<CR>
-" add current working dir to python path for local imports
-let cwd = getcwd()
-autocmd FileType python let g:coc_user_config = {"python.autoComplete.extraPaths": [getcwd()],}
 " show action menu
 nmap <silent> ga <Plug>(coc-codeaction-selected)<CR>
 
+" coc-python
+" add local paths to python path for local imports
+" current working dir, current buffer dir, current buffer parent dir, any parent dir to buffer named 'python'
+autocmd FileType python let g:coc_user_config = {
+      \"python.autoComplete.extraPaths": [
+        \substitute(expand('%:p:h'), '\v(.*python)\/.*', '\1', ''),
+        \expand('%:p:h'),
+        \fnamemodify(expand('%:p:h'), ':h'),
+        \getcwd(),
+        \],
+      \}
+
 endif
+
+" coc-git
+" navigate chunks of current buffer
+nmap [g <Plug>(coc-git-prevchunk)
+nmap ]g <Plug>(coc-git-nextchunk)
+" navigate conflicts of current buffer
+" conflicts with coc diagnostic keys
+" nmap [c <Plug>(coc-git-prevconflict)
+" nmap ]c <Plug>(coc-git-nextconflict)
+nmap gO :CocCommand git.browserOpen<CR>
+nmap gl :CocCommand git.copyUrl<CR>
+"chunks
+nmap ghi <Plug>(coc-git-chunkinfo)
+nmap ghs :CocCommand git.chunkStage<CR>
+nmap ghu :CocCommand git.chunkUndo<CR>
+" " show commit contains current position
+" nmap gp <Plug>(coc-git-commit)
+"" create text object for git chunks
+"omap ig <Plug>(coc-git-chunk-inner)
+"xmap ig <Plug>(coc-git-chunk-inner)
+"omap ag <Plug>(coc-git-chunk-outer)
+"xmap ag <Plug>(coc-git-chunk-outer)
 
 """Plugins allowed in vimdiff mode"""
 
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme='phlebotinum'
-" let g:airline_theme='jellybeans'
-" let g:airline_theme='apprentice'
-let g:airline#extensions#tabline#enabled = 1
+let g:airline_skip_empty_sections = 1
+" let g:airline_left_sep = ''
+" let g:airline_right_sep = ''
+" let g:airline_left_alt_sep =  '|'
+" let g:airline_right_alt_sep = '|'
+" let g:airline_left_alt_sep = '|'
+" let g:airline_right_alt_sep = ''
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+let g:airline_symbols.clipboard = '🅒'
+let g:airline_symbols.paste = '🅟'
+let g:airline_symbols.spell = '🅢'
+" let g:airline_symbols.spell = 'Ꞩ'
+let g:airline_symbols.ellipsis = '…'
+let g:airline_symbols.linenr = ''
+let g:airline_symbols.maxlinenr = ''
+" airline-tabline
+let g:airline#extensions#tabline#enabled = 0
+let g:airline#extensions#tabline#show_tab_type = 0
+let g:airline#extensions#tabline#overflow_marker = '…'
 let g:airline#extensions#tabline#buffer_min_count = 2
-let g:airline#extensions#tabline#buf_min_count = 2
-" let g:airline#extensions#tabline#fnamemod = ':.'
+" let g:airline#extensions#tabline#left_sep = '|'
+" let g:airline#extensions#tabline#right_sep = '|'
+" let g:airline#extensions#tabline#left_alt_sep = '|'
+" let g:airline#extensions#tabline#right_alt_sep = '|'
 let g:airline#extensions#tabline#formatter = 'short_path'
-" let g:airline_section_a = airline#section#create(['mode', 'crypt', 'paste', 'spell', 'iminsert'])
-" let g:airline_section_b = airline#section#create(['hunks'])
+let g:airline#extensions#tabline#show_close_button = 1
+" other extensions
+let g:airline#extensions#hunks#coc_git = 1
+" airline-coc
 let g:airline#extensions#coc#enabled = 1
-let airline#extensions#coc#error_symbol = '✗'
+let g:airline#extensions#coc#error_symbol = '✗'
 let g:airline#extensions#coc#warning_symbol = '⚠'
 let g:airline#extensions#coc#stl_format_err = '%E{[%e(#%fe)]}'
 let g:airline#extensions#coc#stl_format_warn = '%W{[%w(#%fw)]}'
 " let g:airline_section_error = '%{airline#util#wrap(airline#extensions#coc#get_error(),0)}'
 " let g:airline_section_warning = '%{airline#util#wrap(airline#extensions#coc#get_warning(),0)}'
-let g:airline_skip_empty_sections = 1
 
 " Scala
 let g:scala_scaladoc_indent = 1
@@ -364,19 +432,29 @@ let g:black_skip_string_normalization = 1
 let g:black_linelength = 120
 
 " localvimrc
-let g:localvimrc_whitelist='/Users/colinfahy/workspace/.*'
+let g:localvimrc_whitelist='~/workspace/.*'
 
 " gitgutter
-set updatetime=500
-highlight GitGutterAdd ctermfg=2 ctermbg=none
-highlight GitGutterChange ctermbg=none
-highlight GitGutterDelete ctermfg=1
+" TODO: trying out coc-git as alternative
+let g:gitgutter_enabled = 0
+" set updatetime=500
+highlight GitGutterAdd ctermfg=65 ctermbg=none guifg=#5f875f guibg=none
+highlight GitGutterChange ctermfg=103 ctermbg=none guifg=#8787af guibg=none
+highlight GitGutterDelete ctermfg=131 ctermbg=none guifg=#703020 guibg=none
 nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
-" g:gitgutter_preview_win_floating = 0
+let g:gitgutter_preview_win_floating = 1
 
 " fugitive
 let g:github_enterprise_urls = ['https://ghe.spotify.net']
+nnoremap <leader>gl :gclog<cr>
+nnoremap <leader>gd :gdiff<cr>
+nnoremap <leader>ge :Gedit<CR>
+nnoremap <leader>gb :Git blame<CR>
+nnoremap <leader>gB :GBrowse<CR>
+nnoremap <leader>gw :Gwrite<CR>
+nnoremap <leader>gC :Git commit<CR>
+nnoremap <leader>gs :Git<CR>
 
 " quick-scope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -406,7 +484,7 @@ map <ScrollWheelDown> <C-E>
 " endif
 
 " Markdown
-let g:markdown_fenced_languages = ['css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala']
+let g:markdown_fenced_languages = ['html', 'css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala', 'bash=sh']
 
 " vim-matchup
 " hi MatchParen guifg=#b1d8f6 ctermfg=012 ctermbg=none
@@ -519,9 +597,11 @@ EOF
 
 " fzf
 " Mapping selecting mappings
-nnoremap <C-p> :<C-u>FZF<CR>
-nnoremap <leader>s :<C-u>FZF<CR>
-nnoremap <leader>f :Files<CR>
+" nnoremap <C-p> :<C-u>FZF<CR>
+nnoremap <C-p> :Files<CR>
+" nnoremap <leader>s :<C-u>FZF<CR>
+nnoremap <leader>s :Files<CR>
+nnoremap <leader>f :GFiles<CR>
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
@@ -534,9 +614,11 @@ inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
 inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
 " Word completion with custom spec with popup layout option
 inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
+" Config
+" let g:fzf_preview_window = ['right:60%', 'ctrl-/']
 " TODO: experimental, remoe these
-let g:fzf_preview_use_dev_icons = 1
-let g:fzf_preview_command = 'bat --color=always --plain {-1}'
+" let g:fzf_preview_use_dev_icons = 1
+" let g:fzf_preview_command = 'bat --color=always --plain {-1}'
 
 " Vista.vim
 let g:vista_icon_indent = ["╰─▸", "├─▸"]
@@ -552,3 +634,73 @@ let g:vista_sidebar_width = 30
 map <M-;> :Vista!!<CR>
 autocmd FileType vista,vista_kind nnoremap <buffer> <silent>/ :<c-u>call vista#finder#fzf#Run()<CR>
 
+
+"numb.nvim
+" lua <<EOF
+" require('numb').setup()
+" EOF
+
+" poet-v
+" let g:poetv_executables = ['poetry', 'pipenv']
+let g:poetv_executables = ['poetry']
+" let g:poetv_auto_activate = 0
+" let g:poetv_statusline_symbol = ''
+" let g:poetv_set_environment = 1
+
+" notational-fzf-vim
+nnoremap <silent> <c-s> :NV<CR>
+nnoremap <silent> <c-S> :NV<CR>work/
+let g:nv_search_paths = ['~/sync/Notes/fzfvim']
+"" String. Set to '' (the empty string) if you don't want an extension appended by default.
+"" Don't forget the dot, unless you don't want one.
+"let g:nv_default_extension = '.md'
+"" String. Default is first directory found in `g:nv_search_paths`. Error thrown
+""if no directory found and g:nv_main_directory is not specified
+""let g:nv_main_directory = g:nv_main_directory or (first directory in g:nv_search_paths)
+"" Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
+"" 'command' or 'alt-KEY' : 'command'. See examples below.
+"let g:nv_keymap = {
+"                    \ 'ctrl-s': 'split ',
+"                    \ 'ctrl-v': 'vertical split ',
+"                    \ 'ctrl-t': 'tabedit ',
+"                    \ })
+"" String. Must be in the form 'ctrl-KEY' or 'alt-KEY'
+"let g:nv_create_note_key = 'ctrl-x'
+"" String. Controls how new note window is created.
+"let g:nv_create_note_window = 'vertical split'
+"" Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
+"let g:nv_show_preview = 1
+"" Boolean. Respect .*ignore files in or above nv_search_paths. Set by default.
+"let g:nv_use_ignore_files = 1
+"" Boolean. Include hidden files and folders in search. Disabled by default.
+"let g:nv_include_hidden = 0
+"" Boolean. Wrap text in preview window.
+"let g:nv_wrap_preview_text = 1
+"" String. Width of window as a percentage of screen's width.
+"let g:nv_window_width = '40%'
+"" String. Determines where the window is. Valid options are: 'right', 'left', 'up', 'down'.
+"let g:nv_window_direction = 'down'
+"" String. Command to open the window (e.g. `vertical` `aboveleft` `30new` `call my_function()`).
+"let g:nv_window_command = 'call my_function()'
+"" Float. Width of preview window as a percentage of screen's width. 50% by default.
+"let g:nv_preview_width = 50
+"" String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
+"let g:nv_preview_direction = 'right'
+"" String. Yanks the selected filenames to the default register.
+"let g:nv_yank_key = 'ctrl-y'
+"" String. Separator used between yanked filenames.
+"let g:nv_yank_separator = "\n"
+"" Boolean. If set, will truncate each path element to a single character. If
+"" you have colons in your pathname, this will fail. Set by default.
+"let g:nv_use_short_pathnames = 1
+""List of Strings. Shell glob patterns. Ignore all filenames that match any of
+"" the patterns.
+"let g:nv_ignore_pattern = ['summarize-*', 'misc*']
+"" List of Strings. Key mappings like above in case you want to define your own
+"" handler function. Most users won't want to set this to anything.
+"let g:nv_expect_keys = []
+
+
+" hop.nvim
+map s <cmd>HopChar1<CR>
+omap s v<cmd>HopChar1<CR>

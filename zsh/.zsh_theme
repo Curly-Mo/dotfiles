@@ -1,6 +1,7 @@
 # Colin's ZSH Theme
 
-VIM_PROMPT="%{$fg_bold[yellow]%} [% NORMAL]% %{$reset_color%}"
+# ZVM_MODE is from jeffreytse/zsh-vi-mode
+VI_NORMAL_PROMPT="%{$fg_bold[green]%} [% NORMAL]% %{$reset_color%}"
 
 PROMPT='
 $(_timestamp) $(_virtualenv_prompt_info)$(_user_host)${_current_dir}$(_ruby_version)
@@ -8,7 +9,7 @@ $(_timestamp) $(_virtualenv_prompt_info)$(_user_host)${_current_dir}$(_ruby_vers
 
 PROMPT2='%{$fg[$CARETCOLOR]%}◀%{$reset_color%} '
 
-RPROMPT='%{$(echotc UP 1)%} ${${KEYMAP/vicmd/$VIM_PROMPT}/(main|viins)/} $(_git_time_since_commit) $(gitprompt) ${_return_status}%{$(echotc DO 1)%}'
+RPROMPT='%{$(echotc UP 1)%} ${${KEYMAP/vicmd/$VI_NORMAL_PROMPT}/(main|viins)/} $(_git_time_since_commit) $(gitprompt) ${_return_status}%{$(echotc DO 1)%}'
 
 _current_dir="%F{030}%7~%{$reset_color%} "
 _return_status="%{$fg_bold[red]%}%(?..⍉)%{$reset_color%}"
@@ -107,7 +108,7 @@ else
   CARETCOLOR="white"
 fi
 
-MODE_INDICATOR="%{$fg_bold[yellow]%}❮%{$reset_color%}%{$fg[yellow]%}❮❮%{$reset_color%}"
+MODE_INDICATOR="%{$fg_bold[green]%}❮%{$reset_color%}%{$fg[green]%}❮❮%{$reset_color%}"
 
 ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg[green]%}"
 ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%}"

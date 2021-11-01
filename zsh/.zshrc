@@ -1,9 +1,8 @@
-# uncomment to enable `zpmod source-study`
-# requires `zinit module build` first
-# module_path+=( "/Users/colinfahy/.zinit/bin/zmodules/Src" )
+# uncomment to enable `zpmod source-study` (requires `zinit module build` first)
+# module_path+=( "$HOME/.zinit/bin/zmodules/Src" )
 # zmodload zdharma/zplugin
 
-# uncomment for profiling
+# uncomment for profiling (also uncomment a the bottom of file)
 # zmodload zsh/zprof
 
 # tmux
@@ -31,7 +30,7 @@ setopt extendedglob
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing DHARMA Initiative Plugin Manager (zdharma/zinit)…%f"
     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f" || \
         print -P "%F{160}▓▒░ The clone has failed.%f"
 fi
@@ -64,8 +63,8 @@ zinit ice wait"0" lucid
 zinit snippet OMZ::"lib/completion.zsh"
 
 # Load Oh My Zsh Plugins
-zinit ice wait"0" lucid
-zinit snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
+# zinit ice wait"0" lucid
+# zinit snippet OMZ::"plugins/vi-mode/vi-mode.plugin.zsh"
 # zinit ice wait"0" lucid
 # zinit snippet OMZ::"plugins/last-working-dir/last-working-dir.plugin.zsh"
 zinit ice wait"0" lucid
@@ -73,8 +72,20 @@ zinit snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
 # nah, the alias expansion was too distracting
 # zinit ice wait"0" silent
 # zinit snippet OMZ::"plugins/globalias/globalias.plugin.zsh"
+# zinit ice wait"0" lucid
+# zinit snippet OMZ::"plugins/direnv/direnv.plugin.zsh"
+zinit ice wait"5" lucid
+zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
 
 # Plugins
+function zvm_config() {
+  # This function called by zsh-vi-mode
+  ZVM_KEYTIMEOUT=0.1
+  ZVM_ESCAPE_KEYTIMEOUT=0.01
+}
+zinit ice depth=1
+zinit light jeffreytse/zsh-vi-mode
+
 # zinit ice wait"0" lucid
 zinit light Curly-Mo/last-working-dir-tmux
 
@@ -100,8 +111,8 @@ zinit light darvid/zsh-poetry
 zinit ice wait"0" lucid
 zinit light davidparsson/zsh-pyenv-lazy
 
-zinit ice wait"0" lucid
-zinit light shihyuho/zsh-jenv-lazy
+# zinit ice wait"0" lucid
+# zinit light shihyuho/zsh-jenv-lazy
 # jenv-lazy caused issues, fine I'll just load it non-lazily for now
 # zinit ice wait"10" lucid
 # zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
@@ -129,8 +140,12 @@ zinit light lukechilds/zsh-nvm
 # zinit light MichaelAquilina/zsh-you-should-use
 
 # completions
+# alacritty completion
 zinit ice wait"1" as"completion" lucid
 zinit snippet "https://github.com/jwilm/alacritty/blob/master/extra/completions/_alacritty"
+# notes-cli completion
+zinit ice wait"1" lucid id-as"notes-cli-completion" mv"notes-cli-completion -> _notes" as"completion"
+zinit snippet https://github.com/rhysd/notes-cli/blob/master/completions/zsh/_notes
 
 # local stuff
 zinit ice lucid if"[[ -f $HOME/.zsh_theme ]]"
@@ -152,16 +167,17 @@ zinit light "$HOME/.zsh_functions"
 # zinit ice wait"2" lucid
 # zinit snippet "https://github.com/tj/git-extras/blob/master/etc/git-extras-completion.zsh"
 
+
 # do this one last since it calls compinit
 zinit ice wait"1" lucid atinit"zpcompinit; zpcdreplay"
-zinit light zdharma/fast-syntax-highlighting
+zinit light zdharma-continuum/fast-syntax-highlighting
 
 # End zinit config
 
 # vim-mode
-bindkey -v
-export KEYTIMEOUT=1
-bindkey '^R' history-incremental-search-backward
+# bindkey -v
+# export KEYTIMEOUT=5
+# bindkey '^R' history-incremental-search-backward
 #bindkey '^[[A' up-line-or-search
 #bindkey '^[[B' down-line-or-search
 
@@ -171,6 +187,8 @@ bindkey "^[[8~" end-of-line
 
 # Welcome message
 if [[ -o login && -x "$(command -v fortune)" && -x "$(command -v lolcat)" ]]; then
+  # wget http://skeeto.s3.amazonaws.com/share/showerthoughts -O /usr/share/fortune/showerthoughts
+  # strfile /usr/share/fortune/showerthoughts /usr/share/fortune/showerthoughts.dat
   fortune showerthoughts | lolcat
 fi
 

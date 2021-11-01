@@ -20,7 +20,6 @@ alias l='ls -CF'
 alias ltr='ls -lAtr'
 alias lr='ls -ltu'
 alias tree='tree -C -L 4'
-alias fp='command ls -d -1 --color=auto'
 # find
 alias today='find -maxdepth 1 -type f -mtime -1'
 alias latest='find . -maxdepth 1 -type f -printf "%Ts\t%f\n" | sort -nr | cut -f2 | head -1'
@@ -29,13 +28,16 @@ function rc(){
   local latest_file=$(latest)
   $1 $(latest)
 }
+function fp(){
+  ls -1 "$@" | xargs realpath
+}
 
 # vim
 alias vi="vim"
 if hash nvim 2>/dev/null; then
     alias vim="nvim"
 fi
-alias vimrc='vim $HOME/.nvimrc'
+alias vimrc='vim $HOME/.config/nvim/init.vim'
 alias vl='vim $(latest)'
 
 # python
@@ -50,6 +52,18 @@ alias pacmatic='sudo pacmatic'
 alias sudont='sudo $(fc -nl -1)'
 alias serious='sudo $(fc -nl -1)'
 alias sudid='sudo $(fc -nl -1)'
+alias sudoit='sudo $(fc -nl -1)'
+alias doit='sudo $(fc -nl -1)'
+
+# arch
+alias yay="paru"
+alias yeet="paru -Rns"
+# alias yayy='yay -Syu --noconfirm'
+# alias yolo='yay -Syu --noconfirm'
+alias systat='systemctl status'
+alias systart='systemctl start'
+alias systop='systemctl stop'
+alias sysenable='systemctl enable'
 
 # xdg
 if ! [ -x "$(command -v open)" ]; then
@@ -80,8 +94,6 @@ alias gs='gsutil'
 
 # go to workspace root
 alias work='cd $HOME/workspace'
-alias vaf='cd $HOME/workspace/voice-artist-fulfillment-svc'
-alias squiddy='cd $HOME/workspace/squiddy-svc'
 # go to personal root
 alias personal='cd $HOME/personal'
 
@@ -103,6 +115,7 @@ alias psme='ps -u $USER'
 
 # zsh
 alias zhrc='vim $HOME/.zshrc'
+alias zshrc='vim $HOME/.zshrc'
 
 # ssh
 alias ssht='TERM=xterm-color ssh'
@@ -121,3 +134,10 @@ alias optisteam='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME="nvidia" 
 alias journalboot='journalctl -xb -p 5'
 alias journalthis='journalctl -xb -p 5'
 alias journallast='journalctl -x -b -1 -p 5'
+
+# fzf
+alias fzv='vim $(fzf)'
+
+# todo.txt
+alias todo='todo.sh'
+alias todow="todo -d $HOME/sync/Notes/todo/.config/workconfig"

@@ -13,8 +13,8 @@ alt + shift + s
   launch_or_focus idea
 
 ### SELECTION ###
-alt + c
-  xclip -in -selection clipboard
+#alt + c
+#  xclip -in -selection clipboard
   
 #alt + v
 #  xte "keydown Shift_L" "key Insert" "keyup Shift_L"

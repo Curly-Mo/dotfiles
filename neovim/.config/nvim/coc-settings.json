@@ -1,19 +1,16 @@
 {
   // "coc.preferences.diagnostic.displayByAle": true,
-  // scala
-  // Superseded by `coc-metals` extension
-  // "languageserver": {
-  //   "metals": {
-  //     "command": "metals-vim",
-  //     "rootPatterns": ["build.sbt"],
-  //     "filetypes": ["scala", "sbt"]
-  //   }
-  // },
   // use microsoft python langauge server
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
   "python.pythonPath": "~/.pyenv/shims/python",
   "python.venvPath": "~/.pyenv",
   "tsserver.npm": "/usr/bin/npm",
-  "metals.javaHome": "/home/colinfahy/.jenv/versions/11/"
+  "metals.javaHome": "/home/colinfahy/.jenv/versions/11/",
+  "git.enableGutters": true,
+  "git.addedSign.hlGroup": "GitGutterAdd",
+  "git.changedSign.hlGroup": "GitGutterChange",
+  "git.removedSign.hlGroup": "GitGutterDelete",
+  "git.topRemovedSign.hlGroup": "GitGutterDelete",
+  "git.changeRemovedSign.hlGroup": "GitGutterChangeDelete"
 }

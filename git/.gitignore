@@ -2,6 +2,7 @@
 .env
 .out
 tags
+.vim
 
 # Compiled source #
 ###################

@@ -1,5 +1,1 @@
 setxkbmap -layout us -option caps:escape
-# xbindkeys
-# /usr/bin/sxhkd &
-# # TODO: replace with xkb when you are smart enough
-# xmodmap ~/.Xmodmap
