@@ -2,7 +2,7 @@
 
 echo "Installing zplugin..."
 mkdir $HOME/.zinit
-git clone https://github.com/zdharma/zinit.git $HOME/.zinit/bin
+git clone https://github.com/zdharma-continuum/zinit.git $HOME/.zinit/bin
 
 touch $HOME/.lastdir
 

@@ -46,8 +46,8 @@ Plug 'tpope/vim-projectionist'
 " end tpope
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim' }
-Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentice-airline' }
+" Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim' }
+" Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim', 'as': 'apprentice-airline' }
 Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
@@ -69,7 +69,7 @@ Plug 'embear/vim-localvimrc'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'unblevable/quick-scope'
-Plug 'andymass/vim-matchup'
+" Plug 'andymass/vim-matchup'
 Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'mattn/calendar-vim'
 Plug 'freitass/todo.txt-vim'
@@ -91,6 +91,8 @@ Plug 'lukhio/vim-mapping-conflicts'
 Plug 'alok/notational-fzf-vim'
 Plug 'phaazon/hop.nvim'
 Plug 'michaeljsmith/vim-indent-object'
+Plug 'lifepillar/vim-colortemplate'
+Plug 'stsewd/gx-extended.vim'
 call plug#end()
 
 " syntax
@@ -226,7 +228,6 @@ set diffopt+=foldcolumn:1
 " status
 " set shortmess=a
 
-
 """"""PLUGINS"""""""
 
 if !&diff
@@ -237,8 +238,8 @@ if !&diff
 " Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
 "
 " set cmdheight=2
-set nobackup
-set nowritebackup
+" set nobackup
+" set nowritebackup
 " change buffers with unsaved changes
 set hidden
 function! s:check_back_space() abort
@@ -704,3 +705,7 @@ let g:nv_search_paths = ['~/sync/Notes/fzfvim']
 " hop.nvim
 map s <cmd>HopChar1<CR>
 omap s v<cmd>HopChar1<CR>
+
+" undotree
+nnoremap <F5> :UndotreeToggle<CR>
+let g:undotree_SetFocusWhenToggle = 1

@@ -62,6 +62,7 @@ alias yeet="paru -Rns"
 # alias yolo='yay -Syu --noconfirm'
 alias systat='systemctl status'
 alias systart='systemctl start'
+alias sysrestart='systemctl restart'
 alias systop='systemctl stop'
 alias sysenable='systemctl enable'
 
