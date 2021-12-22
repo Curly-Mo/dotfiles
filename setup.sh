@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Installing zplugin..."
+echo "Installing zinit..."
 mkdir $HOME/.zinit
 git clone https://github.com/zdharma-continuum/zinit.git $HOME/.zinit/bin
 
