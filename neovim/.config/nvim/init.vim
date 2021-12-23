@@ -592,7 +592,7 @@ require'nvim-treesitter.configs'.setup {
           ["im"] = "@call.inner"
       }
     },
-    ensure_installed = "all" -- one of "all", "language", or a list of languages
+    ensure_installed = "maintained" -- one of "all", "language", or a list of languages
 }
 EOF
 
