@@ -56,7 +56,7 @@ alias sudoit='sudo $(fc -nl -1)'
 alias doit='sudo $(fc -nl -1)'
 
 # arch
-alias yay="paru"
+alias yay="PYENV_VERSION=system paru"
 alias yeet="paru -Rns"
 # alias yayy='yay -Syu --noconfirm'
 # alias yolo='yay -Syu --noconfirm'

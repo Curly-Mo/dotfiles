@@ -8,6 +8,8 @@
 !#include ".Xresources.d/base16-eighties"
 
 
+! but why?
+Xft.dpi: 144
 !
 ! fonts
 !

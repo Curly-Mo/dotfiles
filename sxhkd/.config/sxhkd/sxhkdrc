@@ -13,10 +13,10 @@ alt + shift + s
   launch_or_focus idea
 
 ### SELECTION ###
-alt + c
-  xsel -po|xsel -bi
-alt + @v
-  xdotool type --clearmodifiers --delay 0 -- "$(xclip -out -selection clipboard)"
+# alt + c
+#   xsel -po|xsel -bi
+# alt + @v
+#   xdotool type --clearmodifiers --delay 0 -- "$(xclip -out -selection clipboard)"
 
 #alt + c
 #  xclip -in -selection clipboard

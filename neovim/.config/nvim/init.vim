@@ -5,7 +5,6 @@ if !&diff
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
   Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-python', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
@@ -17,7 +16,8 @@ if !&diff
   Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-yank', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-yank', {'do': 'yarn install --frozen-lockfile'}
+  Plug 'fannheyward/coc-pyright', {'do': 'yarn install --frozen-lockfile'}
   Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
   Plug 'iamcco/coc-actions', {'do': 'yarn install --frozen-lockfile'}
   Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
@@ -74,7 +74,8 @@ Plug 'uber/prototool', { 'rtp':'vim/prototool' }
 Plug 'mattn/calendar-vim'
 Plug 'freitass/todo.txt-vim'
 Plug 'markonm/traces.vim'
-" Plug 'janko/vim-test'
+Plug 'janko/vim-test'
+Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
 Plug 'Curly-Mo/phlebotinum'
 Plug 'tweekmonster/startuptime.vim', { 'on': ['StartupTime'] }
 Plug 'nanotech/jellybeans.vim'
@@ -93,6 +94,8 @@ Plug 'phaazon/hop.nvim'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'lifepillar/vim-colortemplate'
 Plug 'stsewd/gx-extended.vim'
+Plug 'psliwka/vim-smoothie'
+Plug 'airblade/vim-rooter'
 call plug#end()
 
 " syntax
@@ -166,7 +169,7 @@ autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
 " aliases
 :command WQ wq
 :command Wq wq
-:command Q qa
+:command Q qa!
 :command CQ cq
 :command Cq cq
 :command Bd bd
@@ -228,6 +231,11 @@ set diffopt+=foldcolumn:1
 " status
 " set shortmess=a
 
+" Neovim
+" Python
+let g:python3_host_prog = "~/.pyenv/shims/python3"
+let g:python_host_prog = "~/.pyenv/shims/python2"
+
 """"""PLUGINS"""""""
 
 if !&diff
@@ -264,7 +272,7 @@ nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> <C-LeftMouse> <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nmap <silent> gf <Plug>(coc-references)
 " Use K for show documentation in preview window
 function! s:show_documentation()
   if &filetype == 'vim'
@@ -448,8 +456,8 @@ let g:gitgutter_preview_win_floating = 1
 
 " fugitive
 let g:github_enterprise_urls = ['https://ghe.spotify.net']
-nnoremap <leader>gl :gclog<cr>
-nnoremap <leader>gd :gdiff<cr>
+nnoremap <leader>gl :Gclog<cr>
+nnoremap <leader>gd :Gdiff<cr>
 nnoremap <leader>ge :Gedit<CR>
 nnoremap <leader>gb :Git blame<CR>
 nnoremap <leader>gB :GBrowse<CR>
@@ -465,8 +473,8 @@ highlight QuickScopeSecondary guifg=#fac863 ctermfg=221 gui=underline cterm=unde
 highlight QuickScopeSecondary guifg=#8fbfdc ctermfg=110 gui=underline cterm=underline
 
 " Smoother scrolling
-map <ScrollWheelUp> <C-Y>
-map <ScrollWheelDown> <C-E>
+" map <ScrollWheelUp> <C-Y>
+" map <ScrollWheelDown> <C-E>
 
 " MacOS clipboard, slow startup time searching for clipboard provider if not set
 " if has('macunix')
@@ -599,7 +607,10 @@ EOF
 " fzf
 " Mapping selecting mappings
 " nnoremap <C-p> :<C-u>FZF<CR>
-nnoremap <C-p> :Files<CR>
+command! GFilesOrFiles execute (len(system('git rev-parse'))) ? ':Files' : ':GFiles'
+nnoremap <C-p> :GFilesOrFiles<CR>
+" nnoremap <C-p> :Files<CR>
+nnoremap <C-b> :Buffers<CR>
 " nnoremap <leader>s :<C-u>FZF<CR>
 nnoremap <leader>s :Files<CR>
 nnoremap <leader>f :GFiles<CR>
@@ -622,17 +633,19 @@ inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'hei
 " let g:fzf_preview_command = 'bat --color=always --plain {-1}'
 
 " Vista.vim
-let g:vista_icon_indent = ["╰─▸", "├─▸"]
+" let g:vista_icon_indent = ["╰─▸", "├─▸"]
 " let g:vista_icon_indent = ["▸ ", ", "]
 let g:vista#renderer#enable_icon = 1
-let g:vista#renderer#icons = {
-\   "function": "\uf794",
-\   "variable": "\uf71b",
-\  }
+let g:vista_sidebar_width = 25
 let g:vista_default_executive = 'coc'
 let g:vista_fzf_preview = ['right:50%']
-let g:vista_sidebar_width = 30
+let g:vista_keep_fzf_colors = 1
+let g:vista_echo_cursor_strategy = 'both'
+let g:vista_blink = [3, 50]
+let g:vista_cursor_delay = 200
+let g:vista_floating_delay = 400
 map <M-;> :Vista!!<CR>
+map <M-'> :Vista focus<CR>
 autocmd FileType vista,vista_kind nnoremap <buffer> <silent>/ :<c-u>call vista#finder#fzf#Run()<CR>
 
 
@@ -709,3 +722,37 @@ omap s v<cmd>HopChar1<CR>
 " undotree
 nnoremap <F5> :UndotreeToggle<CR>
 let g:undotree_SetFocusWhenToggle = 1
+
+" vim-test
+nmap <silent> <leader>t :TestNearest<CR>
+" nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> gT :TestFile<CR>
+nmap <silent> <leader>a :TestSuite<CR>
+nmap <silent> <leader>l :TestLast<CR>
+let test#strategy = "neovim"
+let test#java#maventest#options = '-T 4 -Dcheckstyle.skip -Dspotbugs.skip -Ddockerfile.skip -Ddockerfile.skip'
+
+" vim-ultest
+let g:ultest_use_pty = 1
+let g:ultest_max_threads = 1
+let g:ultest_summary_width = 30
+augroup UltestRunner
+    au!
+    au BufWritePost * UltestNearest
+augroup END
+nmap ]t <Plug>(ultest-next-fail)
+nmap [t <Plug>(ultest-prev-fail)
+nmap <silent> <leader>t <Plug>(ultest-run-nearest)
+nmap <silent> <leader>T <Plug>(ultest-run-file)
+nmap <silent> gt <Plug>(ultest-summary-toggle)
+let g:ultest_disable_grouping = ["java"]
+
+" vim-smoothie
+let g:smoothie_enabled = 1
+let g:smoothie_update_interval = 1
+let g:smoothie_speed_constant_factor = 15
+let g:smoothie_speed_linear_factor = 40
+let g:smoothie_speed_exponentiation_factor = 0.999
+let g:smoothie_no_default_mappings = 0
+let g:smoothie_experimental_mappings = 1
+let g:smoothie_break_on_reverse = 0

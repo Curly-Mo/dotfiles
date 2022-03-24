@@ -23,7 +23,7 @@ tmux::reattach_or_new_session
 
 export ZSH_CACHE_DIR=~/.cache/zsh
 setopt promptsubst
-# setopt globdots
+setopt globdots
 setopt extendedglob
 
 ### Added by Zinit's installer
@@ -72,34 +72,21 @@ zinit snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
 # nah, the alias expansion was too distracting
 # zinit ice wait"0" silent
 # zinit snippet OMZ::"plugins/globalias/globalias.plugin.zsh"
-# zinit ice wait"0" lucid
-# zinit snippet OMZ::"plugins/direnv/direnv.plugin.zsh"
 zinit ice wait"5" lucid
 zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
 
 # Plugins
 function zvm_config() {
   # This function called by zsh-vi-mode
-  ZVM_KEYTIMEOUT=0.1
-  ZVM_ESCAPE_KEYTIMEOUT=0.01
+  ZVM_KEYTIMEOUT=0.3
+  ZVM_ESCAPE_KEYTIMEOUT=0.03
+  ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 }
 zinit ice depth=1
 zinit light jeffreytse/zsh-vi-mode
 
 # zinit ice wait"0" lucid
 zinit light Curly-Mo/last-working-dir-tmux
-
-zinit ice atclone"dircolors -b LS_COLORS > c.zsh" atpull'%atclone' pick"c.zsh" nocompile'!'
-zinit light trapd00r/LS_COLORS
-
-zinit ice wait"0" lucid blockf
-zinit light zsh-users/zsh-completions
-
-# export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
-# export ZSH_AUTOSUGGEST_USE_ASYNC=true
-# export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=5'
-zinit ice wait"1" lucid atload"_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false"
-zinit light zsh-users/zsh-autosuggestions
 
 # caused too many issues
 # zinit ice wait"0" silent atload"zstyle ':history-search-multi-word' highlight-color 'fg=4,bold,bg=5'"
@@ -128,9 +115,6 @@ zinit light lukechilds/zsh-nvm
 # zinit ice wait"2" silent
 # zinit light lukechilds/zsh-nvm
 
-# zinit ice wait"0" silent from"gh-r" as"program"
-# zinit load junegunn/fzf-bin
-
 # zinit ice wait"0" silent src"zsh-history-substring-search.zsh"
 # zinit light zsh-users/zsh-history-substring-search
 # bindkey '^[[A' history-substring-search-up
@@ -157,20 +141,106 @@ zinit snippet "$HOME/.aliases"
 zinit ice wait"0" lucid if"[[ -f $HOME/.localrc ]]"
 zinit snippet "$HOME/.localrc"
 
+zinit wait lucid light-mode for \
+  hlissner/zsh-autopair \
+  urbainvaes/fzf-marks
+
 # Load all my functions and completions
-zinit ice wait"1" lucid if"[[ -d $HOME/.zsh_functions ]]"
+zinit ice wait"0" lucid if"[[ -d $HOME/.zsh_functions ]]"
 zinit light "$HOME/.zsh_functions"
 
 # Programs
-# zinit ice wait"1" lucid as"program" pick"$ZPFX/bin/git-*" make"PREFIX=$ZPFX" nocompile
-# zinit light tj/git-extras
-# zinit ice wait"2" lucid
-# zinit snippet "https://github.com/tj/git-extras/blob/master/etc/git-extras-completion.zsh"
+# git things
+zinit as"program" wait"3" lucid light-mode for \
+  Fakerr/git-recall \
+  paulirish/git-open \
+  paulirish/git-recent \
+  davidosomething/git-my \
+  make"PREFIX=$ZPFX install" iwata/git-now \
+  make"PREFIX=$ZPFX" tj/git-extras
+
+zinit as"program" wait lucid light-mode make"!" for \
+  atclone"./direnv hook zsh > zhook.zsh" atpull"%atclone" pick"direnv" src"zhook.zsh" \
+    direnv/direnv
+
+# Packs
+# actually packs are dumb
+# This pack seems broken
+# zinit pack"default+keys" for fzf
+zinit as'command' wait lucid light-mode \
+    atclone'PREFIX=$ZPFX FZF_VERSION=0.28.0 FZF_REVISION=zinit-pack make install &&
+      mkdir -p $ZPFX/{bin,man/man1} &&
+      cp shell/completion.zsh _fzf_completion &&
+      cp -vf bin/fzf(|-tmux) $ZPFX/bin &&
+      cp -vf man/man1/fzf(|-tmux).1 $ZPFX/man/man1' \
+    atpull'%atclone' depth'1' nocompile pick'$ZPFX/bin/fzf(|-tmux)' src'shell/key-bindings.zsh' \
+  for @junegunn/fzf
+zinit as"program" wait lucid light-mode from"gh-r" for \
+  mv"fd* -> fd" pick"fd/fd" \
+   @sharkdp/fd
+
+zinit pack"no-dir-color-swap" for ls_colors
+
+# zsh stuff
+zinit wait lucid light-mode for \
+ atinit"ZINIT[COMPINIT_OPTS]=-C; zpcompinit; zpcdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+ blockf atpull'zinit creinstall -q .' \
+    zsh-users/zsh-completions \
+ atload"!_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false" \
+    zsh-users/zsh-autosuggestions
 
 
-# do this one last since it calls compinit
-zinit ice wait"1" lucid atinit"zpcompinit; zpcdreplay"
-zinit light zdharma-continuum/fast-syntax-highlighting
+function _fzf_tab_config() {
+  # zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
+  # zstyle ':completion:*:fzf-flags:*' 
+  # disable sort when completing `git checkout`
+  zstyle ':completion:*:git-checkout:*' sort false
+  # set list-colors to enable filename colorizing
+  zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+  # preview directory's content with exa when completing cd
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+  # set descriptions format to enable group support
+  zstyle ':completion:*:descriptions' format '[%d]'
+  # switch group using `,` and `.`
+  zstyle ':fzf-tab:*' switch-group ',' '.'
+  # give a preview of commandline arguments when completing `kill`
+  # zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+  # zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
+  #   [[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w
+  # zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
+  # show systemd unit status
+  zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
+  # show file contents
+  zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat --color=always --plain ${(Q)realpath}'
+  # environment variable
+  zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
+    fzf-preview 'echo ${(P)word}'
+  # git
+  zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
+    'git diff $word | delta'
+  zstyle ':fzf-tab:complete:git-log:*' fzf-preview \
+    'git log --color=always $word'
+  zstyle ':fzf-tab:complete:git-help:*' fzf-preview \
+    'git help $word | bat -plman --color=always'
+  zstyle ':fzf-tab:complete:git-show:*' fzf-preview \
+    'case "$group" in
+    "commit tag") git show --color=always $word ;;
+    *) git show --color=always $word | delta ;;
+    esac'
+  zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
+    'case "$group" in
+    "modified file") git diff $word | delta ;;
+    "recent commit object name") git show --color=always $word | delta ;;
+    *) git log --color=always $word ;;
+    esac'
+  # fix man
+  zstyle ':fzf-tab:complete:(\\|)run-help:*' fzf-preview 'run-help $word'
+  zstyle ':fzf-tab:complete:(\\|*/|)man:*' fzf-preview 'man $word'
+}
+zinit wait"1" lucid light-mode for \
+  atinit"_fzf_tab_config" \
+    Aloxaf/fzf-tab
 
 # End zinit config
 
