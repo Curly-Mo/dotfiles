@@ -39,6 +39,12 @@ autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 ### End of Zinit installer's chunk
 
+# zinit annexes
+zinit light-mode for \
+    zdharma-continuum/zinit-annex-bin-gem-node \
+    zdharma-continuum/zinit-annex-rust \
+    zdharma-continuum/zinit-annex-man
+
 # Oh my zsh themes
 # zinit ice wait"0" silent
 # zinit snippet OMZ::lib/git.zsh
@@ -76,6 +82,7 @@ zinit ice wait"5" lucid
 zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
 
 # Plugins
+# TODO: migrate these old style plugins to new style
 function zvm_config() {
   # This function called by zsh-vi-mode
   ZVM_KEYTIMEOUT=0.3
@@ -123,6 +130,27 @@ zinit light lukechilds/zsh-nvm
 # zinit ice wait"0" silent
 # zinit light MichaelAquilina/zsh-you-should-use
 
+# new style
+zinit wait lucid light-mode for \
+  urbainvaes/fzf-marks
+
+# function zsh_fzy_config() {
+#   bindkey '\ec' fzy-cd-widget
+#   bindkey '^T'  fzy-file-widget
+#   bindkey '^R'  fzy-history-widget
+#   bindkey '^P'  fzy-proc-widget
+#   zstyle :fzy:history prompt       'history >> '
+#   zstyle :fzy:history command      fzy-history-default-command
+#   zstyle :fzy:file    prompt       'file >> '
+#   zstyle :fzy:file    command      fzy-file-default-command
+#   zstyle :fzy:cd      prompt       'cd >> '
+#   zstyle :fzy:cd      command      fzy-cd-default-command
+#   zstyle :fzy:proc    prompt       'proc >> '
+#   zstyle :fzy:proc    command      fzy-proc-default-command
+# }
+# zinit wait lucid light-mode for \
+#   atinit"zsh_fzy_config" aperezdc/zsh-fzy
+
 # completions
 # alacritty completion
 zinit ice wait"1" as"completion" lucid
@@ -141,21 +169,17 @@ zinit snippet "$HOME/.aliases"
 zinit ice wait"0" lucid if"[[ -f $HOME/.localrc ]]"
 zinit snippet "$HOME/.localrc"
 
-zinit wait lucid light-mode for \
-  hlissner/zsh-autopair \
-  urbainvaes/fzf-marks
-
 # Load all my functions and completions
 zinit ice wait"0" lucid if"[[ -d $HOME/.zsh_functions ]]"
 zinit light "$HOME/.zsh_functions"
 
 # Programs
 # git things
-zinit as"program" wait"3" lucid light-mode for \
-  Fakerr/git-recall \
-  paulirish/git-open \
-  paulirish/git-recent \
-  davidosomething/git-my \
+zinit as"null" wait"2" lucid light-mode for \
+  sbin Fakerr/git-recall \
+  sbin paulirish/git-open \
+  sbin paulirish/git-recent \
+  sbin davidosomething/git-my \
   make"PREFIX=$ZPFX install" iwata/git-now \
   make"PREFIX=$ZPFX" tj/git-extras
 
@@ -163,37 +187,48 @@ zinit as"program" wait lucid light-mode make"!" for \
   atclone"./direnv hook zsh > zhook.zsh" atpull"%atclone" pick"direnv" src"zhook.zsh" \
     direnv/direnv
 
-# Packs
-# actually packs are dumb
-# This pack seems broken
-# zinit pack"default+keys" for fzf
-zinit as'command' wait lucid light-mode \
-    atclone'PREFIX=$ZPFX FZF_VERSION=0.28.0 FZF_REVISION=zinit-pack make install &&
-      mkdir -p $ZPFX/{bin,man/man1} &&
-      cp shell/completion.zsh _fzf_completion &&
-      cp -vf bin/fzf(|-tmux) $ZPFX/bin &&
-      cp -vf man/man1/fzf(|-tmux).1 $ZPFX/man/man1' \
-    atpull'%atclone' depth'1' nocompile pick'$ZPFX/bin/fzf(|-tmux)' src'shell/key-bindings.zsh' \
-  for @junegunn/fzf
-zinit as"program" wait lucid light-mode from"gh-r" for \
-  mv"fd* -> fd" pick"fd/fd" \
-   @sharkdp/fd
-
-zinit pack"no-dir-color-swap" for ls_colors
-
-# zsh stuff
-zinit wait lucid light-mode for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zpcompinit; zpcdreplay" \
-    zdharma-continuum/fast-syntax-highlighting \
- blockf atpull'zinit creinstall -q .' \
-    zsh-users/zsh-completions \
- atload"!_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false" \
-    zsh-users/zsh-autosuggestions
-
+function fzf_config() {
+  export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git --color=always'
+  export FZF_DEFAULT_OPTS='--height 50% --border --ansi'
+  # export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+  # export FZF_CTRL_R_OPTS="--bind 'ctrl-r:up'"
+  # export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_CTRL_T_OPTS="--select-1 --exit-0 --height 50% --border --preview '(highlight -O ansi -l {} 2> /dev/null || bat --color=always --plain {-1} || tree -C {}) 2> /dev/null | head -200'"
+  # export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+  export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'tree -C {} | head -200'"
+  export FZF_COMPLETION_OPTS="--select-1 --exit-0 --preview '(highlight -O ansi -l {} 2> /dev/null || bat --color=always --plain {-1} || tree -C {}) 2> /dev/null | head -200' --bind 'tab:down' --bind 'shift-tab:up' --bind 'alt-enter:toggle+down'"
+  # bindkey '^I' fzf-completion
+  bindkey '^Y' $fzf_default_completion
+  # export FZF_COMPLETION_TRIGGER=''
+  _fzf_compgen_path() {
+    fd --hidden --exclude ".git" --color=always . "$1"
+  }
+  _fzf_compgen_dir() {
+    fd --type d --hidden --exclude ".git" --color=always . "$1"
+  }
+}
+# zinit as'command' wait'2' lucid light-mode \
+#     atclone'PREFIX=$ZPFX FZF_VERSION=0.28.0 FZF_REVISION=zinit-pack make install &&
+#       mkdir -p $ZPFX/{bin,man/man1} &&
+#       cp shell/completion.zsh _fzf_completion &&
+#       cp -vf bin/fzf(|-tmux) $ZPFX/bin &&
+#       cp -vf man/man1/fzf(|-tmux).1 $ZPFX/man/man1' \
+#     atpull'%atclone' depth'1' nocompile pick'$ZPFX/bin/fzf(|-tmux)' src'shell/key-bindings.zsh' \
+#     atload"fzf_config" \
+#   for @junegunn/fzf
+zinit wait'0' lucid light-mode for \
+  multisrc'shell/{completion,key-bindings}.zsh' \
+  atload"fzf_config" \
+  id-as"junegunn/fzf_completions" \
+    junegunn/fzf
+# function fzf_completions_config() {
+# }
+# zinit wait'0' lucid light-mode for \
+#   pick'zsh/fzf-zsh-completion.sh' \
+#   atload"fzf_completions_config" \
+#     lincheney/fzf-tab-completion
 
 function _fzf_tab_config() {
-  # zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
-  # zstyle ':completion:*:fzf-flags:*' 
   # disable sort when completing `git checkout`
   zstyle ':completion:*:git-checkout:*' sort false
   # set list-colors to enable filename colorizing
@@ -205,14 +240,15 @@ function _fzf_tab_config() {
   # switch group using `,` and `.`
   zstyle ':fzf-tab:*' switch-group ',' '.'
   # give a preview of commandline arguments when completing `kill`
-  # zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
+  zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
   # zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
   #   [[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w
-  # zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
+  zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
   # show systemd unit status
   zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
   # show file contents
-  zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat --color=always --plain ${(Q)realpath}'
+  # zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat --color=always --plain ${(Q)realpath}'
+  zstyle ':fzf-tab:complete:*:*' fzf-preview '(highlight -O ansi -l {} 2> /dev/null || bat --color      =always --plain {-1} || tree -C {}) 2> /dev/null | head -200'
   # environment variable
   zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
     fzf-preview 'echo ${(P)word}'
@@ -241,6 +277,34 @@ function _fzf_tab_config() {
 zinit wait"1" lucid light-mode for \
   atinit"_fzf_tab_config" \
     Aloxaf/fzf-tab
+
+# zinit as"program" wait lucid light-mode from"gh-r" for \
+#   mv"fd* -> fd" pick"fd/fd" \
+#    @sharkdp/fd
+
+zinit wait lucid light-mode as:'program' from:'gh-r' for \
+  mv:'zoxide* -> zoxide' \
+  pick:'zoxide/zoxide' \
+  atload:'!eval "$(zoxide init zsh)"' \
+    @ajeetdsouza/zoxide
+
+zinit wait lucid light-mode \
+  atclone"[[ -z ${commands[dircolors]} ]] &&
+    local P=${${(M)OSTYPE##darwin}:+g};
+    ${P}dircolors -b LS_COLORS >! clrs.zsh" \
+  atload'zstyle ":completion:*:default" list-colors "${(s.:.)LS_COLORS}";' \
+  atpull'%atclone' nocompile'!' pick'clrs.zsh' for \
+  git id-as'trapd00r/LS_COLORS' \
+    @trapd00r/LS_COLORS
+
+# zsh stuff
+zinit wait lucid light-mode for \
+ atinit"ZINIT[COMPINIT_OPTS]=-C; zpcompinit; zpcdreplay" \
+    zdharma-continuum/fast-syntax-highlighting \
+ blockf atpull'zinit creinstall -q .' \
+    zsh-users/zsh-completions \
+ atload"!_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false" \
+    zsh-users/zsh-autosuggestions
 
 # End zinit config
 

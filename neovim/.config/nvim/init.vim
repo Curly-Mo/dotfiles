@@ -83,6 +83,7 @@ Plug 'nanotech/jellybeans.vim'
 Plug 'nvim-treesitter/nvim-treesitter', { 'do': ':TSUpdate' }
 " Plug 'nvim-treesitter/playground' " TODO: temporary to learn more about treesitter
 Plug 'ryanoasis/vim-devicons'
+Plug 'kyazdani42/nvim-web-devicons'
 Plug 'vim-scripts/ReplaceWithRegister'
 Plug 'machakann/vim-highlightedyank'
 Plug 'tommcdo/vim-exchange'
@@ -96,6 +97,14 @@ Plug 'lifepillar/vim-colortemplate'
 Plug 'stsewd/gx-extended.vim'
 Plug 'psliwka/vim-smoothie'
 Plug 'airblade/vim-rooter'
+" plenary deps
+Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim'
+Plug 'nvim-telescope/telescope-fzy-native.nvim'
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+" end plenary deps
+Plug 'AckslD/nvim-neoclip.lua'
+Plug 'stsewd/fzf-checkout.vim'
 call plug#end()
 
 " syntax
@@ -294,7 +303,7 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 " Remap for format selected region
 vmap <leader>f <Plug>(coc-format-selected)
-nmap <leader>f <Plug>(coc-format-selected)
+" nmap <leader>f <Plug>(coc-format-selected)
 " Use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
 " Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
@@ -613,7 +622,7 @@ nnoremap <C-p> :GFilesOrFiles<CR>
 nnoremap <C-b> :Buffers<CR>
 " nnoremap <leader>s :<C-u>FZF<CR>
 nnoremap <leader>s :Files<CR>
-nnoremap <leader>f :GFiles<CR>
+" nnoremap <leader>f :GFiles<CR>
 nmap <leader><tab> <plug>(fzf-maps-n)
 xmap <leader><tab> <plug>(fzf-maps-x)
 omap <leader><tab> <plug>(fzf-maps-o)
@@ -724,11 +733,11 @@ nnoremap <F5> :UndotreeToggle<CR>
 let g:undotree_SetFocusWhenToggle = 1
 
 " vim-test
-nmap <silent> <leader>t :TestNearest<CR>
-" nmap <silent> <leader>T :TestFile<CR>
+nmap <silent> <leader>gt :TestNearest<CR>
+nmap <silent> <leader>gT :TestFile<CR>
 nmap <silent> gT :TestFile<CR>
-nmap <silent> <leader>a :TestSuite<CR>
-nmap <silent> <leader>l :TestLast<CR>
+nmap <silent> <leader>ga :TestSuite<CR>
+nmap <silent> <leader>gl :TestLast<CR>
 let test#strategy = "neovim"
 let test#java#maventest#options = '-T 4 -Dcheckstyle.skip -Dspotbugs.skip -Ddockerfile.skip -Ddockerfile.skip'
 
@@ -744,7 +753,7 @@ nmap ]t <Plug>(ultest-next-fail)
 nmap [t <Plug>(ultest-prev-fail)
 nmap <silent> <leader>t <Plug>(ultest-run-nearest)
 nmap <silent> <leader>T <Plug>(ultest-run-file)
-nmap <silent> gt <Plug>(ultest-summary-toggle)
+nmap <silent> gt :UltestSummary!<CR>
 let g:ultest_disable_grouping = ["java"]
 
 " vim-smoothie
@@ -756,3 +765,81 @@ let g:smoothie_speed_exponentiation_factor = 0.999
 let g:smoothie_no_default_mappings = 0
 let g:smoothie_experimental_mappings = 1
 let g:smoothie_break_on_reverse = 0
+
+" telescope
+lua <<EOF
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        -- map actions.which_key to <C-h> (default: <C-/>)
+        -- actions.which_key shows the mappings for your picker,
+        -- e.g. git_{create, delete, ...}_branch for the git_branches picker
+        ["<C-h>"] = "which_key"
+      }
+    },
+    layout_config = {
+      width = 0.9
+    },
+  },
+  pickers = {
+  },
+  extensions = {
+  }
+}
+require('telescope').load_extension('fzf')
+EOF
+nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
+" neoclip
+lua <<EOF
+require('neoclip').setup({
+  history = 1000,
+  enable_persistent_history = false,
+  continious_sync = false,
+  db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
+  filter = nil,
+  preview = true,
+  default_register = '"',
+  default_register_macros = 'q',
+  enable_macro_history = true,
+  content_spec_column = false,
+  on_paste = {
+    set_reg = false,
+  },
+  on_replay = {
+    set_reg = false,
+  },
+  keys = {
+    telescope = {
+      i = {
+        select = '<cr>',
+        paste = '<c-p>',
+        paste_behind = '<c-k>',
+        replay = '<c-q>',  -- replay a macro
+        delete = '<c-d>',  -- delete an entry
+        custom = {},
+      },
+      n = {
+        select = '<cr>',
+        paste = 'p',
+        paste_behind = 'P',
+        replay = 'q',
+        delete = 'd',
+        custom = {},
+      },
+    },
+    fzf = {
+      select = 'default',
+      paste = 'ctrl-p',
+      paste_behind = 'ctrl-k',
+      custom = {},
+    },
+  },
+})
+require('telescope').load_extension('neoclip')
+EOF

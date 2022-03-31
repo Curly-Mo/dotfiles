@@ -114,6 +114,9 @@ alias pse='command ps -e -o pid,ppid,user,tty,start,time,%cpu,%mem,command'
 alias psgrep='pse | grep -v "grep -i --color=auto" | command grep -i --color=auto'
 alias psme='ps -u $USER'
 
+# pipe
+alias dofor='xargs -l'
+
 # zsh
 alias zhrc='vim $HOME/.zshrc'
 alias zshrc='vim $HOME/.zshrc'
