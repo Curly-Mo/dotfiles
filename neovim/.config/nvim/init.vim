@@ -75,7 +75,7 @@ Plug 'mattn/calendar-vim'
 Plug 'freitass/todo.txt-vim'
 Plug 'markonm/traces.vim'
 Plug 'janko/vim-test'
-Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
+" Plug 'rcarriga/vim-ultest', { 'do': ':UpdateRemotePlugins' }
 Plug 'Curly-Mo/phlebotinum'
 Plug 'tweekmonster/startuptime.vim', { 'on': ['StartupTime'] }
 Plug 'nanotech/jellybeans.vim'
@@ -95,15 +95,16 @@ Plug 'phaazon/hop.nvim'
 Plug 'michaeljsmith/vim-indent-object'
 Plug 'lifepillar/vim-colortemplate'
 Plug 'stsewd/gx-extended.vim'
-Plug 'psliwka/vim-smoothie'
+" Plug 'psliwka/vim-smoothie'
 Plug 'airblade/vim-rooter'
 " plenary deps
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'nvim-telescope/telescope-file-browser.nvim'
 " end plenary deps
-Plug 'AckslD/nvim-neoclip.lua'
+" Plug 'AckslD/nvim-neoclip.lua'
 Plug 'stsewd/fzf-checkout.vim'
 call plug#end()
 
@@ -321,6 +322,8 @@ nmap <leader>o :Org<CR>
 nmap <silent>go :Org<CR>
 " show action menu
 nmap <silent> ga <Plug>(coc-codeaction-selected)<CR>
+" show command menu
+nmap <silent> <leader>gc :CocList commands<cr>
 
 " coc-python
 " add local paths to python path for local imports
@@ -453,8 +456,7 @@ let g:black_linelength = 120
 let g:localvimrc_whitelist='~/workspace/.*'
 
 " gitgutter
-" TODO: trying out coc-git as alternative
-let g:gitgutter_enabled = 0
+let g:gitgutter_enabled = 1
 " set updatetime=500
 highlight GitGutterAdd ctermfg=65 ctermbg=none guifg=#5f875f guibg=none
 highlight GitGutterChange ctermfg=103 ctermbg=none guifg=#8787af guibg=none
@@ -609,15 +611,55 @@ require'nvim-treesitter.configs'.setup {
           ["im"] = "@call.inner"
       }
     },
-    ensure_installed = "maintained" -- one of "all", "language", or a list of languages
+    ensure_installed = {
+      "c",
+      "html",
+      "http",
+      "java",
+      "javascript",
+      "json",
+      "json5",
+      "latex",
+      "lua",
+      "make",
+      "markdown",
+      "python",
+      "regex",
+      "rst",
+      "ruby",
+      "rust",
+      "scala",
+      "scss",
+      "todotxt",
+      "toml",
+      "typescript",
+      "vim",
+      "yaml",
+    },
 }
 EOF
 
 " fzf
 " Mapping selecting mappings
 " nnoremap <C-p> :<C-u>FZF<CR>
-command! GFilesOrFiles execute (len(system('git rev-parse'))) ? ':Files' : ':GFiles'
-nnoremap <C-p> :GFilesOrFiles<CR>
+command! -nargs=* GFilesOrFiles execute (len(system('git rev-parse'))) ? ':Files <args>' : ':GFiles <args>'
+command! FilesFromDirOrRoot execute (len(system('fd | wc -l')) < 3) ? ':Files ' . FindRootDirectory() : ':GFilesOrFiles'
+function! Fd_cmd()
+  let l:root = FindRootDirectory()
+  if len(l:root) == 0
+    " return  printf("fd --hidden --exclude .git --full-path --color=always | proximity-sort %s", expand('%:p:h'))
+    return  printf("fd --hidden --exclude .git --full-path | proximity-sort %s", expand('%:p:h'))
+  endif
+  " return  printf("fd --hidden --exclude .git --full-path --color=always --base-directory %s | proximity-sort %s", root, expand('%:p:h'))
+  return  printf("fd --hidden --exclude .git --full-path --base-directory %s | proximity-sort %s", root, expand('%:p:h'))
+  " return  printf("fd --hidden --exclude .git --full-path --base-directory %s", root)
+endfunction
+command! -bang -nargs=? -complete=dir FilesProximity
+  \ call fzf#vim#files(<q-args>, {'source': Fd_cmd(),
+  \                               'options': '--tiebreak=index'}, <bang>0)
+" nnoremap <C-p> :GFilesOrFiles<CR>
+" nnoremap <C-p> :FilesFromDirOrRoot<CR>
+nnoremap <C-p> :FilesProximity<CR>
 " nnoremap <C-p> :Files<CR>
 nnoremap <C-b> :Buffers<CR>
 " nnoremap <leader>s :<C-u>FZF<CR>
@@ -631,12 +673,12 @@ imap <c-x><c-k> <plug>(fzf-complete-word)
 imap <c-x><c-f> <plug>(fzf-complete-path)
 imap <c-x><c-l> <plug>(fzf-complete-line)
 " Path completion with custom source command
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd --type f --hidden --exclude .git')
+" inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
 " Word completion with custom spec with popup layout option
 inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
 " Config
-" let g:fzf_preview_window = ['right:60%', 'ctrl-/']
+let g:fzf_preview_window = ['right:60%', 'ctrl-/']
 " TODO: experimental, remoe these
 " let g:fzf_preview_use_dev_icons = 1
 " let g:fzf_preview_command = 'bat --color=always --plain {-1}'
@@ -741,20 +783,20 @@ nmap <silent> <leader>gl :TestLast<CR>
 let test#strategy = "neovim"
 let test#java#maventest#options = '-T 4 -Dcheckstyle.skip -Dspotbugs.skip -Ddockerfile.skip -Ddockerfile.skip'
 
-" vim-ultest
-let g:ultest_use_pty = 1
-let g:ultest_max_threads = 1
-let g:ultest_summary_width = 30
-augroup UltestRunner
-    au!
-    au BufWritePost * UltestNearest
-augroup END
-nmap ]t <Plug>(ultest-next-fail)
-nmap [t <Plug>(ultest-prev-fail)
-nmap <silent> <leader>t <Plug>(ultest-run-nearest)
-nmap <silent> <leader>T <Plug>(ultest-run-file)
-nmap <silent> gt :UltestSummary!<CR>
-let g:ultest_disable_grouping = ["java"]
+" " vim-ultest
+" let g:ultest_use_pty = 1
+" let g:ultest_max_threads = 1
+" let g:ultest_summary_width = 30
+" augroup UltestRunner
+"     au!
+"     au BufWritePost * UltestNearest
+" augroup END
+" nmap ]t <Plug>(ultest-next-fail)
+" nmap [t <Plug>(ultest-prev-fail)
+" nmap <silent> <leader>t <Plug>(ultest-run-nearest)
+" nmap <silent> <leader>T <Plug>(ultest-run-file)
+" nmap <silent> gt :UltestSummary!<CR>
+" let g:ultest_disable_grouping = ["java"]
 
 " vim-smoothie
 let g:smoothie_enabled = 1
@@ -768,78 +810,128 @@ let g:smoothie_break_on_reverse = 0
 
 " telescope
 lua <<EOF
+function Split(s, delimiter)
+    result = {};
+    for match in (s..delimiter):gmatch("(.-)"..delimiter) do
+        table.insert(result, match);
+    end
+    return result;
+end
 require('telescope').setup{
   defaults = {
+    find_command = {"fd", "--type=file", "--hidden", "--exclude=.git", "--full-path"},
+    -- find_command = {"fd", "--type=file", "--hidden", "--exclude=.git", "--full-path", "|", "proximity-sort", vim.fn.expand('%:p:h')},
+    -- TODO: figure out how to hack this
+    -- find_command = {Split(vim.fn['Fd_cmd'](), ' ')},
+    file_sorter = require('telescope.sorters').fuzzy_with_index_bias,
+    color_devicons = true,
+    dynamic_preview_title = true,
+    path_display = {
+      "smart",
+      "truncate",
+    },
     mappings = {
       i = {
         -- map actions.which_key to <C-h> (default: <C-/>)
         -- actions.which_key shows the mappings for your picker,
         -- e.g. git_{create, delete, ...}_branch for the git_branches picker
-        ["<C-h>"] = "which_key"
+        -- ["<C-h>"] = "which_key"
+        ["<esc>"] = "close",
+        ["<C-j>"] = "move_selection_next",
+        ["<C-k>"] = "move_selection_previous",
       }
     },
     layout_config = {
-      width = 0.9
+      width = 0.95,
+      preview_width = 0.45,
     },
   },
   pickers = {
+    find_files = {
+      find_command = {"fd", "--type=file", "--hidden", "--exclude=.git", "--full-path"},
+      -- find_command = {"fd", "--type=file", "--hidden", "--exclude=.git", "--full-path", "|", "proximity-sort", vim.fn.expand('%:p:h')},
+      file_sorter = require('telescope.sorters').fuzzy_with_index_bias,
+    },
   },
   extensions = {
-  }
+    fzf = {
+      fuzzy = true,
+      override_generic_sorter = true,
+      override_file_sorter = true,
+      case_mode = "smart_case",
+    },
+    file_browser = {
+      -- theme = "ivy",
+      -- mappings = {
+      --   ["i"] = {
+      --   },
+      --   ["n"] = {
+      --   },
+      -- },
+    },
+  },
 }
 require('telescope').load_extension('fzf')
+require("telescope").load_extension("file_browser")
 EOF
 nnoremap <C-p> <cmd>Telescope find_files<cr>
+" nnoremap <silent> <C-p> :lua require('telescope.builtin').find_files{ search_dirs = {vim.fn.expand('%:p:h'), vim.fn['FindRootDirectory']()} }<CR>
+" nnoremap <C-p> :lua require('telescope.builtin').find_files{ find_command = Split(vim.fn['Fd_cmd'](), ' ') }<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <C-[> <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <M-p> <cmd>Telescope file_browser<cr>
 
-" neoclip
-lua <<EOF
-require('neoclip').setup({
-  history = 1000,
-  enable_persistent_history = false,
-  continious_sync = false,
-  db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
-  filter = nil,
-  preview = true,
-  default_register = '"',
-  default_register_macros = 'q',
-  enable_macro_history = true,
-  content_spec_column = false,
-  on_paste = {
-    set_reg = false,
-  },
-  on_replay = {
-    set_reg = false,
-  },
-  keys = {
-    telescope = {
-      i = {
-        select = '<cr>',
-        paste = '<c-p>',
-        paste_behind = '<c-k>',
-        replay = '<c-q>',  -- replay a macro
-        delete = '<c-d>',  -- delete an entry
-        custom = {},
-      },
-      n = {
-        select = '<cr>',
-        paste = 'p',
-        paste_behind = 'P',
-        replay = 'q',
-        delete = 'd',
-        custom = {},
-      },
-    },
-    fzf = {
-      select = 'default',
-      paste = 'ctrl-p',
-      paste_behind = 'ctrl-k',
-      custom = {},
-    },
-  },
-})
-require('telescope').load_extension('neoclip')
-EOF
+" " neoclip
+" lua <<EOF
+" require('neoclip').setup({
+"   history = 1000,
+"   enable_persistent_history = false,
+"   continious_sync = false,
+"   db_path = vim.fn.stdpath("data") .. "/databases/neoclip.sqlite3",
+"   filter = nil,
+"   preview = true,
+"   default_register = '"',
+"   default_register_macros = 'q',
+"   enable_macro_history = true,
+"   content_spec_column = false,
+"   on_paste = {
+"     set_reg = false,
+"   },
+"   on_replay = {
+"     set_reg = false,
+"   },
+"   keys = {
+"     telescope = {
+"       i = {
+"         select = '<cr>',
+"         paste = '<c-p>',
+"         paste_behind = '<c-k>',
+"         replay = '<c-q>',  -- replay a macro
+"         delete = '<c-d>',  -- delete an entry
+"         custom = {},
+"       },
+"       n = {
+"         select = '<cr>',
+"         paste = 'p',
+"         paste_behind = 'P',
+"         replay = 'q',
+"         delete = 'd',
+"         custom = {},
+"       },
+"     },
+"     fzf = {
+"       select = 'default',
+"       paste = 'ctrl-p',
+"       paste_behind = 'ctrl-k',
+"       custom = {},
+"     },
+"   },
+" })
+" require('telescope').load_extension('neoclip')
+" EOF
+
+" rooter
+let g:rooter_manual_only = 1

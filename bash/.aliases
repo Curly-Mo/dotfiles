@@ -36,6 +36,7 @@ function fp(){
 alias vi="vim"
 if hash nvim 2>/dev/null; then
     alias vim="nvim"
+    alias vimdiff="nvim -d"
 fi
 alias vimrc='vim $HOME/.config/nvim/init.vim'
 alias vl='vim $(latest)'

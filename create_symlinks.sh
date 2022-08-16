@@ -14,9 +14,9 @@ printf '%s\n' "$(color ${dotdirs})"
 for d in $dotdirs; do
     printf "Create symlinks in $(color $HOME) for: $(color $(basename $d))\n"
     files=$(find ${d} -type f)
-    pretty_files=$(color $files)
-    paste <(printf "%s\n" "${pretty_files[@]/$(dirname $d)/${HOME}}") <(printf "%s\n" "${pretty_files[@]}") | column -t -o " -> "
-    read -p "Confirm? " -n 1 -r
+    pretty_files=($(color $files))
+    paste <(printf "%s\n" "${pretty_files[@]/$d\//${HOME}/}") <(printf "%s\n" "${pretty_files[@]}") | column -t -o " -> "
+    read -p "Confirm? Y/n:" -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         for f in $files ; do

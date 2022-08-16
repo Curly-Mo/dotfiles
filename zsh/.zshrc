@@ -134,22 +134,23 @@ zinit light lukechilds/zsh-nvm
 zinit wait lucid light-mode for \
   urbainvaes/fzf-marks
 
-# function zsh_fzy_config() {
-#   bindkey '\ec' fzy-cd-widget
-#   bindkey '^T'  fzy-file-widget
-#   bindkey '^R'  fzy-history-widget
-#   bindkey '^P'  fzy-proc-widget
-#   zstyle :fzy:history prompt       'history >> '
-#   zstyle :fzy:history command      fzy-history-default-command
-#   zstyle :fzy:file    prompt       'file >> '
-#   zstyle :fzy:file    command      fzy-file-default-command
-#   zstyle :fzy:cd      prompt       'cd >> '
-#   zstyle :fzy:cd      command      fzy-cd-default-command
-#   zstyle :fzy:proc    prompt       'proc >> '
-#   zstyle :fzy:proc    command      fzy-proc-default-command
-# }
-# zinit wait lucid light-mode for \
-#   atinit"zsh_fzy_config" aperezdc/zsh-fzy
+function zsh_fzy_config() {
+  # bindkey '\ec' fzy-cd-widget
+  # bindkey '^T'  fzy-file-widget
+  # bindkey '^R'  fzy-history-widget
+  bindkey '^Y'  fzy-history-widget
+  bindkey '^P'  fzy-proc-widget
+  # zstyle :fzy:history prompt       'history >> '
+  # zstyle :fzy:history command      fzy-history-default-command
+  # zstyle :fzy:file    prompt       'file >> '
+  # zstyle :fzy:file    command      fzy-file-default-command
+  # zstyle :fzy:cd      prompt       'cd >> '
+  # zstyle :fzy:cd      command      fzy-cd-default-command
+  # zstyle :fzy:proc    prompt       'proc >> '
+  # zstyle :fzy:proc    command      fzy-proc-default-command
+}
+zinit wait lucid light-mode for \
+  atinit"zsh_fzy_config" aperezdc/zsh-fzy
 
 # completions
 # alacritty completion
@@ -188,23 +189,58 @@ zinit as"program" wait lucid light-mode make"!" for \
     direnv/direnv
 
 function fzf_config() {
-  export FZF_DEFAULT_COMMAND='fd --type f --hidden --exclude .git --color=always'
-  export FZF_DEFAULT_OPTS='--height 50% --border --ansi'
-  # export FZF_CTRL_R_OPTS="--preview 'echo {}' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
-  # export FZF_CTRL_R_OPTS="--bind 'ctrl-r:up'"
-  # export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_CTRL_T_OPTS="--select-1 --exit-0 --height 50% --border --preview '(highlight -O ansi -l {} 2> /dev/null || bat --color=always --plain {-1} || tree -C {}) 2> /dev/null | head -200'"
-  # export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
-  export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'tree -C {} | head -200'"
-  export FZF_COMPLETION_OPTS="--select-1 --exit-0 --preview '(highlight -O ansi -l {} 2> /dev/null || bat --color=always --plain {-1} || tree -C {}) 2> /dev/null | head -200' --bind 'tab:down' --bind 'shift-tab:up' --bind 'alt-enter:toggle+down'"
+  # keys
   # bindkey '^I' fzf-completion
-  bindkey '^Y' $fzf_default_completion
-  # export FZF_COMPLETION_TRIGGER=''
+  # bindkey "^Y" $fzf_default_completion
+  # bindkey "^[c" fzf-cd-widget
+  # bindkey "^T" fzf-file-widget
+  bindkey "^R" history-incremental-search-backward
+  bindkey "^E" fzf-history-widget
+  # config
+  export FZF_PREVIEW_CMD="(highlight -O ansi --line-range 0-200 {} 2> /dev/null || bat --force-colorization --line-range 0:200 --plain {-1} || tree -C {}) 2> /dev/null | head -200"
+  export FZF_COMMAND='fd --hidden --exclude .git --color=always --max-depth 12'
+  # export FZF_DEFAULT_COMMAND="${FZF_COMMAND} | proximity-sort ."
+  export FZF_DEFAULT_COMMAND="${FZF_COMMAND}"
+  FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --bind 'tab:replace-query+down' --bind 'shift-tab:backward-kill-word' --bind 'right:replace-query+down' --bind 'left:backward-kill-word' --bind 'change:first' --bind 'ctrl-f:jump' --bind 'ctrl-d:delete-char/eof+clear-query'  --bind 'alt-j:down' --bind 'alt-k:up'"
+  export FZF_DEFAULT_OPTS="--height 60% --border --ansi --info=inline --algo v2 ${FZF_BINDINGS_OPTS}"
+  # export FZF_DEFAULT_OPTS="--height 50% --border --ansi --info=inline --algo v1 --tiebreak=index ${FZF_BINDINGS_OPTS}"
+  FZF_CTRL_R_PREVIEW_OPTS="--preview 'echo {} | highlight --syntax sh -O ansi' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
+  export FZF_CTRL_R_OPTS="--exact --bind 'ctrl-e:up' --bind 'ctrl-E:down' ${FZF_CTRL_R_PREVIEW_OPTS}"
+  export FZF_CTRL_T_COMMAND="${FZF_COMMAND}"
+  export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview '${FZF_PREVIEW_CMD}'"
+  # export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type d | proximity-sort ."
+  export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type d"
+  # export FZF_ALT_C_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview 'tree -C {} | head -200' --bind 'alt-c:down' --bind 'alt-C:up' --bind 'tab:down' --bind 'shift-tab:up'"
+  export FZF_ALT_C_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview 'tree -C {} | head -200' --bind 'alt-c:down' --bind 'alt-C:up'"
+  FZF_COMPLETION_BINDINGS_OPTS=""
+  export FZF_COMPLETION_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview '${FZF_PREVIEW_CMD}' ${FZF_COMPLETION_BINDINGS_OPTS}"
   _fzf_compgen_path() {
-    fd --hidden --exclude ".git" --color=always . "$1"
+    # fd --hidden --exclude .git --full-path --color=always . "$1" | proximity-sort .
+    fd --hidden --exclude .git --color=always --max-depth 10 . "$1"
   }
   _fzf_compgen_dir() {
-    fd --type d --hidden --exclude ".git" --color=always . "$1"
+    # fd --hidden --exclude .git --full-path --color=always --type d . "$1" | proximity-sort .
+    fd --hidden --exclude .git --color=always --max-depth 10 --type d . "$1"
+  }
+  # export FZF_COMPLETION_TRIGGER=''
+  # Super hack to only notrigger complete for certain commands
+  # rename fzf-completion to _fzf-completion
+  eval "`declare -f fzf-completion | sed '1s/.*/_&/'`"
+  fzf-completion() {
+    d_cmds=(${=FZF_COMPLETION_DIR_COMMANDS:-cd pushd rmdir})
+    f_cmds=(${=FZF_COMPLETION_FILE_COMMANDS:-vim nvim cat rm})
+    p_cmds=(${=FZF_COMPLETION_PATH_COMMANDS:-ls})
+    cmd=$(__fzf_extract_command "$LBUFFER")
+    cmd=$(__fzf_extract_command $(whence $cmd))
+    if [ ${d_cmds[(i)$cmd]} -le ${#d_cmds} ]; then
+      FZF_COMPLETION_TRIGGER='' _fzf-completion
+    elif [ ${f_cmds[(i)$cmd]} -le ${#f_cmds} ]; then
+      FZF_COMPLETION_TRIGGER='' _fzf-completion
+    elif [ ${p_cmds[(i)$cmd]} -le ${#p_cmds} ]; then
+      FZF_COMPLETION_TRIGGER='' _fzf-completion
+    else
+      _fzf-completion
+    fi
   }
 }
 # zinit as'command' wait'2' lucid light-mode \
@@ -221,6 +257,7 @@ zinit wait'0' lucid light-mode for \
   atload"fzf_config" \
   id-as"junegunn/fzf_completions" \
     junegunn/fzf
+  # src'shell/completion.zsh' \
 # function fzf_completions_config() {
 # }
 # zinit wait'0' lucid light-mode for \
@@ -229,26 +266,31 @@ zinit wait'0' lucid light-mode for \
 #     lincheney/fzf-tab-completion
 
 function _fzf_tab_config() {
+  # accept and run
+  # zstyle ':fzf-tab:*' print-query alt-space # unbind from alt-enter
+  # zstyle ':fzf-tab:*' accept-line alt-enter
+  zstyle ':fzf-tab:*' accept-line ctrl-x
+  zstyle ':fzf-tab:*' continuous-trigger 'right'
+  zstyle ':fzf-tab:*' continuous-trigger 'tab'
   # disable sort when completing `git checkout`
   zstyle ':completion:*:git-checkout:*' sort false
   # set list-colors to enable filename colorizing
   zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
   # preview directory's content with exa when completing cd
-  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+  # zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath'
+  zstyle ':fzf-tab:complete:cd:*' fzf-preview 'tree -C ${(Q)realpath} | head -200'
   # set descriptions format to enable group support
   zstyle ':completion:*:descriptions' format '[%d]'
   # switch group using `,` and `.`
   zstyle ':fzf-tab:*' switch-group ',' '.'
   # give a preview of commandline arguments when completing `kill`
   zstyle ':completion:*:*:*:*:processes' command "ps -u $USER -o pid,user,comm -w -w"
-  # zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-preview \
-  #   [[ $group == "[process ID]" ]] && ps --pid=$word -o cmd --no-headers -w -w
   zstyle ':fzf-tab:complete:(kill|ps):argument-rest' fzf-flags --preview-window=down:3:wrap
   # show systemd unit status
   zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl status $word'
   # show file contents
   # zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat --color=always --plain ${(Q)realpath}'
-  zstyle ':fzf-tab:complete:*:*' fzf-preview '(highlight -O ansi -l {} 2> /dev/null || bat --color      =always --plain {-1} || tree -C {}) 2> /dev/null | head -200'
+  zstyle ':fzf-tab:complete:*:*' fzf-preview '(highlight -O ansi --line-range 0-200 $realpath || bat --color=always --line-range :200 --plain ${(Q)realpath} || tree -C $realpath) 2> /dev/null | head -200'
   # environment variable
   zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
     fzf-preview 'echo ${(P)word}'
@@ -273,6 +315,27 @@ function _fzf_tab_config() {
   # fix man
   zstyle ':fzf-tab:complete:(\\|)run-help:*' fzf-preview 'run-help $word'
   zstyle ':fzf-tab:complete:(\\|*/|)man:*' fzf-preview 'man $word'
+  # looks
+  zstyle ':fzf-tab:complete:*' fzf-pad 4
+  # zstyle ':fzf-tab:complete:*' fzf-flags --tiebreak=index
+  # use fd
+  # _files() {
+  #   # fd --hidden --exclude .git --type=f | {
+  #   fd --hidden --exclude .git --type=f | proximity-sort . | {
+  #     while read line; do
+  #       compadd -f -- $line
+  #     done
+  #   }
+  # }
+  # _cd() {
+  #   fd --hidden --exclude .git --type=d | proximity-sort . | {
+  #     while read line; do
+  #       compadd -f -- $line
+  #     done
+  #   }
+  #   # local dirs=($(fd --hidden --exclude .git --type=d | proximity-sort .))
+  #   # compadd -a -f dirs
+  # }
 }
 zinit wait"1" lucid light-mode for \
   atinit"_fzf_tab_config" \

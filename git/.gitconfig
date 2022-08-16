@@ -1,18 +1,23 @@
 [core]
   editor = vim
   excludesfile = ~/.gitignore
+  ; pager = delta
 [diff]
-  tool = vimdiff3
+  tool = nvimdiff
+  colorMoved = default
 [difftool]
   prompt = false
   # Be able to abort all diffs with `:cq` or `:cquit`
   trustExitCode = true
-[difftool "vimdiff3"]
-	path = nvim
+[difftool "nvimdiff"]
+  path = nvim
+  # cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [merge]
-  tool = vimdiff3
-[mergetool "vimdiff3"]
-	path = nvim
+  tool = nvimdiff
+  # conflictstyle = diff3
+[mergetool "nvimdiff"]
+  path = nvim
+  # cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\""
 [push]
   default = simple
 [credential]
@@ -22,6 +27,10 @@
 [credential "https://ghe.spotify.net"]
   username = colinfahy
 [alias]
+  d = "difftool"
+  l = "log"
+  c = "commit"
+  s = "status"
   echoexec = "!f() { echo $(tput setaf 2)'$' ${@}$(tput sgr0); $@; }; f"
   remoteupstream = "!f() { if $(git remote | grep -q upstream); then echo upstream; else echo origin; fi; }; f"
   remaster = "!f() { git echoexec git pull $(git remoteupstream) master --rebase --autostash; }; f"
@@ -30,13 +39,53 @@
   unarc = "! f() { git echoexec git checkout -b $(echo $1 | sed -E 's/^archive\\///') && git tag -d $1; }; f "
   cleanup = "!f() { git echoexec git branch --merged master | egrep -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
   fresh = "!f() { git echoexec git checkout master && git echoexec git pull $(git remoteupstream) master; }; f"
-  new = "!f() { git echoexec git checkout -b $1 master && git echoexec git pull $(git remoteupstream) master; }; f"
+  new = "!f() { git echoexec git fetch $(git remoteupstream) master && git echoexec git checkout -b $1 --no-track $(git remoteupstream)/master; }; f"
+  # new = "!f() { git echoexec git checkout -b $1 master && git echoexec git pull $(git remoteupstream) master; }; f"
+  co = "checkout"
+  # Using git-extras instead: https://github.com/tj/git-extras/blob/master/Commands.md
+  # new = "!f() { git echoexec git checkout -b $1 master && git echoexec git pull $(git remoteupstream) master; }; f"
+  # copr = "!f() { git echoexec git fetch $(git remoteupstream) pull/$1/head:pr-$1 && git echoexec git checkout pr-$1; }; f"
+  # pr = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
+  # pr-clean = "!git for-each-ref refs/heads/pr/* --format='%(refname)' | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
+  # git-extras aliases. requires https://github.com/tj/git-extras
+  cb = "create-branch"
+  nb = "create-branch"
+  # new = "!f() { git echoexec git create-branch --from $(git remoteupstream)/master $@; }; f"
+  br = "brv"
+  rn = "rename-branch"
 [include]
   path = ~/.gituser
 [color]
-	ui = auto
+  ui = auto
 [pull]
-	rebase = false
+  rebase = false
 # Replace all git urls with https
 [url "https://"]
-	insteadOf = git://
+  insteadOf = git://
+[filesystem "N/A|11.0.8|/dev/mapper/cryptroot"]
+  timestampResolution = 5000 nanoseconds
+  minRacyThreshold = 3646 microseconds
+[remote "origin"]
+  # Replaced by pr alias
+  # fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
+[interactive]
+  diffFilter = delta --color-only --features=interactive
+[delta]
+  navigate = true  # use n and N to move between diff sections
+  side-by-side = true
+  features = line-numbers styles
+[delta "styles"]
+  syntax-theme = base16
+  plus-style = black "#8787af"
+  plus-non-emph-style = black "#8787af"
+  plus-emph-style = black "#5f875f"
+  minus-style = black "#8787af"
+  minus-non-emph-style = black "#8787af"
+  minus-emph-style = black "#af5f00"
+[delta "line-numbers"]
+  line-numbers = true
+  line-numbers-right-format = "│"
+  line-numbers-left-format = "{nm:>3}┊"
+  line-numbers-right-format = "{np:>3}│"
+[git-extras "create-branch"]
+	remote = origin
