@@ -172,7 +172,7 @@ zinit snippet "$HOME/.localrc"
 
 # Load all my functions and completions
 zinit ice wait"0" lucid if"[[ -d $HOME/.zsh_functions ]]"
-zinit light "$HOME/.zsh_functions"
+zinit snippet "$HOME/.zsh_functions/my_zsh_functions"
 
 # Programs
 # git things
