@@ -175,7 +175,7 @@ zinit snippet "$HOME/.localrc"
 # zinit snippet "$HOME/.zsh_functions/my_zsh_functions.zsh"
 # from dotfiles
 zinit wait"0" lucid light-mode for \
-  pick:"zsh/.zsh_functions/my_zsh_functions.plugin.zsh" \
+  pick:"zsh/.zsh_functions/.zsh_functions.plugin.zsh" \
   src:"zsh/.zsh_functions/my_zsh_functions.zsh" \
   Curly-Mo/dotfiles
 

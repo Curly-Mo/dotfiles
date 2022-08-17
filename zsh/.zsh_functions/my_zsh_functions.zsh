@@ -53,7 +53,7 @@ attach() {
 now() {
   local lastcmd=$(fc -l -1)
   local lastargs=${${(z)lastcmd}:2}
-  local cmd=$1
+  local cmd="$@"
   print -z $cmd $lastargs
 }
 _now() {
@@ -64,7 +64,7 @@ compdef _now now
 recommand() {
   local lastcmd=$(fc -l -1)
   local lastargs=${${(z)lastcmd}:2}
-  local cmd="$@"
+  local cmd=$1
   print -z $cmd $lastargs
 }
 
