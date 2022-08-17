@@ -171,8 +171,13 @@ zinit ice wait"0" lucid if"[[ -f $HOME/.localrc ]]"
 zinit snippet "$HOME/.localrc"
 
 # Load all my functions and completions
-zinit ice wait"0" lucid if"[[ -d $HOME/.zsh_functions ]]"
-zinit snippet "$HOME/.zsh_functions/my_zsh_functions"
+# zinit ice wait"0" lucid if"[[ -d $HOME/.zsh_functions ]]"
+# zinit snippet "$HOME/.zsh_functions/my_zsh_functions.zsh"
+# from dotfiles
+zinit wait"0" lucid light-mode for \
+  pick:"zsh/.zsh_functions/my_zsh_functions.plugin.zsh" \
+  src:"zsh/.zsh_functions/my_zsh_functions.zsh" \
+  Curly-Mo/dotfiles
 
 # Programs
 # git things
