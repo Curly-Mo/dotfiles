@@ -57,18 +57,65 @@ now() {
   print -z $cmd $lastargs
 }
 _now() {
-  _alternative _command_names
+  # _alternative _command_names
+  local context state state_descr line
+  _arguments -C ':any:_command_names -e'
+  # _arguments -C '*::_command_names->cmd' 
+  # case "$state" in
+  #     cmd)
+  #         local -a music_files
+  #         music_files=( Music/**/*.{mp3,wav,flac,ogg} )
+  #         _arguments -C 'wut:any:_files'
+  #         ;;
+  # esac
 }
 compdef _now now
 
-recommand() {
+# recommand() {
+#   local lastcmd=$(fc -l -1)
+#   local lastargs=${${(z)lastcmd}:2}
+#   local cmd="$@"
+#   print -z $cmd $lastargs
+# }
+alias recommand="now"
+
+# Fix last n args to previous command
+fix() {
   local lastcmd=$(fc -l -1)
-  local lastargs=${${(z)lastcmd}:2}
-  local cmd=$1
-  print -z $cmd $lastargs
+  local args=$@
+  local n_args=${1:-1}
+  local other_args="${args:2}"
+  local lastcmd=${${(z)lastcmd}:1}
+  local lastcmd_minus_nargs=${${(z)lastcmd}:0:-${n_args}}
+  print -z $lastcmd_minus_nargs $other_args
 }
+_fix() {
+  local lastcmd=$history[$[HISTCMD-1]]
+  local cmdlen=${#${(z)lastcmd}[@]}
+  lastcmd=${${(z)lastcmd}:0:1}
+
+  _arguments \
+    "1:nargs:_numbers -l 0 -m $cmdlen -d 1" \
+    "*::passthrough:$_comps[$lastcmd]"
+}
+compdef _fix fix
+
+# Replace last args to previous command
+with() {
+  local lastcmd=$(fc -l -1)
+  local args=$@
+  local n_args=$#
+  local lastcmd=${${(z)lastcmd}:1}
+  local lastcmd_minus_nargs=${${(z)lastcmd}:0:-${n_args}}
+  print -z $lastcmd_minus_nargs $args
+}
+_with() {
+  local lastcmd=$history[$[HISTCMD-1]]
+  lastcmd=${${(z)lastcmd}:0:1}
+  $_comps[$lastcmd]
+}
+compdef _with with
 
 ppgrep() {
   pgrep -f "$@" | xargs ps -efp;
 }
-

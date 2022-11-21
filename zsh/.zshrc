@@ -25,6 +25,8 @@ export ZSH_CACHE_DIR=~/.cache/zsh
 setopt promptsubst
 setopt globdots
 setopt extendedglob
+setopt interactive_comments
+unsetopt complete_aliases
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then

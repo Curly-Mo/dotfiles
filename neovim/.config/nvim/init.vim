@@ -204,12 +204,13 @@ set clipboard+=unnamedplus
 set mouse=a
 
 " set tempfile location
-"silent !mkdir -p ~/.vim/tmp/backup > /dev/null 2>&1
-set backupdir=~/.vim/tmp/backup//
-"silent !mkdir -p ~/.vim/tmp/swap > /dev/null 2>&1
-set directory=~/.vim/tmp/swap//
-"silent !mkdir -p ~/.vim/tmp/undo > /dev/null 2>&1
-set undodir=~/.vim/tmp/undo//
+" in neovim, no need to create these dirs first
+"silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/backup > /dev/null 2>&1
+"silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/swap > /dev/null 2>&1
+"silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/undo > /dev/null 2>&1
+set backupdir=~/.config/nvim/tmp/backup//
+set directory=~/.config/nvim/tmp/swap//
+set undodir=~/.config/nvim/tmp/undo//
 " Persistent undo
 set undofile
 set undolevels=50000
@@ -890,7 +891,7 @@ nnoremap <C-p> <cmd>Telescope find_files<cr>
 " nnoremap <C-p> :lua require('telescope.builtin').find_files{ find_command = Split(vim.fn['Fd_cmd'](), ' ') }<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <C-[> <cmd>Telescope live_grep<cr>
+" nnoremap <C-[> <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <M-p> <cmd>Telescope file_browser<cr>

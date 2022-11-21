@@ -31,26 +31,28 @@
   l = "log"
   c = "commit"
   s = "status"
-  echoexec = "!f() { echo $(tput setaf 2)'$' ${@}$(tput sgr0); $@; }; f"
+  execho = "!f() { echo $(tput setaf 2)'$' ${@}$(tput sgr0); $@; }; f"
   remoteupstream = "!f() { if $(git remote | grep -q upstream); then echo upstream; else echo origin; fi; }; f"
-  remaster = "!f() { git echoexec git pull $(git remoteupstream) master --rebase --autostash; }; f"
-  arc = "! f() { git echoexec git tag archive/$1 $1 && git echoexec git branch -d $1; }; f"
-  arcl = "! f() { git echoexec git tag | grep '^archive/';}; f"
-  unarc = "! f() { git echoexec git checkout -b $(echo $1 | sed -E 's/^archive\\///') && git tag -d $1; }; f "
-  cleanup = "!f() { git echoexec git branch --merged master | egrep -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
-  fresh = "!f() { git echoexec git checkout master && git echoexec git pull $(git remoteupstream) master; }; f"
-  new = "!f() { git echoexec git fetch $(git remoteupstream) master && git echoexec git checkout -b $1 --no-track $(git remoteupstream)/master; }; f"
-  # new = "!f() { git echoexec git checkout -b $1 master && git echoexec git pull $(git remoteupstream) master; }; f"
+  remaster = "!f() { git execho git pull $(git remoteupstream) master --rebase --autostash; }; f"
+  memaster = "!f() { git execho git pull $(git remoteupstream) master --autostash; }; f"
+  arc = "! f() { git execho git tag archive/$(date '+%Y-%m-%d')/$1 $1 && git execho git branch -d $1; }; f"
+  arcl = "! f() { git execho git tag --list --sort=-version:refname $@ | grep '^archive/';}; f"
+  ; unarc = "! f() { git execho git checkout $(git arcl --sort=v:refname | grep $1 -m 1) && git switch -c $(echo $1 | sed -E 's/^archive\\/([^a-zA-Z]*\\/)*//') && git tag -d $1; }; f "
+  unarc = "! f() { git arcl | grep $1 -m 1 && git execho git checkout $(git arcl --sort=v:refname | grep $1 -m 1) && git execho git switch -c $(echo $1 | sed -E 's/^archive\\/([^a-zA-Z]*\\/)*//') && git execho git tag -d $(git arcl --sort=v:refname | grep $1 -m 1); }; f "
+  cleanup = "!f() { git execho git branch --merged master | grep -E -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
+  fresh = "!f() { git execho git checkout master && git execho git pull $(git remoteupstream) master; }; f"
+  new = "!f() { git execho git fetch $(git remoteupstream) master && git execho git checkout -b $1 --no-track $(git remoteupstream)/master; }; f"
+  # new = "!f() { git execho git checkout -b $1 master && git execho git pull $(git remoteupstream) master; }; f"
   co = "checkout"
   # Using git-extras instead: https://github.com/tj/git-extras/blob/master/Commands.md
-  # new = "!f() { git echoexec git checkout -b $1 master && git echoexec git pull $(git remoteupstream) master; }; f"
-  # copr = "!f() { git echoexec git fetch $(git remoteupstream) pull/$1/head:pr-$1 && git echoexec git checkout pr-$1; }; f"
+  # new = "!f() { git execho git checkout -b $1 master && git execho git pull $(git remoteupstream) master; }; f"
+  # copr = "!f() { git execho git fetch $(git remoteupstream) pull/$1/head:pr-$1 && git execho git checkout pr-$1; }; f"
   # pr = "!f() { git fetch -fu ${2:-origin} refs/pull/$1/head:pr/$1 && git checkout pr/$1; }; f"
   # pr-clean = "!git for-each-ref refs/heads/pr/* --format='%(refname)' | while read ref ; do branch=${ref#refs/heads/} ; git branch -D $branch ; done"
   # git-extras aliases. requires https://github.com/tj/git-extras
   cb = "create-branch"
   nb = "create-branch"
-  # new = "!f() { git echoexec git create-branch --from $(git remoteupstream)/master $@; }; f"
+  # new = "!f() { git execho git create-branch --from $(git remoteupstream)/master $@; }; f"
   br = "brv"
   rn = "rename-branch"
 [include]
@@ -89,3 +91,5 @@
   line-numbers-right-format = "{np:>3}│"
 [git-extras "create-branch"]
 	remote = origin
+[help]
+	autocorrect = prompt
