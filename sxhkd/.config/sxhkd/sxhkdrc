@@ -1,16 +1,21 @@
 ### APPLICATIONS ###
 alt + d
-  launch_or_focus alacritty
+  prime-run launch_or_focus alacritty
+  # launch_or_focus alacritty
 alt + F2
-  launch_or_focus alacritty
+  prime-run launch_or_focus alacritty
+  # launch_or_focus alacritty
 alt + f
-  launch_or_focus google-chrome
+  prime-run launch_or_focus google-chrome
+  # launch_or_focus google-chrome
 alt + s
   launch_or_focus spotify
 alt + a
   launch_or_focus slack
 alt + shift + s
   launch_or_focus idea
+alt + shift + g
+  launch_or_focus gpclient
 
 ### SELECTION ###
 # alt + c

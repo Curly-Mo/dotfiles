@@ -87,7 +87,7 @@ fix() {
   local other_args="${args:2}"
   local lastcmd=${${(z)lastcmd}:1}
   local lastcmd_minus_nargs=${${(z)lastcmd}:0:-${n_args}}
-  print -z $lastcmd_minus_nargs $other_args
+  print -z $lastcmd_minus_nargs $other_args ""
 }
 _fix() {
   local lastcmd=$history[$[HISTCMD-1]]

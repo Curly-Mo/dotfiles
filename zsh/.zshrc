@@ -166,10 +166,12 @@ zinit snippet https://github.com/rhysd/notes-cli/blob/master/completions/zsh/_no
 zinit ice lucid if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
-zinit ice wait"0" lucid if"[[ -f $HOME/.aliases ]]"
+# zinit ice wait"0" lucid if"[[ -f $HOME/.aliases ]]"
+zinit ice lucid if"[[ -f $HOME/.aliases ]]"
 zinit snippet "$HOME/.aliases"
 
-zinit ice wait"0" lucid if"[[ -f $HOME/.localrc ]]"
+zinit ice lucid if"[[ -f $HOME/.localrc ]]"
+# zinit ice wait"0" lucid if"[[ -f $HOME/.localrc ]]"
 zinit snippet "$HOME/.localrc"
 
 # Load all my functions and completions

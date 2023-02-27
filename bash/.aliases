@@ -127,6 +127,7 @@ alias ssht='TERM=xterm-color ssh'
 
 # stuff
 alias dot='cd $HOME/dotfiles'
+alias dotfiles='cd $HOME/dotfiles'
 
 # kde
 # nevermind kde sessions saving is borked
@@ -134,6 +135,10 @@ alias dot='cd $HOME/dotfiles'
 
 # optimus-steam
 alias optisteam='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME="nvidia" __VK_LAYER_NV_optimus="NVIDIA_only" steam'
+# prime
+# alias alacritty='prime-run alacritty'
+# alias google-chrome='prime-run google-chrome'
+# alias slack='prime-run slack'
 
 # journalctl
 alias journalboot='journalctl -xb -p 5'

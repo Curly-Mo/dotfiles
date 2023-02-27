@@ -4,7 +4,6 @@ call plug#begin('~/.config/nvim/plugged')
 if !&diff
   Plug 'neoclide/coc.nvim', {'branch': 'release'}
   " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
-  Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
@@ -103,6 +102,7 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope-file-browser.nvim'
+Plug 'scalameta/nvim-metals'
 " end plenary deps
 " Plug 'AckslD/nvim-neoclip.lua'
 Plug 'stsewd/fzf-checkout.vim'
@@ -246,6 +246,14 @@ set diffopt+=foldcolumn:1
 " Python
 let g:python3_host_prog = "~/.pyenv/shims/python3"
 let g:python_host_prog = "~/.pyenv/shims/python2"
+
+" delete without yanking
+nnoremap <leader>d "_d
+vnoremap <leader>d "_d
+" replace currently selected text with default register
+" without yanking it
+vnoremap <leader>p "_dP
+
 
 """"""PLUGINS"""""""
 
