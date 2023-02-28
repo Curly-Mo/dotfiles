@@ -10,6 +10,7 @@ Plug 'haya14busa/incsearch.vim'
 "Plug 'SirVer/ultisnips'
 "Plug 'honza/vim-snippets'
 " Plug 'mattn/emmet-vim'
+Plug 'lifepillar/vim-colortemplate'
 call plug#end()
 
 " Colors

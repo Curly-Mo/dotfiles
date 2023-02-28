@@ -3,8 +3,8 @@
   // use microsoft python langauge server
   "python.jediEnabled": false,
   "python.formatting.provider": "black",
-  "python.pythonPath": "~/.pyenv/shims/python",
-  "python.venvPath": "~/.pyenv",
+  // "python.pythonPath": "~/.pyenv/shims/python",
+  // "python.venvPath": "~/.pyenv",
   "tsserver.npm": "/usr/bin/npm",
   "metals.javaHome": "/home/colinfahy/.jenv/versions/11/",
   "git.enableGutters": true,

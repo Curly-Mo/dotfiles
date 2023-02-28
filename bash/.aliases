@@ -36,6 +36,7 @@ function fp(){
 alias vi="vim"
 if hash nvim 2>/dev/null; then
     alias vim="nvim"
+    alias vimdiff="nvim -d"
 fi
 alias vimrc='vim $HOME/.config/nvim/init.vim'
 alias vl='vim $(latest)'
@@ -56,7 +57,7 @@ alias sudoit='sudo $(fc -nl -1)'
 alias doit='sudo $(fc -nl -1)'
 
 # arch
-alias yay="paru"
+alias yay="PYENV_VERSION=system paru"
 alias yeet="paru -Rns"
 # alias yayy='yay -Syu --noconfirm'
 # alias yolo='yay -Syu --noconfirm'
@@ -114,6 +115,9 @@ alias pse='command ps -e -o pid,ppid,user,tty,start,time,%cpu,%mem,command'
 alias psgrep='pse | grep -v "grep -i --color=auto" | command grep -i --color=auto'
 alias psme='ps -u $USER'
 
+# pipe
+alias dofor='xargs -l'
+
 # zsh
 alias zhrc='vim $HOME/.zshrc'
 alias zshrc='vim $HOME/.zshrc'
@@ -123,6 +127,7 @@ alias ssht='TERM=xterm-color ssh'
 
 # stuff
 alias dot='cd $HOME/dotfiles'
+alias dotfiles='cd $HOME/dotfiles'
 
 # kde
 # nevermind kde sessions saving is borked
@@ -130,6 +135,10 @@ alias dot='cd $HOME/dotfiles'
 
 # optimus-steam
 alias optisteam='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME="nvidia" __VK_LAYER_NV_optimus="NVIDIA_only" steam'
+# prime
+# alias alacritty='prime-run alacritty'
+# alias google-chrome='prime-run google-chrome'
+# alias slack='prime-run slack'
 
 # journalctl
 alias journalboot='journalctl -xb -p 5'
