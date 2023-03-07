@@ -40,8 +40,8 @@
   ; unarc = "! f() { git execho git checkout $(git arcl --sort=v:refname | grep $1 -m 1) && git switch -c $(echo $1 | sed -E 's/^archive\\/([^a-zA-Z]*\\/)*//') && git tag -d $1; }; f "
   unarc = "! f() { git arcl | grep $1 -m 1 && git execho git checkout $(git arcl --sort=v:refname | grep $1 -m 1) && git execho git switch -c $(echo $1 | sed -E 's/^archive\\/([^a-zA-Z]*\\/)*//') && git execho git tag -d $(git arcl --sort=v:refname | grep $1 -m 1); }; f "
   cleanup = "!f() { git execho git branch --merged master | grep -E -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
-  fresh = "!f() { git execho git checkout master && git execho git pull $(git remoteupstream) master; }; f"
-  new = "!f() { git execho git fetch $(git remoteupstream) master && git execho git checkout -b $1 --no-track $(git remoteupstream)/master; }; f"
+  fresh = "!f() { git execho git stash && git execho git checkout master && git execho git pull $(git remoteupstream) master && git execho git stash pop; }; f"
+  new = "!f() { git execho git stash && git execho git checkout -b $1 --no-track $(git remoteupstream)/master && git execho git pull $(git remoteupstream) master --rebase --autostash && git execho git stash pop; }; f"
   # new = "!f() { git execho git checkout -b $1 master && git execho git pull $(git remoteupstream) master; }; f"
   co = "checkout"
   # Using git-extras instead: https://github.com/tj/git-extras/blob/master/Commands.md
