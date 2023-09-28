@@ -6,6 +6,7 @@ if !&diff
   " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
   Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'mfussenegger/nvim-jdtls'
   Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
   Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
   " Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}

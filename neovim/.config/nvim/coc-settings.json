@@ -1,4 +1,5 @@
 {
+  "semanticTokens.enable": true,
   // "coc.preferences.diagnostic.displayByAle": true,
   // use microsoft python langauge server
   "python.jediEnabled": false,
@@ -6,7 +7,7 @@
   // "python.pythonPath": "~/.pyenv/shims/python",
   // "python.venvPath": "~/.pyenv",
   "tsserver.npm": "/usr/bin/npm",
-  "metals.javaHome": "/home/colinfahy/.jenv/versions/11/",
+  // "metals.javaHome": "/home/colinfahy/.jenv/versions/17/",
   "git.enableGutters": true,
   "git.addedSign.hlGroup": "GitGutterAdd",
   "git.changedSign.hlGroup": "GitGutterChange",

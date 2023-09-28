@@ -35,6 +35,8 @@
   remoteupstream = "!f() { if $(git remote | grep -q upstream); then echo upstream; else echo origin; fi; }; f"
   remaster = "!f() { git execho git pull $(git remoteupstream) master --rebase --autostash; }; f"
   memaster = "!f() { git execho git pull $(git remoteupstream) master --autostash; }; f"
+  remain = "!f() { git execho git pull $(git remoteupstream) main --rebase --autostash; }; f"
+  memain = "!f() { git execho git pull $(git remoteupstream) main --autostash; }; f"
   arc = "! f() { git execho git tag archive/$(date '+%Y-%m-%d')/$1 $1 && git execho git branch -d $1; }; f"
   arcl = "! f() { git execho git tag --list --sort=-version:refname $@ | grep '^archive/';}; f"
   ; unarc = "! f() { git execho git checkout $(git arcl --sort=v:refname | grep $1 -m 1) && git switch -c $(echo $1 | sed -E 's/^archive\\/([^a-zA-Z]*\\/)*//') && git tag -d $1; }; f "
