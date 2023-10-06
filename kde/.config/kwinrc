@@ -7,14 +7,21 @@ Enabled=true
 GLCore=true
 GLPreferBufferSwap=a
 GLTextureFilter=2
-HiddenPreviews=5
+LatencyPolicy=Medium
 OpenGLIsUnsafe=false
 WindowsBlockCompositing=true
 XRenderSmoothScale=false
 
 [Desktops]
 Id_1=cb417c34-3cca-4810-acc2-30b3d15f67b5
-Number=1
+Id_2=ba913a49-985d-4f5e-8929-aee9fd24c85d
+Id_3=29de415b-d0f1-48ce-997d-361bb0b1c2ee
+Id_4=b7c117a4-fdb1-41a9-8a31-8233020e5c2e
+Name_1=Work
+Name_2=Hack
+Name_3=Project
+Name_4=Personal
+Number=4
 Rows=1
 
 [Effect-CoverSwitch]
@@ -37,6 +44,9 @@ TabBoxAlternative=false
 BorderActivate=9
 BorderActivateAll=9
 BorderActivateClass=9
+
+[Effect-windowview]
+BorderActivateAll=9
 
 [ElectricBorders]
 Bottom=None
@@ -67,10 +77,9 @@ CommandWindow3=Activate and pass click
 CommandWindowWheel=Scroll
 
 [NightColor]
-Active=true
-EveningBeginFixed=2300
-Mode=Times
-MorningBeginFixed=0830
+EveningBeginFixed=2330
+Mode=Constant
+MorningBeginFixed=0930
 NightTemperature=3200
 TransitionTime=60
 
@@ -80,14 +89,14 @@ windowgeometryEnabled=false
 
 [TabBox]
 ActivitiesMode=1
-ApplicationsMode=0
+ApplicationsMode=1
 BorderActivate=9
 BorderAlternativeActivate=9
 DesktopLayout=org.kde.breeze.desktop
 DesktopListLayout=org.kde.breeze.desktop
 DesktopMode=1
 HighlightWindows=true
-LayoutName=org.kde.breezedark.desktop
+LayoutName=flipswitch
 MinimizedMode=0
 MultiScreenMode=0
 ShowDesktopMode=0
@@ -106,6 +115,12 @@ ShowDesktopMode=0
 ShowTabBox=true
 SwitchingMode=0
 
+[Tiling]
+padding=4
+
+[Tiling][213a9620-187e-58a6-b80b-85d8fb95dfce]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Windows]
 ActiveMouseScreen=false
 AutoRaise=false
@@ -117,7 +132,7 @@ ClickRaise=true
 DelayFocusInterval=300
 ElectricBorderCooldown=350
 ElectricBorderCornerRatio=0.25
-ElectricBorderDelay=150
+ElectricBorderDelay=100
 ElectricBorderMaximize=true
 ElectricBorderTiling=true
 ElectricBorders=0

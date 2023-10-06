@@ -1,13 +1,10 @@
 ### APPLICATIONS ###
 alt + d
-  prime-run launch_or_focus alacritty
-  # launch_or_focus alacritty
+  launch_or_focus alacritty
 alt + F2
-  prime-run launch_or_focus alacritty
-  # launch_or_focus alacritty
+  launch_or_focus alacritty
 alt + f
-  prime-run launch_or_focus google-chrome
-  # launch_or_focus google-chrome
+  launch_or_focus google-chrome
 alt + s
   launch_or_focus spotify
 alt + a

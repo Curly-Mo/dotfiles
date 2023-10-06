@@ -9,8 +9,8 @@
 # xmodmap ~/.Xmodmap
 
 dex $HOME/.config/autostart/google-chrome.desktop
-dex $HOME/.config/autostart/alacritty-prime.desktop
-# dex $HOME/.config/autostart/alacritty.desktop
+# dex $HOME/.config/autostart/alacritty-prime.desktop
+dex $HOME/.config/autostart/alacritty.desktop
 
 # give terminal focus
 wmctrl -x -a alacritty
