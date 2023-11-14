@@ -736,7 +736,7 @@ let g:poetv_executables = ['poetry']
 " notational-fzf-vim
 nnoremap <silent> <c-s> :NV<CR>
 nnoremap <silent> <c-S> :NV<CR>work/
-let g:nv_search_paths = ['~/sync/Notes/fzfvim']
+let g:nv_search_paths = ['~/sync/notes/fzfvim']
 "" String. Set to '' (the empty string) if you don't want an extension appended by default.
 "" Don't forget the dot, unless you don't want one.
 "let g:nv_default_extension = '.md'
@@ -788,6 +788,9 @@ let g:nv_search_paths = ['~/sync/Notes/fzfvim']
 
 
 " hop.nvim
+lua <<EOF
+require'hop'.setup()
+EOF
 map s <cmd>HopChar1<CR>
 omap s v<cmd>HopChar1<CR>
 

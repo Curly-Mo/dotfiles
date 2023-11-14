@@ -1,0 +1,10 @@
+[Unit]
+Description=Input Leap Client
+After=network.target
+
+[Service]
+ExecStart=input-leap
+Restart=always
+
+[Install]
+WantedBy=default.target

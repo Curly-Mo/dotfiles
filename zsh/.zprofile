@@ -4,7 +4,7 @@ export MANPAGER='nvim +Man!'
 # export MANPAGER="page -C -e 'au User PageDisconnect sleep 100m|%y p|enew! |bd! #|pu p|set ft=man'"
 # export PAGER="page -q 90000"
 
-export PATH="$HOME/.cargo/bin:$PATH"
+export PATH="$PATH:$HOME/.cargo/bin"
 
 export NOTES_CLI_HOME="$HOME/sync/Notes/notescli"
 export TODO_DIR="$HOME/sync/Notes/todo"
@@ -15,3 +15,7 @@ export XDG_CONFIG_HOME="$HOME/.config"
 
 # ssh-agent
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+
+# ruby
+export GEM_HOME="$(gem env user_gemhome)"
+export PATH="$PATH:$GEM_HOME/bin"

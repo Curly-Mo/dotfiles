@@ -1,0 +1,12 @@
+#!/bin/sh
+
+default_args='--site services.gue1 --userid $USERID -u $USERNAME'
+args="$@"
+# replace localhost with local ip
+args=${args/localhost/192.168.16.1}
+# wrap uris in quotes
+args=$(sed "s/\(\w*:\/\/\S*\)/'\1'/g" <<< "$args")
+
+cmd="jhurl ${default_args} ${args}"
+echo $cmd | bat --style plain -l sh 1>&2
+eval "jhurl ${args}"

@@ -61,11 +61,8 @@ alias yay="PYENV_VERSION=system paru"
 alias yeet="paru -Rns"
 # alias yayy='yay -Syu --noconfirm'
 # alias yolo='yay -Syu --noconfirm'
-alias systat='systemctl status'
-alias systart='systemctl start'
-alias sysrestart='systemctl restart'
-alias systop='systemctl stop'
-alias sysenable='systemctl enable'
+alias sys='systemctl'
+alias ctl='systemctl'
 
 # xdg
 if ! [ -x "$(command -v open)" ]; then

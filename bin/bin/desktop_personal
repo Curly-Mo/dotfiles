@@ -1,0 +1,15 @@
+#!/bin/sh
+
+desktop=$(wmctrl -d | grep Work | cut -d ' ' -f1)
+if [ "" = "$desktop" ]
+then
+    num_desktops=$(wmctrl -d | wc -l)
+    wmctrl -n $(($num_desktops + 1))
+    wmctrl -s $num_desktops
+    rename_workspace.py $num_desktops "Work"
+else
+    wmctrl -s $desktop
+fi
+
+launch_or_focus google-chrome
+prime-run launch_or_focus alacritty

@@ -1,11 +1,1 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=Cadence
-Comment=cadence
-Exec=cadence --minimized
-Icon=cadence
-Terminal=false
-StartupNotify=false
-Categories=Application;
-Hidden=true
+../../.local/share/applications/cadence.desktop

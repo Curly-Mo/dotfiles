@@ -1,0 +1,12 @@
+#!/bin/sh
+
+default_args="--site services.guc3.spotify.net --catalogue premium --country US --user-header Accept=application/json --user-header Content-Type=application/json --userid e330b8ba2ed9475e91efb70eb7f879ab --canonical-username curly-mo --reply-byte-size-limit 4194304"
+args="$@"
+# replace localhost with local ip
+args=${args/localhost/192.168.16.1}
+# wrap uris in quotes
+args=$(sed "s/\(\w*:\/\/\S*\)/'\1'/g" <<< "$args")
+
+cmd="sp jhurl ${default_args} ${args}"
+echo $cmd | bat --style plain -l sh 1>&2
+eval $cmd

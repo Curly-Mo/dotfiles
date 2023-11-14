@@ -57,7 +57,10 @@
   # new = "!f() { git execho git create-branch --from $(git remoteupstream)/master $@; }; f"
   br = "brv"
   rn = "rename-branch"
-[include]
+[user]
+  name = Colin
+  email = colin@cfahy.com
+[includeIf "gitdir:~/workspace/"]
   path = ~/.gituser
 [color]
   ui = auto

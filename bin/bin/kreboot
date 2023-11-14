@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# kde shutdown
+qdbus org.kde.ksmserver /KSMServer logout 0 1 1

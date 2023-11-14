@@ -7,7 +7,7 @@ Enabled=true
 GLCore=true
 GLPreferBufferSwap=a
 GLTextureFilter=2
-LatencyPolicy=Medium
+LatencyPolicy=Low
 OpenGLIsUnsafe=false
 WindowsBlockCompositing=true
 XRenderSmoothScale=false
@@ -58,6 +58,9 @@ Top=None
 TopLeft=None
 TopRight=None
 
+[ModifierOnlyShortcuts]
+Meta=
+
 [MouseBindings]
 CommandActiveTitlebar1=Raise
 CommandActiveTitlebar2=Nothing
@@ -96,7 +99,7 @@ DesktopLayout=org.kde.breeze.desktop
 DesktopListLayout=org.kde.breeze.desktop
 DesktopMode=1
 HighlightWindows=true
-LayoutName=flipswitch
+LayoutName=thumbnails
 MinimizedMode=0
 MultiScreenMode=0
 ShowDesktopMode=0
@@ -108,7 +111,7 @@ ActivitiesMode=1
 ApplicationsMode=0
 DesktopMode=1
 HighlightWindows=true
-LayoutName=org.kde.breeze.desktop
+LayoutName=flipswitch
 MinimizedMode=0
 MultiScreenMode=0
 ShowDesktopMode=0

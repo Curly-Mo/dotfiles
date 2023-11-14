@@ -3,8 +3,10 @@ alt + d
   launch_or_focus alacritty
 alt + F2
   launch_or_focus alacritty
+# alt + f
+#   launch_or_focus google-chrome
 alt + f
-  launch_or_focus google-chrome
+  launch_or_focus firefox
 alt + s
   launch_or_focus spotify
 alt + a

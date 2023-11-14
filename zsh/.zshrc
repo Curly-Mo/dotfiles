@@ -107,8 +107,8 @@ zinit light darvid/zsh-poetry
 zinit ice wait"0" lucid
 zinit light davidparsson/zsh-pyenv-lazy
 
-# zinit ice wait"0" lucid
-# zinit light shihyuho/zsh-jenv-lazy
+zinit ice wait"0" lucid
+zinit light shihyuho/zsh-jenv-lazy
 # jenv-lazy caused issues, fine I'll just load it non-lazily for now
 # zinit ice wait"10" lucid
 # zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
