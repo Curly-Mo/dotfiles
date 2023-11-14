@@ -1,0 +1,77 @@
+" syntax on
+set number
+autocmd FileType * setlocal formatoptions-=c
+autocmd FileType * setlocal formatoptions-=r
+autocmd FileType * setlocal formatoptions-=o
+" filetype plugin indent on
+
+" search
+set hlsearch
+nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+set ignorecase
+set smartcase
+set incsearch
+"set gdefault
+" set magic
+
+" tabs
+" set tabstop=2
+" set softtabstop=2
+" set shiftwidth=2
+" set expandtab
+autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
+
+" aliases
+:command WQ wq
+:command Wq wq
+:command Q q
+:command CQ cq
+:command Cq cq
+:command Bd bd
+:command BD bd
+" :command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+" :command W :execute '!sudo tee % > /dev/null'
+" :command W w
+:command W :execute ':SudoWrite'
+:command Wd :execute ':Mkdir' | w
+:command WD :execute ':Mkdir' | :execute ':SudoWrite'
+" reload vimrc
+:command! Reload source $MYVIMRC
+
+" paste
+" nnoremap <F2> :set invpaste paste?<CR>
+" set pastetoggle=<F10>
+set noshowmode
+" clipboard
+set clipboard+=unnamedplus
+set clipboard-=ideaput
+" set mouse=a
+
+" set tempfile location
+"silent !mkdir -p ~/.vim/tmp/backup > /dev/null 2>&1
+" set backupdir=~/.vim/tmp/backup//
+"silent !mkdir -p ~/.vim/tmp/swap > /dev/null 2>&1
+" set directory=~/.vim/tmp/swap//
+"silent !mkdir -p ~/.vim/tmp/undo > /dev/null 2>&1
+" set undodir=~/.vim/tmp/undo//
+" Persistent undo
+" set undofile
+set undolevels=50000
+
+" Always open readonly if swapfile exists
+if has("autocmd")
+  autocmd SwapExists * let v:swapchoice = "o"
+endif
+
+" Remember last cursor position
+if has("autocmd")
+    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
+
+" Emulated plugins
+set surround
+set commentary
+" set argtextobj.vim
+" set vim-highlightedyank
+set ReplaceWithRegister
