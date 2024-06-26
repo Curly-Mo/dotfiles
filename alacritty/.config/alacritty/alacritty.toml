@@ -1,0 +1,47 @@
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.bright]
+black = "0x444444"
+blue = "0x8fafd7"
+cyan = "0x5fafaf"
+green = "0x87af87"
+magenta = "0x8787af"
+red = "0xff8000"
+white = "0xffffff"
+yellow = "0xffffaf"
+
+[colors.normal]
+black = "0x171717"
+blue = "0x5f87af"
+cyan = "0x5f8787"
+green = "0x5f875f"
+magenta = "0x5f5f87"
+red = "0xaf5f5f"
+white = "0x6c6c6c"
+yellow = "0x87875f"
+
+[colors.primary]
+background = "0x171717"
+foreground = "0xbcbcbc"
+
+[font]
+size = 19.5
+
+[font.normal]
+family = "Roboto Mono for Powerline"
+
+# [hints.mouse]
+# enabled = true
+# mods = "Shift"
+
+[scrolling]
+history = 100000
+
+[shell]
+args = ["--login"]
+program = "/usr/bin/zsh"
+
+[window]
+decorations = "none"
+startup_mode = "Maximized"
