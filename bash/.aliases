@@ -146,5 +146,6 @@ alias journallast='journalctl -x -b -1 -p 5'
 alias fzv='vim $(fzf)'
 
 # todo.txt
-alias todo='todo.sh'
-alias todow="todo -d $HOME/sync/Notes/todo/.config/workconfig"
+alias todo='todo.sh -d $HOME/sync/notes/todo/.config/config'
+alias todow="todo -d $HOME/sync/notes/todo/.config/workconfig"
+alias notes='cd $HOME/sync/notes/'

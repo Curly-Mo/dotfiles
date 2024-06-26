@@ -1,3 +1,6 @@
 [user]
   name = Colin Fahy
   email = colinfahy@spotify.com
+# always use SSH instead of HTTPS
+[url "git@ghe.spotify.net:"]
+  insteadOf = https://ghe.spotify.net/

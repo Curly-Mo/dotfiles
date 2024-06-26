@@ -80,11 +80,12 @@ CommandWindow3=Activate and pass click
 CommandWindowWheel=Scroll
 
 [NightColor]
-EveningBeginFixed=2330
-Mode=Constant
-MorningBeginFixed=0930
-NightTemperature=3200
-TransitionTime=60
+Active=true
+EveningBeginFixed=0030
+Mode=Times
+MorningBeginFixed=0800
+NightTemperature=2000
+TransitionTime=120
 
 [Plugins]
 highlightwindowEnabled=true
@@ -124,8 +125,31 @@ padding=4
 [Tiling][213a9620-187e-58a6-b80b-85d8fb95dfce]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
+[Tiling][28b8f3eb-1ecb-57e9-b5b1-a41dd0513c16]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][38793e0f-e5e2-5832-aabf-2c1377ed7c92]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][58f8e0ea-4424-5c42-b71e-399c59a9a7a0]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][5b7a5ba4-43cc-5910-8e98-f358f9d54b43]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][6241797b-414a-582e-8732-28c2e39d6ac5]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][67752058-f3d4-5e99-b457-95864d038281]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][8df035f6-9c38-59e0-83c0-9372231be0b5]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][ea69addc-bc12-58fb-9d6d-9a8d4aa9fd37]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Windows]
-ActiveMouseScreen=false
 AutoRaise=false
 AutoRaiseInterval=750
 BorderSnapZone=10
@@ -154,6 +178,9 @@ ShadeHoverInterval=250
 SnapOnlyWhenOverlapping=false
 TitlebarDoubleClickCommand=Maximize
 WindowSnapZone=10
+
+[Xwayland]
+Scale=1
 
 [org.kde.kdecoration2]
 ButtonsOnLeft=MN

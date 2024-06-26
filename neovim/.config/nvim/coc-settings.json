@@ -8,6 +8,7 @@
   // "python.venvPath": "~/.pyenv",
   "tsserver.npm": "/usr/bin/npm",
   // "metals.javaHome": "/home/colinfahy/.jenv/versions/17/",
+  "java.jdt.ls.java.home": "~/.jenv/versions/21",
   "git.enableGutters": true,
   "git.addedSign.hlGroup": "GitGutterAdd",
   "git.changedSign.hlGroup": "GitGutterChange",
