@@ -119,3 +119,20 @@ compdef _with with
 ppgrep() {
   pgrep -f "$@" | xargs ps -efp;
 }
+
+# Open a note
+note() {
+  local args=$@
+  local n_args=$#
+  local notes_dir="$HOME/sync/notes/fzfvim"
+  local filename="${args%.*}"
+  # strip off the extension
+  local filename="${filename%.*}"
+
+  vim ${notes_dir}/${filename}.md
+}
+_note() {
+  local notes_dir="$HOME/sync/notes/fzfvim"
+  _files -W $notes_dir -g '*.md(:r)'
+}
+compdef _note note

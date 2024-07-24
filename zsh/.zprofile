@@ -6,10 +6,12 @@ export MANPAGER='nvim +Man!'
 
 export PATH="$PATH:$HOME/.cargo/bin"
 
-export NOTES_CLI_HOME="$HOME/sync/Notes/notescli"
-export TODO_DIR="$HOME/sync/Notes/todo"
+export NOTES_CLI_HOME="$HOME/sync/notes/notescli"
+export TODO_DIR="$HOME/sync/notes/todo"
 export TODO_FILE="$TODO_DIR/todo.txt"
 export DONE_FILE="$TODO_DIR/done.txt"
+export TODO_ACTIONS_DIR="$TODO_DIR/actions.d"
+export TODOTXT_CFG_FILE="$TODO_DIR/.config/config"
 
 export XDG_CONFIG_HOME="$HOME/.config"
 

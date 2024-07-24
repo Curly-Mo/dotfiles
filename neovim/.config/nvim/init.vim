@@ -734,15 +734,16 @@ let g:poetv_executables = ['poetry']
 " let g:poetv_set_environment = 1
 
 " notational-fzf-vim
-nnoremap <silent> <c-s> :NV<CR>
-nnoremap <silent> <c-S> :NV<CR>work/
-let g:nv_search_paths = ['~/sync/notes/fzfvim']
+nnoremap <silent> <c-s> :NV!<CR>
+" nnoremap <silent> <c-S> :NV<CR>work/
+let g:nv_search_paths = ['~/sync/notes/fzfvim', './notes']
 "" String. Set to '' (the empty string) if you don't want an extension appended by default.
 "" Don't forget the dot, unless you don't want one.
 "let g:nv_default_extension = '.md'
 "" String. Default is first directory found in `g:nv_search_paths`. Error thrown
 ""if no directory found and g:nv_main_directory is not specified
 ""let g:nv_main_directory = g:nv_main_directory or (first directory in g:nv_search_paths)
+let g:nv_main_directory = '~/sync/notes/fzfvim'
 "" Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
 "" 'command' or 'alt-KEY' : 'command'. See examples below.
 "let g:nv_keymap = {
@@ -754,6 +755,7 @@ let g:nv_search_paths = ['~/sync/notes/fzfvim']
 "let g:nv_create_note_key = 'ctrl-x'
 "" String. Controls how new note window is created.
 "let g:nv_create_note_window = 'vertical split'
+let g:nv_create_note_window = 'buffer'
 "" Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
 "let g:nv_show_preview = 1
 "" Boolean. Respect .*ignore files in or above nv_search_paths. Set by default.
