@@ -94,27 +94,19 @@ zinit ice lucid if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
 zinit ice wait"0" lucid if"[[ -f $HOME/.localrc ]]"
-# zinit ice lucid if"[[ -f $HOME/.localrc ]]"
 zinit snippet "$HOME/.localrc"
 
 zinit ice wait"0" lucid if"[[ -f $HOME/.aliases ]]"
-# zinit ice lucid if"[[ -f $HOME/.aliases ]]"
 zinit snippet "$HOME/.aliases"
 
 # completions
-zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall for \
-  "$HOME/bin/_completions"
+zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall "$HOME/bin/_completions"
 
 # Load all my functions and completions
-# zinit ice wait"0" lucid if"[[ -d $HOME/.zsh_functions ]]"
-# zinit snippet "$HOME/.zsh_functions/my_zsh_functions.zsh"
-# from dotfiles
+# TODO: load these better
 zinit wait"0" lucid light-mode for \
-  pick:"zsh/.zsh_functions/.zsh_functions.plugin.zsh" \
-  src:"zsh/.zsh_functions/my_zsh_functions.zsh" \
+  pick:"zsh/.zsh_functions/zsh_functions.plugin.zsh" \
   Curly-Mo/dotfiles
-# zinit ice wait"0" lucid if"[[ -f $HOME/.zsh_functions/my_zsh_functions.zsh ]]" creinstall for \
-#   "$HOME/.zsh_functions/my_zsh_functions.zsh"
 
 # Config
 zinit ice lucid if"[[ -f $HOME/dotfiles/zsh/.config/zsh/fzf.zsh ]]"
