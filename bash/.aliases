@@ -41,7 +41,10 @@ if hash nvim 2>/dev/null; then
 fi
 alias vimrc="vim $HOME/.config/nvim/init.vim"
 alias vl="vim $(latest)"
-alias v="vim -c 'Telescope oldfiles'"
+alias v="vim_wrapper"
+
+# fzf
+alias fzv='vim $(fzf)'
 
 # python
 # python poetry activate
@@ -143,9 +146,6 @@ alias optisteam='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME="nvidia" 
 alias journalboot='journalctl -xb -p 5'
 alias journalthis='journalctl -xb -p 5'
 alias journallast='journalctl -x -b -1 -p 5'
-
-# fzf
-alias fzv='vim $(fzf)'
 
 # notes
 alias notes='cd $HOME/sync/notes/'

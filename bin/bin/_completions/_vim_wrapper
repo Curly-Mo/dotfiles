@@ -1,0 +1,7 @@
+#compdef vim_wrapper
+
+function _vim_wrapper {
+  _vim
+}
+
+_vim_wrapper "$@"

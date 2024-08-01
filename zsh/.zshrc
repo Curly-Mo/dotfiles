@@ -69,7 +69,7 @@ zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
 
 # Load meta plugins
 # from zdharma-continuum/zinit-annex-meta-plugins
-zinit wait lucid skip'fzf-go fzy' for \
+zinit wait lucid skip'fzf-go' for \
   `# fzf, fzy, lotabout/skim, peco/peco` \
   fuzzy-src \
   `# Fakerr/git-recall, paulirish/git-open, paulirish/git-recent, davidosomething/git-my, arzzen/git-quick-stats, iwata/git-now, tj/git-extras, wfxr/forgit` \
@@ -77,7 +77,7 @@ zinit wait lucid skip'fzf-go fzy' for \
   `# dircolors-material, sharkdp, ogham/exa, BurntSushi/ripgrep, jonas/tig` \
   console-tools
   # `# sharkdp/fd, sharkdp/bat, sharkdp/hexyl, sharkdp/hyperfine, sharkdp/vivid` \
-  # sharkdp \
+  # sharkdp
 
 
 # local stuff
@@ -113,6 +113,8 @@ zinit wait"0" lucid light-mode for \
   pick:"zsh/.zsh_functions/.zsh_functions.plugin.zsh" \
   src:"zsh/.zsh_functions/my_zsh_functions.zsh" \
   Curly-Mo/dotfiles
+# zinit ice wait"0" lucid if"[[ -f $HOME/.zsh_functions/my_zsh_functions.zsh ]]" creinstall for \
+#   "$HOME/.zsh_functions/my_zsh_functions.zsh"
 
 # Config
 zinit ice lucid if"[[ -f $HOME/dotfiles/zsh/.config/zsh/fzf.zsh ]]"
@@ -198,11 +200,11 @@ zinit wait lucid light-mode \
 
 # zsh stuff
 zinit wait lucid light-mode for \
- atinit"ZINIT[COMPINIT_OPTS]=-C; zpcompinit; zpcdreplay" \
+  atinit"ZINIT[COMPINIT_OPTS]=-C; zpcompinit; zpcdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
- blockf atpull'zinit creinstall -q .' \
+  blockf atpull'zinit creinstall -q .' \
     zsh-users/zsh-completions \
- atload"!_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false" \
+  atload"!_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false" \
     zsh-users/zsh-autosuggestions
 
 

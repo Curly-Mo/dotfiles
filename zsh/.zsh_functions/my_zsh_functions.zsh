@@ -11,7 +11,7 @@ _up() {
   local up_dirs=(${(s:/:)pwd})
   _alternative "dirs:directory:($up_dirs)"
 }
-# compdef _up up
+compdef _up up
 
 # Jump down to first matching subdirectory
 down() {
@@ -30,7 +30,7 @@ _down() {
   local down_dir_names=(${^down_dir_names}/)
   _alternative "dirs:directory:($down_dir_names $down_dirs)"
 }
-# compdef _down down
+compdef _down down
 
 attach() {
   if [[ -z "$TMUX" ]] ;then
@@ -69,7 +69,7 @@ _now() {
   #         ;;
   # esac
 }
-# compdef _now now
+compdef _now now
 
 # recommand() {
 #   local lastcmd=$(fc -l -1)
@@ -98,7 +98,7 @@ _fix() {
     "1:nargs:_numbers -l 0 -m $cmdlen -d 1" \
     "*::passthrough:$_comps[$lastcmd]"
 }
-# compdef _fix fix
+compdef _fix fix
 
 # Replace last args to previous command
 with() {
@@ -114,7 +114,7 @@ _with() {
   lastcmd=${${(z)lastcmd}:0:1}
   $_comps[$lastcmd]
 }
-# compdef _with with
+compdef _with with
 
 ppgrep() {
   pgrep -f "$@" | xargs ps -efp;
@@ -135,4 +135,4 @@ _note() {
   local notes_dir=$NOTES_FZFVIM_DIR
   _files -W $notes_dir -g '*.md(:r)'
 }
-# compdef _note note
+compdef _note note

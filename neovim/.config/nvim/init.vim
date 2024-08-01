@@ -188,13 +188,17 @@ autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
 " :command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 " :command W :execute '!sudo tee % > /dev/null'
 " :command W w
-:command W :execute ':SudoWrite'
-:command Wd :execute ':Mkdir' | w
-:command WD :execute ':Mkdir' | :execute ':SudoWrite'
+:command W :SudoWrite
+:command Wd :Mkdir | w
+:command WD :Mkdir | :SudoWrite
 " reload vimrc
 :command! Reload source $MYVIMRC
 " csv
 :command! CSV %!column -t
+" cd
+:command CD :cd %:h
+:command Groot :cd `git rev-parse --show-toplevel`
+:command Proot :Groot
 
 " paste
 nnoremap <F2> :set invpaste paste?<CR>
@@ -869,6 +873,7 @@ require('telescope').setup{
     layout_config = {
       width = 0.95,
       preview_width = 0.45,
+      preview_cutoff = 0,
     },
   },
   pickers = {
