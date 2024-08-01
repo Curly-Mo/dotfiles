@@ -1,6 +1,6 @@
 # uncomment to enable `zpmod source-study` (requires `zinit module build` first)
-# module_path+=( "$HOME/.zinit/bin/zmodules/Src" )
-# zmodload zdharma/zplugin
+# module_path+=( "$HOME/.zinit/module/Src" )
+# zmodload zdharma_continuum/zinit
 
 # uncomment for profiling (also uncomment a the bottom of file)
 # zmodload zsh/zprof
@@ -104,8 +104,9 @@ zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall "$HOME/bi
 
 # Load all my functions and completions
 # TODO: load these better
-zinit wait"0" lucid light-mode for \
+zinit id-as"my_zsh_functions" wait"0" lucid light-mode for \
   pick:"zsh/.zsh_functions/zsh_functions.plugin.zsh" \
+  multisrc:"zsh/.zsh_functions/my_zsh_functions.zsh" \
   Curly-Mo/dotfiles
 
 # Config
@@ -192,7 +193,7 @@ zinit wait lucid light-mode \
 
 # zsh stuff
 zinit wait lucid light-mode for \
-  atinit"ZINIT[COMPINIT_OPTS]=-C; zpcompinit; zpcdreplay" \
+  atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
   blockf atpull'zinit creinstall -q .' \
     zsh-users/zsh-completions \
