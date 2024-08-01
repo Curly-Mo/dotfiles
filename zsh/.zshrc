@@ -104,10 +104,11 @@ zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall "$HOME/bi
 
 # Load all my functions and completions
 # TODO: load these better
-zinit id-as"my_zsh_functions" wait"0" lucid light-mode for \
+zinit id-as"my_zsh_functions" as"completions" wait"0" lucid light-mode for \
   pick:"zsh/.zsh_functions/zsh_functions.plugin.zsh" \
   multisrc:"zsh/.zsh_functions/my_zsh_functions.zsh" \
-  Curly-Mo/dotfiles
+  blockf atpull'zinit creinstall -q .' \
+    Curly-Mo/dotfiles
 
 # Config
 zinit ice lucid if"[[ -f $HOME/dotfiles/zsh/.config/zsh/fzf.zsh ]]"

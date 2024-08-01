@@ -2,28 +2,27 @@
 call plug#begin('~/.config/nvim/plugged')
 " Disable plugins in vimdiff
 if !&diff
-  Plug 'neoclide/coc.nvim', {'branch': 'release'}
-  " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
-  Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
-  " Plug 'mfussenegger/nvim-jdtls'
-  Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
-  " Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
-  " Plug 'neoclide/coc-yank', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'fannheyward/coc-pyright', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'iamcco/coc-actions', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
-  Plug 'liuchengxu/vista.vim'
-" end coc.nvim plugins
-" Plug 'Vigemus/iron.nvim'
+  " Plug 'neoclide/coc.nvim', {'branch': 'release'}
+  " " find more coc plugins here: https://www.npmjs.com/search?q=keywords%3Acoc.nvim
+  " Plug 'neoclide/coc-yaml', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-java', {'do': 'yarn install --frozen-lockfile'}
+  " " Plug 'mfussenegger/nvim-jdtls'
+  " Plug 'neoclide/coc-json', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-tsserver', {'do': 'yarn install --frozen-lockfile'}
+  " " Plug 'neoclide/coc-eslint', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-html', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-css', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-highlight', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-snippets', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-git', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'neoclide/coc-vimtex', {'do': 'yarn install --frozen-lockfile'}
+  " " Plug 'neoclide/coc-yank', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'fannheyward/coc-pyright', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'josa42/coc-sh', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'iamcco/coc-actions', {'do': 'yarn install --frozen-lockfile'}
+  " Plug 'iamcco/coc-vimlsp', {'do': 'yarn install --frozen-lockfile'}
+  " " end coc.nvim plugins
+  " Plug 'Vigemus/iron.nvim'
 endif
 " These plugins are allowed in vimdiff mode
 " tpope
@@ -107,6 +106,7 @@ Plug 'scalameta/nvim-metals'
 " end plenary deps
 " Plug 'AckslD/nvim-neoclip.lua'
 Plug 'stsewd/fzf-checkout.vim'
+Plug 'liuchengxu/vista.vim'
 call plug#end()
 
 " syntax
@@ -265,126 +265,127 @@ vnoremap <leader>p "_dP
 if !&diff
 """Plugins disable in vimdiff mode"""
 
-" coc.nvim
-" Use tab for trigger completion with characters ahead and navigate.
-" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
-"
-" set cmdheight=2
-" set nobackup
-" set nowritebackup
-" change buffers with unsaved changes
-set hidden
-function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-" Use tab for trigger completion with characters ahead and navigate.
-" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" other plugin before putting this into your config.
-inoremap <silent><expr> <TAB>
-      \ coc#pum#visible() ? coc#pum#next(1):
-      \ CheckBackspace() ? "\<Tab>" :
-      \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
-inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1): CheckBackspace() ? "\<Tab>" : coc#refresh()
-inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1): CheckBackspace() ? "\<S-Tab>" : coc#refresh()
-" Make <CR> to accept selected completion item or notify coc.nvim to format
-" <C-g>u breaks current undo, please make your own choice.
-inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
-" Use <c-space> to trigger completion.
-if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
-else
-  inoremap <silent><expr> <c-@> coc#refresh()
+"" coc.nvim
+"" Use tab for trigger completion with characters ahead and navigate.
+"" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+""
+"" set cmdheight=2
+"" set nobackup
+"" set nowritebackup
+"" change buffers with unsaved changes
+"set hidden
+"function! CheckBackspace() abort
+"  let col = col('.') - 1
+"  return !col || getline('.')[col - 1]  =~# '\s'
+"endfunction
+"" Use tab for trigger completion with characters ahead and navigate.
+"" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+"" other plugin before putting this into your config.
+"inoremap <silent><expr> <TAB>
+"      \ coc#pum#visible() ? coc#pum#next(1):
+"      \ CheckBackspace() ? "\<Tab>" :
+"      \ coc#refresh()
+"inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+"inoremap <silent><expr> <C-j> coc#pum#visible() ? coc#pum#next(1): CheckBackspace() ? "\<Tab>" : coc#refresh()
+"inoremap <silent><expr> <C-k> coc#pum#visible() ? coc#pum#prev(1): CheckBackspace() ? "\<S-Tab>" : coc#refresh()
+"" Make <CR> to accept selected completion item or notify coc.nvim to format
+"" <C-g>u breaks current undo, please make your own choice.
+"inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+"                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+"" Use <c-space> to trigger completion.
+"if has('nvim')
+"  inoremap <silent><expr> <c-space> coc#refresh()
+"else
+"  inoremap <silent><expr> <c-@> coc#refresh()
+"endif
+"" Use `[c` and `]c` for navigate diagnostics
+"nmap <silent> [c <Plug>(coc-diagnostic-prev)
+"nmap <silent> ]c <Plug>(coc-diagnostic-next)
+"" Remap keys for gotos
+"nmap <silent> gd <Plug>(coc-definition)
+"nmap <silent> <C-LeftMouse> <Plug>(coc-definition)
+"nmap <silent> gy <Plug>(coc-type-definition)
+"nmap <silent> gi <Plug>(coc-implementation)
+"nmap <silent> gf <Plug>(coc-references)
+"nmap <silent> gr <Plug>(coc-references)
+"" Use K for show documentation in preview window
+"function! s:show_documentation()
+"  if &filetype == 'vim'
+"    execute 'h '.expand('<cword>')
+"  else
+"    call CocActionAsync('doHover')
+"  endif
+"endfunction
+"nmap <silent> gk :call <SID>show_documentation()<CR>
+"nnoremap <silent> K :call <SID>show_documentation()<CR>
+"" Highlight symbol under cursor on CursorHold
+"autocmd CursorHold * silent call CocActionAsync('highlight')
+"" hi CocHighlightText ctermbg=236
+"" hi CocFloating ctermbg=238
+"" hi Pmenu ctermbg=248
+"" hi PmenuSbar ctermbg=248
+"" hi PmenuThumb ctermbg=darkgrey
+"" Remap for rename current word
+"nmap <leader>rn <Plug>(coc-rename)
+"" Remap for format selected region
+"vmap <leader>f <Plug>(coc-format-selected)
+"" nmap <leader>f <Plug>(coc-format-selected)
+"" Use `:Format` to format current buffer
+"command! -nargs=0 Format :call CocAction('format')
+"" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
+"vmap <leader>a <Plug>(coc-codeaction-selected)
+"nmap <leader>a <Plug>(coc-codeaction-selected)
+"" Remap for do codeAction of current line
+"nmap <leader>ac <Plug>(coc-codeaction)
+"" Fix autofix problem of current line
+"nmap <leader>qf <Plug>(coc-fix-current)
+"" Support jsonc syntax highlighting
+"autocmd FileType json syntax match Comment +\/\/.\+$+
+"" organize imports with command and hotkey
+"command! -nargs=0 Org :call CocAction('runCommand', 'editor.action.organizeImport')
+"nmap <leader>o :Org<CR>
+"nmap <silent>go :Org<CR>
+"" show action menu
+"nmap <silent> ga <Plug>(coc-codeaction-selected)<CR>
+"" show command menu
+"nmap <silent> <leader>gc :CocList commands<cr>
+
+"" coc-python
+"" add local paths to python path for local imports
+"" current working dir, current buffer dir, current buffer parent dir, any parent dir to buffer named 'python'
+"autocmd FileType python let g:coc_user_config = {
+"      \"python.autoComplete.extraPaths": [
+"        \substitute(expand('%:p:h'), '\v(.*python)\/.*', '\1', ''),
+"        \expand('%:p:h'),
+"        \fnamemodify(expand('%:p:h'), ':h'),
+"        \getcwd(),
+"        \],
+"      \}
+
+"""end plugins disable in vimdiff mode"""
 endif
-" Use `[c` and `]c` for navigate diagnostics
-nmap <silent> [c <Plug>(coc-diagnostic-prev)
-nmap <silent> ]c <Plug>(coc-diagnostic-next)
-" Remap keys for gotos
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> <C-LeftMouse> <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gf <Plug>(coc-references)
-nmap <silent> gr <Plug>(coc-references)
-" Use K for show documentation in preview window
-function! s:show_documentation()
-  if &filetype == 'vim'
-    execute 'h '.expand('<cword>')
-  else
-    call CocActionAsync('doHover')
-  endif
-endfunction
-nmap <silent> gk :call <SID>show_documentation()<CR>
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-" Highlight symbol under cursor on CursorHold
-autocmd CursorHold * silent call CocActionAsync('highlight')
-" hi CocHighlightText ctermbg=236
-" hi CocFloating ctermbg=238
-" hi Pmenu ctermbg=248
-" hi PmenuSbar ctermbg=248
-" hi PmenuThumb ctermbg=darkgrey
-" Remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
-" Remap for format selected region
-vmap <leader>f <Plug>(coc-format-selected)
-" nmap <leader>f <Plug>(coc-format-selected)
-" Use `:Format` to format current buffer
-command! -nargs=0 Format :call CocAction('format')
-" Remap for do codeAction of selected region, ex: `<leader>aap` for current paragraph
-vmap <leader>a <Plug>(coc-codeaction-selected)
-nmap <leader>a <Plug>(coc-codeaction-selected)
-" Remap for do codeAction of current line
-nmap <leader>ac <Plug>(coc-codeaction)
-" Fix autofix problem of current line
-nmap <leader>qf <Plug>(coc-fix-current)
-" Support jsonc syntax highlighting
-autocmd FileType json syntax match Comment +\/\/.\+$+
-" organize imports with command and hotkey
-command! -nargs=0 Org :call CocAction('runCommand', 'editor.action.organizeImport')
-nmap <leader>o :Org<CR>
-nmap <silent>go :Org<CR>
-" show action menu
-nmap <silent> ga <Plug>(coc-codeaction-selected)<CR>
-" show command menu
-nmap <silent> <leader>gc :CocList commands<cr>
 
-" coc-python
-" add local paths to python path for local imports
-" current working dir, current buffer dir, current buffer parent dir, any parent dir to buffer named 'python'
-autocmd FileType python let g:coc_user_config = {
-      \"python.autoComplete.extraPaths": [
-        \substitute(expand('%:p:h'), '\v(.*python)\/.*', '\1', ''),
-        \expand('%:p:h'),
-        \fnamemodify(expand('%:p:h'), ':h'),
-        \getcwd(),
-        \],
-      \}
-
-endif
-
-" coc-git
-" navigate chunks of current buffer
-nmap [g <Plug>(coc-git-prevchunk)
-nmap ]g <Plug>(coc-git-nextchunk)
-" navigate conflicts of current buffer
-" conflicts with coc diagnostic keys
-" nmap [c <Plug>(coc-git-prevconflict)
-" nmap ]c <Plug>(coc-git-nextconflict)
-nmap gO :CocCommand git.browserOpen<CR>
-nmap gl :CocCommand git.copyUrl<CR>
-"chunks
-nmap ghi <Plug>(coc-git-chunkinfo)
-nmap ghs :CocCommand git.chunkStage<CR>
-nmap ghu :CocCommand git.chunkUndo<CR>
-" " show commit contains current position
-" nmap gp <Plug>(coc-git-commit)
-"" create text object for git chunks
-"omap ig <Plug>(coc-git-chunk-inner)
-"xmap ig <Plug>(coc-git-chunk-inner)
-"omap ag <Plug>(coc-git-chunk-outer)
-"xmap ag <Plug>(coc-git-chunk-outer)
+"" coc-git
+"" navigate chunks of current buffer
+"nmap [g <Plug>(coc-git-prevchunk)
+"nmap ]g <Plug>(coc-git-nextchunk)
+"" navigate conflicts of current buffer
+"" conflicts with coc diagnostic keys
+"" nmap [c <Plug>(coc-git-prevconflict)
+"" nmap ]c <Plug>(coc-git-nextconflict)
+"nmap gO :CocCommand git.browserOpen<CR>
+"nmap gl :CocCommand git.copyUrl<CR>
+""chunks
+"nmap ghi <Plug>(coc-git-chunkinfo)
+"nmap ghs :CocCommand git.chunkStage<CR>
+"nmap ghu :CocCommand git.chunkUndo<CR>
+"" " show commit contains current position
+"" nmap gp <Plug>(coc-git-commit)
+""" create text object for git chunks
+""omap ig <Plug>(coc-git-chunk-inner)
+""xmap ig <Plug>(coc-git-chunk-inner)
+""omap ag <Plug>(coc-git-chunk-outer)
+""xmap ag <Plug>(coc-git-chunk-outer)
 
 """Plugins allowed in vimdiff mode"""
 
@@ -713,7 +714,7 @@ let g:fzf_preview_window = ['right:60%', 'ctrl-/']
 " let g:vista_icon_indent = ["▸ ", ", "]
 let g:vista#renderer#enable_icon = 1
 let g:vista_sidebar_width = 25
-let g:vista_default_executive = 'coc'
+" let g:vista_default_executive = 'coc'
 let g:vista_fzf_preview = ['right:50%']
 let g:vista_keep_fzf_colors = 1
 let g:vista_echo_cursor_strategy = 'both'
@@ -892,6 +893,8 @@ require('telescope').setup{
     },
     file_browser = {
       -- theme = "ivy",
+      -- disables netrw and use telescope-file-browser in its place
+      -- hijack_netrw = true,
       -- mappings = {
       --   ["i"] = {
       --   },
@@ -905,14 +908,15 @@ require('telescope').load_extension('fzf')
 require("telescope").load_extension("file_browser")
 EOF
 nnoremap <C-p> <cmd>Telescope find_files<cr>
+nnoremap <M-p> <cmd>Telescope grep_string<cr>
 " nnoremap <silent> <C-p> :lua require('telescope.builtin').find_files{ search_dirs = {vim.fn.expand('%:p:h'), vim.fn['FindRootDirectory']()} }<CR>
 " nnoremap <C-p> :lua require('telescope.builtin').find_files{ find_command = Split(vim.fn['Fd_cmd'](), ' ') }<CR>
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fg <cmd>Telescope grep_string<cr>
 " nnoremap <C-[> <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-nnoremap <M-p> <cmd>Telescope file_browser<cr>
+nnoremap <leader>fk <cmd>Telescope file_browser<cr>
 
 " " neoclip
 " lua <<EOF
