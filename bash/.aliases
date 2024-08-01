@@ -39,8 +39,9 @@ if hash nvim 2>/dev/null; then
     alias vim="nvim"
     alias vimdiff="nvim -d"
 fi
-alias vimrc='vim $HOME/.config/nvim/init.vim'
-alias vl='vim $(latest)'
+alias vimrc="vim $HOME/.config/nvim/init.vim"
+alias vl="vim $(latest)"
+alias v="vim -c 'Telescope oldfiles'"
 
 # python
 # python poetry activate
@@ -146,7 +147,10 @@ alias journallast='journalctl -x -b -1 -p 5'
 # fzf
 alias fzv='vim $(fzf)'
 
-# todo.txt
-alias todo='todo.sh -d $HOME/sync/notes/todo/.config/config'
-alias todow="todo -d $HOME/sync/notes/todo/.config/workconfig"
+# notes
 alias notes='cd $HOME/sync/notes/'
+# todo.txt
+alias todo="$EDITOR $TODO_DIR/todo.txt"
+alias todos="todo.sh"
+alias todosp='todos -d $TODOTXT_CFG_FILE_PERSONAL'
+alias todosw="todos -d $TODOTXT_CFG_FILE_WORK"

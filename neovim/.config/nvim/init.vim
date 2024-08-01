@@ -755,7 +755,6 @@ let g:nv_main_directory = '~/sync/notes/fzfvim'
 "let g:nv_create_note_key = 'ctrl-x'
 "" String. Controls how new note window is created.
 "let g:nv_create_note_window = 'vertical split'
-let g:nv_create_note_window = 'buffer'
 "" Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
 "let g:nv_show_preview = 1
 "" Boolean. Respect .*ignore files in or above nv_search_paths. Set by default.

@@ -1,0 +1,7 @@
+#compdef swap
+
+function _swap {
+  _files
+}
+
+_swap "$@"
