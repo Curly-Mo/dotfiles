@@ -43,12 +43,15 @@ autoload -Uz _zinit
 
 
 # zinit annexes
-zinit light-mode for \
+zinit for \
   zdharma-continuum/zinit-annex-bin-gem-node \
+  zdharma-continuum/zinit-annex-binary-symlink \
+  zdharma-continuum/zinit-annex-linkman \
   zdharma-continuum/zinit-annex-default-ice \
   zdharma-continuum/zinit-annex-meta-plugins \
   zdharma-continuum/zinit-annex-rust \
   zdharma-continuum/zinit-annex-submods \
+  zdharma-continuum/zinit-annex-patch-dl \
   zdharma-continuum/zinit-annex-man
 
 
@@ -65,19 +68,6 @@ zinit ice wait"0" lucid
 zinit snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
 zinit ice wait"5" lucid
 zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
-
-
-# Load meta plugins
-# from zdharma-continuum/zinit-annex-meta-plugins
-zinit wait lucid skip'fzf-go' for \
-  `# fzf, fzy, lotabout/skim, peco/peco` \
-  fuzzy-src \
-  `# Fakerr/git-recall, paulirish/git-open, paulirish/git-recent, davidosomething/git-my, arzzen/git-quick-stats, iwata/git-now, tj/git-extras, wfxr/forgit` \
-  ext-git \
-  `# dircolors-material, sharkdp, ogham/exa, BurntSushi/ripgrep, jonas/tig` \
-  console-tools
-  # `# sharkdp/fd, sharkdp/bat, sharkdp/hexyl, sharkdp/hyperfine, sharkdp/vivid` \
-  # sharkdp
 
 
 # local stuff
@@ -104,7 +94,7 @@ zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall "$HOME/bi
 
 # Load all my functions and completions
 # TODO: load these better
-zinit id-as"my_zsh_functions" as"completions" wait"0" lucid light-mode for \
+zinit id-as"my_zsh_functions" as"completions" wait"0" lucid for \
   pick:"zsh/.zsh_functions/zsh_functions.plugin.zsh" \
   multisrc:"zsh/.zsh_functions/my_zsh_functions.zsh" \
   blockf atpull'zinit creinstall -q .' \
@@ -146,43 +136,63 @@ zinit light shihyuho/zsh-jenv-lazy
 # zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
 
 export NVM_LAZY_LOAD=true
-zinit ice wait'0' lucid
-zinit light lukechilds/zsh-nvm
+zinit wait'0' lucid for \
+  lukechilds/zsh-nvm
 
-# new style
 # curses console `ziconsole`
-zinit wait lucid light-mode for \
+zinit wait lucid for \
   zdharma-continuum/zui \
   zdharma-continuum/zinit-console
 
-zinit wait lucid light-mode for \
+zinit wait lucid for \
   urbainvaes/fzf-marks
 
+
+# Packages https://github.com/zdharma-continuum/zinit-packages
+zinit pack for dircolors-material
+
+# any-gem installs https://github.com/zdharma-continuum/zinit-packages/tree/main/any-gem
+# zinit pack param="GEM → colorls" for any-gem
+# any-node modules https://github.com/zdharma-continuum/zinit-packages/tree/main/any-node
+# zinit pack param="MOD → prettier" for any-node
+
+
 # Programs
-zinit wait'0' lucid light-mode for \
+# zinit lucid as=program for \
+#   pick="$ZPFX/bin/(fzf|fzf-tmux)" \
+#   multisrc'shell/{completion,key-bindings}.zsh' \
+#   atclone="cp shell/completion.zsh _fzf_completion; cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
+#   make="PREFIX=$ZPFX install" \
+#   atload"_fzf_config" \
+#     junegunn/fzf
+zinit wait'0' lucid for \
   multisrc'shell/{completion,key-bindings}.zsh' \
   atload"_fzf_config" \
   id-as"junegunn/fzf_completions" \
     junegunn/fzf
+zinit wait"0" pack"binary+keys" for fzf
 
-zinit wait"1" lucid light-mode for \
+zinit wait"1" lucid for \
   atinit"_fzf_tab_config" \
     Aloxaf/fzf-tab
 
-zinit wait lucid light-mode for \
-  atinit"_zsh_fzy_config" \
-    aperezdc/zsh-fzy
+zinit wait"0" lucid make lbin for \
+  jhawthorn/fzy
+# zinit wait lucid for \
+#   atinit"_zsh_fzy_config" \
+#     aperezdc/zsh-fzy
 
-zinit as"program" wait lucid light-mode make"!" for \
-  atclone"./direnv hook zsh > zhook.zsh" atpull"%atclone" pick"direnv" src"zhook.zsh" \
+zinit wait"0" lucid make"!" lbin for \
+  atclone"./direnv hook zsh > zhook.zsh" \
+  atpull"%atclone" \
+  src"zhook.zsh" \
     direnv/direnv
 
-zinit wait lucid light-mode as:'program' from:'gh-r' for \
-  mv:'zoxide* -> zoxide' \
-  pick:'zoxide/zoxide' \
+zinit wait"0" from"gh-r" lucid lbin for \
   atload:'!eval "$(zoxide init zsh)"' \
-    @ajeetdsouza/zoxide
+    ajeetdsouza/zoxide
 
+# zinit wait"0" pack for ls_colors
 zinit wait lucid light-mode \
   atclone"[[ -z ${commands[dircolors]} ]] &&
     local P=${${(M)OSTYPE##darwin}:+g};
@@ -192,8 +202,74 @@ zinit wait lucid light-mode \
   git id-as'trapd00r/LS_COLORS' \
     @trapd00r/LS_COLORS
 
+zinit wait"0" from"gh-r" lucid lbin for \
+  mv"completions/exa.zsh -> _exa" \
+  ogham/exa
+
+# sharkdp
+zinit wait"0" from"gh-r" lucid lbin for \
+  atload"export BAT_THEME='ansi'" \
+    @sharkdp/bat
+zinit wait"0" from"gh-r" lucid lbin for \
+  @sharkdp/fd
+zinit wait"0" from"gh-r" lucid lbin for \
+  @sharkdp/hexyl
+zinit wait"0" from"gh-r" lucid lbin for \
+  @sharkdp/hyperfine
+zinit wait"0" from"gh-r" lucid lbin for \
+  @sharkdp/vivid
+
+zinit wait"0" lucid make lbin for \
+  mptre/yank
+
+zinit wait"0" lucid from"gh-r" lbin for \
+  pick"misc/quitcd/quitcd.zsh" \
+    jarun/nnn
+
+zinit wait"0" lucid lbin'sk' lman'sk' for \
+  atclone"cargo build --release" atpull"%atclone" \
+  multisrc"shell/completion.zsh" \
+    lotabout/skim
+
+zinit wait"0" lucid from"gh-r" lbin for \
+  peco/peco
+
+zinit wait"0" lucid from"gh-r" for \
+  lbin="rg" \
+    BurntSushi/ripgrep
+
+zinit wait"0" lucid from"gh-r" lbin'jq* -> jq' for \
+  jqlang/jq
+
+# git stuff
+zinit wait"0" lucid lbin for \
+  Fakerr/git-recall \
+  davidosomething/git-my \
+  iwata/git-now \
+  paulirish/git-open \
+  paulirish/git-recent \
+  arzzen/git-quick-stats
+zinit wait"0" lucid from"gh-r" lbin for \
+  dandavison/delta
+zinit wait"0" lucid from"gh-r" lbin for \
+  atload="alias lg='lazygit'" \
+    jesseduffield/lazygit
+zinit wait"0" lucid make lbin for \
+  zdharma-continuum/git-url
+zinit wait"0" lucid as:"program" make for \
+  src"etc/git-extras-completion.zsh" \
+  pick"bin/git-*" \
+  lman"bin/git-*" \
+    tj/git-extras 
+zinit wait"0" lucid make lbin for \
+  pick"hub/etc/hub.zsh_completion" \
+    @github/hub
+zinit wait"0" lucid for \
+  wfxr/forgit
+
+
 # zsh stuff
-zinit wait lucid light-mode for \
+zinit wait lucid for \
   atinit"ZINIT[COMPINIT_OPTS]=-C; zicompinit; zicdreplay" \
     zdharma-continuum/fast-syntax-highlighting \
   blockf atpull'zinit creinstall -q .' \

@@ -8,7 +8,7 @@ function _fzf_config() {
   bindkey "^E" fzf-history-widget
   # config
   export FZF_PREVIEW_CMD="(highlight -O ansi --line-range 0-200 {} 2> /dev/null || bat --force-colorization --line-range 0:200 --plain {-1} || tree -C {}) 2> /dev/null | head -200"
-  export FZF_COMMAND='fd --hidden --exclude .git --color=always --max-depth 12'
+  export FZF_COMMAND='fd --hidden --follow --exclude .git --color=always --max-depth 12'
   # export FZF_DEFAULT_COMMAND="${FZF_COMMAND} | proximity-sort ."
   export FZF_DEFAULT_COMMAND="${FZF_COMMAND}"
   FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --bind 'tab:replace-query+down' --bind 'shift-tab:backward-kill-word' --bind 'right:replace-query+down' --bind 'left:backward-kill-word' --bind 'change:first' --bind 'ctrl-f:jump' --bind 'ctrl-d:delete-char/eof+clear-query'  --bind 'alt-j:down' --bind 'alt-k:up'"
@@ -25,12 +25,12 @@ function _fzf_config() {
   FZF_COMPLETION_BINDINGS_OPTS=""
   export FZF_COMPLETION_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview '${FZF_PREVIEW_CMD}' ${FZF_COMPLETION_BINDINGS_OPTS}"
   _fzf_compgen_path() {
-    # fd --hidden --exclude .git --full-path --color=always . "$1" | proximity-sort .
-    fd --hidden --exclude .git --color=always --max-depth 10 . "$1"
+    # fd --hidden --follow --exclude .git --full-path --color=always . "$1" | proximity-sort .
+    fd --hidden --follow --exclude .git --color=always --max-depth 10 . "$1"
   }
   _fzf_compgen_dir() {
-    # fd --hidden --exclude .git --full-path --color=always --type d . "$1" | proximity-sort .
-    fd --hidden --exclude .git --color=always --max-depth 10 --type d . "$1"
+    # fd --hidden --follow --exclude .git --full-path --color=always --type d . "$1" | proximity-sort .
+    fd --hidden --follow --exclude .git --color=always --max-depth 10 --type d . "$1"
   }
   export FZF_COMPLETION_TRIGGER=''
   # # Super hack to only notrigger complete for certain commands

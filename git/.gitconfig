@@ -62,6 +62,8 @@
   email = colin@cfahy.com
 [includeIf "gitdir:~/workspace/"]
   path = ~/.gituser
+[include]
+  path = ~/.localgitconfig
 [color]
   ui = auto
 [pull]
@@ -94,6 +96,8 @@
   line-numbers-right-format = "│"
   line-numbers-left-format = "{nm:>3}┊"
   line-numbers-right-format = "{np:>3}│"
+[git-extras]
+  default-branch = master
 [git-extras "create-branch"]
 	remote = origin
 [help]
