@@ -27,6 +27,7 @@ setopt globdots
 setopt extendedglob
 setopt interactive_comments
 unsetopt complete_aliases
+export TMP_OLDPWD=$OLDPWD
 
 ### Added by Zinit's installer
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
@@ -56,18 +57,47 @@ zinit for \
 
 
 # Load Oh My Zsh Libs
-zinit snippet OMZ::"lib/history.zsh"
-zinit ice wait"0" lucid
-zinit snippet OMZ::"lib/prompt_info_functions.zsh"
-zinit ice wait"0" lucid
-zinit snippet OMZ::"lib/completion.zsh"
-
+zinit lucid for OMZ::"lib/history.zsh"
+zinit wait"0" lucid for OMZ::"lib/prompt_info_functions.zsh"
+zinit wait"0" lucid for OMZ::"lib/git.zsh"
+zinit wait"0" lucid for OMZ::"lib/completion.zsh"
 
 # Load Oh My Zsh Plugins
-zinit ice wait"0" lucid
-zinit snippet OMZ::"plugins/colored-man-pages/colored-man-pages.plugin.zsh"
-zinit ice wait"5" lucid
-zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
+zinit wait"0" lucid for OMZP::"colored-man-pages"
+zinit wait"3" lucid for OMZP::"jenv"
+zinit wait"0" lucid for OMZP::"command-not-found"
+zinit wait"0" lucid for \
+  nocd atload"bindkey -M viins -r '^[^['; bindkey -M viins '^\`' sudo-command-line" \
+    OMZP::"sudo"
+
+# Load Oh My Zsh completions
+zinit wait"0" lucid for OMZP::"git-extras"
+
+# Workaround for zinit issue#504: remove subversion dependency. Function clones all files in plugin
+# directory (on github) that might be useful to zinit snippet directory. Should only be invoked
+# via zinit atclone"_omzp_fix"
+setopt RE_MATCH_PCRE   # _omzp_fix function uses this regex style
+_omzp_fix() {
+  if [[ ! -f ._zinit/teleid ]] then return 0; fi
+  if [[ ! $(cat ._zinit/teleid) =~ "^OMZP::.*" ]] then return 0; fi
+  local OMZP_NAME=$(cat ._zinit/teleid | sed -n 's/OMZP:://p')
+  git clone --quiet --no-checkout --depth=1 --filter=tree:0 https://github.com/ohmyzsh/ohmyzsh
+  cd ohmyzsh
+  git sparse-checkout set --no-cone plugins/$OMZP_NAME
+  git checkout --quiet
+  cd ..
+  local OMZP_PATH="ohmyzsh/plugins/$OMZP_NAME"
+  local file
+  for file in ohmyzsh/plugins/$OMZP_NAME/*~(.gitignore|*.plugin.zsh)(D); do
+    local filename="${file:t}"
+    echo "Copying $file to $(pwd)/$filename..."
+    cp $file $filename
+  done
+  rm -rf ohmyzsh
+}
+# OMZ plugins that require more than 1 file
+# zinit wait"0" lucid atclone"_omzp_fix" for \
+#   OMZP::"gitfast"
 
 
 # local stuff
@@ -90,47 +120,33 @@ zinit ice wait"0" lucid if"[[ -f $HOME/.aliases ]]"
 zinit snippet "$HOME/.aliases"
 
 # completions
-zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall "$HOME/bin/_completions"
+# zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall "$HOME/bin/_completions"
 
 # Load all my functions and completions
 # TODO: load these better
-zinit id-as"my_zsh_functions" as"completions" wait"0" lucid for \
+zinit wait"0" lucid id-as"my_zsh_functions" for \
   pick:"zsh/.zsh_functions/zsh_functions.plugin.zsh" \
   multisrc:"zsh/.zsh_functions/my_zsh_functions.zsh" \
-  blockf atpull'zinit creinstall -q .' \
     Curly-Mo/dotfiles
-
-# Config
-zinit ice lucid if"[[ -f $HOME/dotfiles/zsh/.config/zsh/fzf.zsh ]]"
-zinit snippet "$HOME/dotfiles/zsh/.config/zsh/fzf.zsh"
-zinit ice lucid if"[[ -f $HOME/dotfiles/zsh/.config/zsh/fzf-tab.zsh ]]"
-zinit snippet "$HOME/dotfiles/zsh/.config/zsh/fzf-tab.zsh"
-zinit ice lucid if"[[ -f $HOME/dotfiles/zsh/.config/zsh/fzy.zsh ]]"
-zinit snippet "$HOME/dotfiles/zsh/.config/zsh/fzy.zsh"
 
 
 # Plugins
-# TODO: migrate these old style plugins to new style
 function zvm_config() {
   # This function called by zsh-vi-mode
   ZVM_KEYTIMEOUT=0.3
   ZVM_ESCAPE_KEYTIMEOUT=0.03
   ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 }
-zinit ice depth=1
-zinit light jeffreytse/zsh-vi-mode
+zinit lucid depth=1 for \
+  jeffreytse/zsh-vi-mode
 
-# zinit ice wait"0" lucid
-zinit light Curly-Mo/last-working-dir-tmux
+zinit lucid for Curly-Mo/last-working-dir-tmux
 
-zinit ice wait"0" lucid
-zinit light darvid/zsh-poetry
+zinit wait"0" lucid for darvid/zsh-poetry
 
-zinit ice wait"0" lucid
-zinit light davidparsson/zsh-pyenv-lazy
+zinit wait"0" lucid for davidparsson/zsh-pyenv-lazy
 
-zinit ice wait"0" lucid
-zinit light shihyuho/zsh-jenv-lazy
+zinit wait"0" lucid for @shihyuho/zsh-jenv-lazy
 # jenv-lazy caused issues, fine I'll just load it non-lazily for now
 # zinit ice wait"10" lucid
 # zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
@@ -166,20 +182,19 @@ zinit pack for dircolors-material
 #   atload"_fzf_config" \
 #     junegunn/fzf
 zinit wait'0' lucid for \
-  multisrc'shell/{completion,key-bindings}.zsh' \
-  atload"_fzf_config" \
+  multisrc'shell/{completion,key-bindings}.zsh $XDG_CONFIG_HOME/zsh/fzf.zsh' \
   id-as"junegunn/fzf_completions" \
     junegunn/fzf
-zinit wait"0" pack"binary+keys" for fzf
+# zinit wait"0" pack"binary+keys" for fzf
 
-zinit wait"1" lucid for \
-  atinit"_fzf_tab_config" \
+zinit wait"0" lucid for \
+  multisrc="$XDG_CONFIG_HOME/zsh/fzf-tab.zsh" \
     Aloxaf/fzf-tab
 
 zinit wait"0" lucid make lbin for \
   jhawthorn/fzy
 # zinit wait lucid for \
-#   atinit"_zsh_fzy_config" \
+#   multisrc="$XDG_CONFIG_HOME/zsh/fzy.zsh" \
 #     aperezdc/zsh-fzy
 
 zinit wait"0" lucid make"!" lbin for \
@@ -189,11 +204,11 @@ zinit wait"0" lucid make"!" lbin for \
     direnv/direnv
 
 zinit wait"0" from"gh-r" lucid lbin for \
-  atload:'!eval "$(zoxide init zsh)"' \
+  nocd atload:'!eval "$(zoxide init zsh)"' \
     ajeetdsouza/zoxide
 
 # zinit wait"0" pack for ls_colors
-zinit wait lucid light-mode \
+zinit lucid light-mode \
   atclone"[[ -z ${commands[dircolors]} ]] &&
     local P=${${(M)OSTYPE##darwin}:+g};
     ${P}dircolors -b LS_COLORS >! clrs.zsh" \
@@ -204,11 +219,11 @@ zinit wait lucid light-mode \
 
 zinit wait"0" from"gh-r" lucid lbin for \
   mv"completions/exa.zsh -> _exa" \
-  ogham/exa
+    ogham/exa
 
 # sharkdp
 zinit wait"0" from"gh-r" lucid lbin for \
-  atload"export BAT_THEME='ansi'" \
+  nocd atload"export BAT_THEME='ansi'" \
     @sharkdp/bat
 zinit wait"0" from"gh-r" lucid lbin for \
   @sharkdp/fd
@@ -252,20 +267,20 @@ zinit wait"0" lucid lbin for \
 zinit wait"0" lucid from"gh-r" lbin for \
   dandavison/delta
 zinit wait"0" lucid from"gh-r" lbin for \
-  atload="alias lg='lazygit'" \
+  nocd atload="alias lg='lazygit'" \
     jesseduffield/lazygit
 zinit wait"0" lucid make lbin for \
   zdharma-continuum/git-url
 zinit wait"0" lucid as:"program" make for \
-  src"etc/git-extras-completion.zsh" \
   pick"bin/git-*" \
   lman"bin/git-*" \
     tj/git-extras 
+  # src"etc/git-extras-completion.zsh" \
 zinit wait"0" lucid make lbin for \
   pick"hub/etc/hub.zsh_completion" \
     @github/hub
-zinit wait"0" lucid for \
-  wfxr/forgit
+# zinit wait"0" lucid for \
+#   wfxr/forgit
 
 
 # zsh stuff
@@ -274,7 +289,7 @@ zinit wait lucid for \
     zdharma-continuum/fast-syntax-highlighting \
   blockf atpull'zinit creinstall -q .' \
     zsh-users/zsh-completions \
-  atload"!_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false" \
+  nocd atload"!_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false" \
     zsh-users/zsh-autosuggestions
 
 
