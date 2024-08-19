@@ -1,6 +1,6 @@
 # keys
-# bindkey '^I' fzf-completion
-# bindkey "^Y" $fzf_default_completion
+bindkey '^I' fzf-completion
+bindkey "^Y" $fzf_default_completion
 # bindkey "^[c" fzf-cd-widget
 # bindkey "^T" fzf-file-widget
 bindkey "^R" history-incremental-search-backward
@@ -31,6 +31,23 @@ _fzf_compgen_dir() {
   # fd --hidden --follow --exclude .git --full-path --color=always --type d . "$1" | proximity-sort .
   fd --hidden --follow --exclude .git --color=always --max-depth 10 --type d . "$1"
 }
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+# _fzf_comprun() {
+#   local command=$1
+#   shift
+
+#   case "$command" in
+#     cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
+#     export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+#     ssh)          fzf --preview 'dig {}'                   "$@" ;;
+#     *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+#   esac
+# }
+
+
 # export FZF_COMPLETION_TRIGGER=''
 # # Super hack to only notrigger complete for certain commands
 # # rename fzf-completion to _fzf-completion
@@ -75,8 +92,16 @@ _fzf_compgen_dir() {
 
 # custom keybinds
 fzf-edit-file-widget() {
-  local cmd=(fd --hidden --follow --exclude .git --color=always --type f "|" fzf --print0)
-  exec $EDITOR "${cmd[@]}"
+  local result=$(fd --hidden --follow --exclude .git --color=always --type f | fzf)
+  local ret=$?
+  if [[ -n $result ]]
+  then
+    $EDITOR $result
+    ret=$?
+  fi
+  zle reset-prompt
+  return $ret
 }
 zle -N fzf-edit-file-widget
 bindkey "^P" fzf-edit-file-widget
+bindkey -M vicmd "^P" fzf-edit-file-widget

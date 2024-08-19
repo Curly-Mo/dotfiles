@@ -67,7 +67,7 @@ zinit wait"0" lucid for OMZP::"colored-man-pages"
 zinit wait"3" lucid for OMZP::"jenv"
 zinit wait"0" lucid for OMZP::"command-not-found"
 zinit wait"0" lucid for \
-  nocd atload"bindkey -M viins -r '^[^['; bindkey -M viins '^\`' sudo-command-line" \
+  nocd atload"bindkey -M viins -r '^[^['; bindkey -M vicmd -r '^[^['; bindkey -M emacs -r '^[^['; bindkey -M viins '^\`' sudo-command-line; bindkey -M vicmd '^\`' sudo-command-line" \
     OMZP::"sudo"
 
 # Load Oh My Zsh completions
@@ -110,13 +110,13 @@ colors
 zinit ice lucid
 zinit snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
 # zinit ice wait"0" lucid if"[[ -f $HOME/.zsh_theme ]]"
-zinit ice lucid if"[[ -f $HOME/.zsh_theme ]]"
+zinit ice lucid link if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
-zinit ice wait"0" lucid if"[[ -f $HOME/.localrc ]]"
+zinit ice wait"0" lucid link if"[[ -f $HOME/.localrc ]]"
 zinit snippet "$HOME/.localrc"
 
-zinit ice wait"0" lucid if"[[ -f $HOME/.aliases ]]"
+zinit ice wait"0" lucid link if"[[ -f $HOME/.aliases ]]"
 zinit snippet "$HOME/.aliases"
 
 # completions
@@ -218,8 +218,7 @@ zinit lucid light-mode \
     @trapd00r/LS_COLORS
 
 zinit wait"0" from"gh-r" lucid lbin for \
-  mv"completions/exa.zsh -> _exa" \
-    ogham/exa
+    eza-community/eza
 
 # sharkdp
 zinit wait"0" from"gh-r" lucid lbin for \

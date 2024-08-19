@@ -1,5 +1,8 @@
 # Aliases sourced by .bashrc
 
+# meta
+alias aliases="$EDITOR $(realpath ${0:a})"
+
 # various
 alias grep="grep --color=auto"
 
@@ -87,6 +90,7 @@ alias citygram='ssh citygram.smusic.nyu.edu'
 alias hpc='ssh cpf247@hpc.nyu.edu'
 
 # git
+alias g='git'
 alias gremaster='git stash && git fetch && git rebase origin/master && git stash pop'
 alias status='git status'
 # go to git project root
@@ -154,3 +158,6 @@ alias todo="$EDITOR $TODO_DIR/todo.txt"
 alias todos="todo.sh"
 alias todosp='todos -d $TODOTXT_CFG_FILE_PERSONAL'
 alias todosw="todos -d $TODOTXT_CFG_FILE_WORK"
+
+# build tools
+alias b="build"

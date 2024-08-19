@@ -43,6 +43,30 @@ Plug 'tpope/vim-capslock'
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-projectionist'
 " end tpope
+" lsp
+" install language servers
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
+" the actual lsp config
+Plug 'neovim/nvim-lspconfig'
+" special language servers
+" Plug 'mfussenegger/nvim-jdtls'
+" Plug 'scalameta/nvim-metals'
+" auto-completion
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'hrsh7th/cmp-cmdline'
+Plug 'hrsh7th/nvim-cmp'
+" dap / Debug Adapter Protocol 
+Plug 'mfussenegger/nvim-dap'
+Plug 'nvim-neotest/nvim-nio'
+Plug 'rcarriga/nvim-dap-ui'
+" linters
+" Plug 'mfussenegger/nvim-lint'
+" formatters
+Plug 'mhartington/formatter.nvim'
+" end lsp
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 " Plug 'romainl/Apprentice', { 'branch': 'fancylines-and-neovim' }
@@ -51,7 +75,6 @@ Plug 'mbbill/undotree'
 Plug 'godlygeek/tabular'
 Plug 'haya14busa/incsearch.vim'
 Plug 'luochen1990/rainbow'
-Plug 'airblade/vim-gitgutter'
 " Plug 'justinmk/vim-sneak'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'wellle/targets.vim'
@@ -61,7 +84,6 @@ Plug 'tweekmonster/impsort.vim', { 'on': ['ImpSort'] }
 Plug 'lervag/vimtex', { 'for': ['tex'] }
 Plug 'NLKNguyen/vim-maven-syntax'
 " Plug 'mechatroner/rainbow_csv'
-Plug 'plytophogy/vim-diffchanges'
 Plug 'raimon49/requirements.txt.vim'
 Plug 'ambv/black', { 'on': ['Black'] }
 Plug 'embear/vim-localvimrc'
@@ -102,12 +124,254 @@ Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-telescope/telescope-fzy-native.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
 Plug 'nvim-telescope/telescope-file-browser.nvim'
-Plug 'scalameta/nvim-metals'
 " end plenary deps
 " Plug 'AckslD/nvim-neoclip.lua'
 Plug 'stsewd/fzf-checkout.vim'
 Plug 'liuchengxu/vista.vim'
+Plug 'lambdalisue/vim-suda'
+" git stuff
+Plug 'airblade/vim-gitgutter'
+Plug 'lewis6991/gitsigns.nvim'
+Plug 'sindrets/diffview.nvim'
+Plug 'rhysd/conflict-marker.vim'
+Plug 'NeogitOrg/neogit'
 call plug#end()
+
+" TODO: replace with init.lua
+lua <<EOF
+-- Make sure to setup `mapleader` and `maplocalleader` before
+-- loading lazy.nvim so that mappings are correct.
+-- This is also a good place to setup other settings (vim.opt)
+-- vim.g.mapleader = " "
+-- vim.g.maplocalleader = "\\"
+
+-- lazy.nvim plugin manager
+-- require("config.lazy")
+
+-- plugins
+-- TODO: move to lua/config/lazy.lua once on lazy.nvim
+-- require("lazy").setup("plugins")
+
+-- cmp-lvim-lsp
+require("cmp").setup({
+  snippet = {
+    -- REQUIRED - you must specify a snippet engine
+    expand = function(args)
+      -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
+      -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+      -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
+      -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
+      vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+    end,
+  },
+  window = {
+    -- completion = require("cmp").config.window.bordered(),
+    -- documentation = require("cmp").config.window.bordered(),
+  },
+  mapping = require("cmp").mapping.preset.insert({
+    ['<C-b>'] = require("cmp").mapping.scroll_docs(-4),
+    ['<C-f>'] = require("cmp").mapping.scroll_docs(4),
+    ['<C-Space>'] = require("cmp").mapping.complete(),
+    ['<C-e>'] = require("cmp").mapping.abort(),
+    ['<CR>'] = require("cmp").mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+  }),
+  sources = require("cmp").config.sources(
+    {
+      { name = 'nvim_lsp' },
+      -- { name = 'vsnip' }, -- For vsnip users.
+      -- { name = 'luasnip' }, -- For luasnip users.
+      -- { name = 'ultisnips' }, -- For ultisnips users.
+      -- { name = 'snippy' }, -- For snippy users.
+    },
+    {
+      { name = 'buffer' },
+    }
+  )
+})
+-- To use git you need to install the plugin petertriho/cmp-git and uncomment lines below
+-- Set configuration for specific filetype.
+--[[ require("cmp").setup.filetype('gitcommit', {
+  sources = require("cmp").config.sources({
+    { name = 'git' },
+  }, {
+    { name = 'buffer' },
+  })
+})
+require("cmp_git").setup() ]]-- 
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+require("cmp").setup.cmdline({ '/', '?' }, {
+  mapping = require("cmp").mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+-- require("cmp").setup.cmdline(':', {
+--   mapping = require("cmp").mapping.preset.cmdline(),
+--   sources = require("cmp").config.sources({
+--     { name = 'path' }
+--   }, {
+--     { name = 'cmdline' }
+--   }),
+--   matching = { disallow_symbol_nonprefix_matching = false }
+-- })
+
+-- mason
+require("mason").setup{}
+require("mason-lspconfig").setup{
+  -- A list of servers to automatically install if they're not already installed. Example: { "rust_analyzer@nightly", "lua_ls" }
+  -- This setting has no relation with the `automatic_installation` setting.
+  ---@type string[]
+  -- ensure_installed = {"pyright", "jdtls"},
+  -- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.
+  -- This setting has no relation with the `ensure_installed` setting.
+  -- Can either be:
+  --   - false: Servers are not automatically installed.
+  --   - true: All servers set up via lspconfig are automatically installed.
+  --   - { exclude: string[] }: All servers set up via lspconfig, except the ones provided in the list, are automatically installed.
+  --       Example: automatic_installation = { exclude = { "rust_analyzer", "solargraph" } }
+  ---@type boolean
+  -- automatic_installation = false,
+  automatic_installation = { exclude = { } },
+  -- See `:h mason-lspconfig.setup_handlers()`
+  ---@type table<string, fun(server_name: string)>?
+  handlers = nil,
+}
+-- lsp
+require("lspconfig").pyright.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").jdtls.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").tsserver.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").bashls.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").jsonls.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").ltex.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").lua_ls.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").grammarly.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").perlnavigator.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").pbls.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+-- require("lspconfig").r_language_server.setup{
+--   capabilities = require('cmp_nvim_lsp').default_capabilities()
+-- }
+require("lspconfig").rust_analyzer.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").cssls.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+require("lspconfig").sqlls.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+-- require("lspconfig").harper_ls.setup{
+--   capabilities = require('cmp_nvim_lsp').default_capabilities()
+-- }
+require("lspconfig").metals.setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+
+-- dap / Debug Adapter Protocol 
+require("dapui").setup{
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+}
+
+-- Formatters
+-- Provides the Format, FormatWrite, FormatLock, and FormatWriteLock commands
+-- require("formatter").setup {
+--   -- Enable or disable logging
+--   -- logging = true,
+--   -- Set the log level
+--   -- log_level = vim.log.levels.WARN,
+--   -- All formatter configurations are opt-in
+--   filetype = {
+--     -- Formatter configurations for filetype "lua" go here
+--     -- and will be executed in order
+--     lua = {
+--       -- "formatter.filetypes.lua" defines default configurations for the
+--       -- "lua" filetype
+--       require("formatter.filetypes.lua").stylua,
+-- 
+--       -- You can also define your own configuration
+--       function()
+--         -- Supports conditional formatting
+--         if require("formatter.util").get_current_buffer_file_name() == "special.lua" then
+--           return nil
+--         end
+-- 
+--         -- Full specification of configurations is down below and in Vim help
+--         -- files
+--         return {
+--           exe = "stylua",
+--           args = {
+--             "--search-parent-directories",
+--             "--stdin-filepath",
+--             require("formatter.util").escape_path(require("formatter.util").get_current_buffer_file_path()),
+--             "--",
+--             "-",
+--           },
+--           stdin = true,
+--         }
+--       end
+--     },
+-- 
+--     -- Use the special "*" filetype for defining formatter configurations on
+--     -- any filetype
+--     ["*"] = {
+--       -- "formatter.filetypes.any" defines default configurations for any
+--       -- filetype
+--       require("formatter.filetypes.any").remove_trailing_whitespace
+--     }
+--   }
+-- }
+
+-- misc plugin config. Can be moved to lua/config?
+vim.api.nvim_create_autocmd("LspAttach", {
+  callback = function(args)
+    local opts = { buffer = args.buf }
+    local client = vim.lsp.get_client_by_id(args.data.client_id)
+
+    if client.supports_method("textDocument/implementation") then
+      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+    end
+    if client.supports_method("textDocument/definition") then
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    end
+    if client.supports_method("textDocument/references") then
+      vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
+    end
+    if client.supports_method("textDocument/declaration") then
+      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+    end
+    if client.supports_method("textDocument/rename") then
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+    end
+    if client.supports_method("textDocument/code_action") then
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+    end
+    if client.supports_method("textDocument/inlayHint") then
+      vim.lsp.inlay_hint.enable(true, opts)
+    end
+  end,
+})
+EOF
+
 
 " syntax
 syntax on
@@ -189,8 +453,10 @@ autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
 " :command W :execute '!sudo tee % > /dev/null'
 " :command W w
 :command W :SudoWrite
+:command WW :SudaWrite
 :command Wd :Mkdir | w
 :command WD :Mkdir | :SudoWrite
+:command WWD :Mkdir | :SudaWrite
 " reload vimrc
 :command! Reload source $MYVIMRC
 " csv
@@ -389,6 +655,10 @@ endif
 
 """Plugins allowed in vimdiff mode"""
 
+" suda
+" let g:suda_smart_edit = 1
+" let g:suda#noninteractive = 1
+
 " Airline
 let g:airline_powerline_fonts = 1
 let g:airline_theme='phlebotinum'
@@ -487,8 +757,10 @@ let g:gitgutter_enabled = 1
 highlight GitGutterAdd ctermfg=65 ctermbg=none guifg=#5f875f guibg=none
 highlight GitGutterChange ctermfg=103 ctermbg=none guifg=#8787af guibg=none
 highlight GitGutterDelete ctermfg=131 ctermbg=none guifg=#703020 guibg=none
-nmap ]h <Plug>(GitGutterNextHunk)
 nmap [h <Plug>(GitGutterPrevHunk)
+nmap ]h <Plug>(GitGutterNextHunk)
+nmap [g <Plug>(GitGutterPrevHunk)
+nmap ]g <Plug>(GitGutterNextHunk)
 let g:gitgutter_preview_win_floating = 1
 
 " fugitive
@@ -879,7 +1151,7 @@ require('telescope').setup{
   },
   pickers = {
     find_files = {
-      find_command = {"fd", "--type=file", "--hidden", "--exclude=.git", "--full-path"},
+      find_command = {"fd", "--type=file", "--hidden", "--follow", "--exclude=.git", "--full-path"},
       -- find_command = {"fd", "--type=file", "--hidden", "--exclude=.git", "--full-path", "|", "proximity-sort", vim.fn.expand('%:p:h')},
       file_sorter = require('telescope.sorters').fuzzy_with_index_bias,
     },
@@ -887,8 +1159,8 @@ require('telescope').setup{
   extensions = {
     fzf = {
       fuzzy = true,
-      override_generic_sorter = true,
-      override_file_sorter = true,
+      override_generic_sorter = false,
+      override_file_sorter = false,
       case_mode = "smart_case",
     },
     file_browser = {
@@ -969,3 +1241,306 @@ nnoremap <leader>fk <cmd>Telescope file_browser<cr>
 
 " rooter
 let g:rooter_manual_only = 1
+
+" neogit
+lua <<EOF
+local neogit = require("neogit")
+neogit.setup {
+  -- Hides the hints at the top of the status buffer
+  disable_hint = false,
+  -- Disables changing the buffer highlights based on where the cursor is.
+  disable_context_highlighting = false,
+  -- Disables signs for sections/items/hunks
+  disable_signs = false,
+  -- Changes what mode the Commit Editor starts in. `true` will leave nvim in normal mode, `false` will change nvim to
+  -- insert mode, and `"auto"` will change nvim to insert mode IF the commit message is empty, otherwise leaving it in
+  -- normal mode.
+  disable_insert_on_commit = "auto",
+  -- When enabled, will watch the `.git/` directory for changes and refresh the status buffer in response to filesystem
+  -- events.
+  filewatcher = {
+    interval = 1000,
+    enabled = true,
+  },
+  -- "ascii"   is the graph the git CLI generates
+  -- "unicode" is the graph like https://github.com/rbong/vim-flog
+  graph_style = "ascii",
+  -- Used to generate URL's for branch popup action "pull request".
+  git_services = {
+    ["github.com"] = "https://github.com/${owner}/${repository}/compare/${branch_name}?expand=1",
+    ["bitbucket.org"] = "https://bitbucket.org/${owner}/${repository}/pull-requests/new?source=${branch_name}&t=1",
+    ["gitlab.com"] = "https://gitlab.com/${owner}/${repository}/merge_requests/new?merge_request[source_branch]=${branch_name}",
+    ["azure.com"] = "https://dev.azure.com/${owner}/_git/${repository}/pullrequestcreate?sourceRef=${branch_name}&targetRef=${target}",
+  },
+  -- Allows a different telescope sorter. Defaults to 'fuzzy_with_index_bias'. The example below will use the native fzf
+  -- sorter instead. By default, this function returns `nil`.
+  telescope_sorter = function()
+    return require("telescope").extensions.fzf.native_fzf_sorter()
+  end,
+  -- Persist the values of switches/options within and across sessions
+  remember_settings = true,
+  -- Scope persisted settings on a per-project basis
+  use_per_project_settings = true,
+  -- Table of settings to never persist. Uses format "Filetype--cli-value"
+  ignored_settings = {
+    "NeogitPushPopup--force-with-lease",
+    "NeogitPushPopup--force",
+    "NeogitPullPopup--rebase",
+    "NeogitCommitPopup--allow-empty",
+    "NeogitRevertPopup--no-edit",
+  },
+  -- Configure highlight group features
+  highlight = {
+    italic = true,
+    bold = true,
+    underline = true
+  },
+  -- Set to false if you want to be responsible for creating _ALL_ keymappings
+  use_default_keymaps = true,
+  -- Neogit refreshes its internal state after specific events, which can be expensive depending on the repository size.
+  -- Disabling `auto_refresh` will make it so you have to manually refresh the status after you open it.
+  auto_refresh = true,
+  -- Value used for `--sort` option for `git branch` command
+  -- By default, branches will be sorted by commit date descending
+  -- Flag description: https://git-scm.com/docs/git-branch#Documentation/git-branch.txt---sortltkeygt
+  -- Sorting keys: https://git-scm.com/docs/git-for-each-ref#_options
+  sort_branches = "-committerdate",
+  -- Change the default way of opening neogit
+  kind = "tab",
+  -- Disable line numbers and relative line numbers
+  disable_line_numbers = true,
+  -- The time after which an output console is shown for slow running commands
+  console_timeout = 2000,
+  -- Automatically show console if a command takes more than console_timeout milliseconds
+  auto_show_console = true,
+  -- Automatically close the console if the process exits with a 0 (success) status
+  auto_close_console = true,
+  status = {
+    show_head_commit_hash = true,
+    recent_commit_count = 10,
+    HEAD_padding = 10,
+    HEAD_folded = false,
+    mode_padding = 3,
+    mode_text = {
+      M = "modified",
+      N = "new file",
+      A = "added",
+      D = "deleted",
+      C = "copied",
+      U = "updated",
+      R = "renamed",
+      DD = "unmerged",
+      AU = "unmerged",
+      UD = "unmerged",
+      UA = "unmerged",
+      DU = "unmerged",
+      AA = "unmerged",
+      UU = "unmerged",
+      ["?"] = "",
+    },
+  },
+  commit_editor = {
+    kind = "tab",
+    show_staged_diff = true,
+    -- Accepted values:
+    -- "split" to show the staged diff below the commit editor
+    -- "vsplit" to show it to the right
+    -- "split_above" Like :top split
+    -- "vsplit_left" like :vsplit, but open to the left
+    -- "auto" "vsplit" if window would have 80 cols, otherwise "split"
+    staged_diff_split_kind = "split"
+  },
+  commit_select_view = {
+    kind = "tab",
+  },
+  commit_view = {
+    kind = "vsplit",
+    verify_commit = vim.fn.executable("gpg") == 1, -- Can be set to true or false, otherwise we try to find the binary
+  },
+  log_view = {
+    kind = "tab",
+  },
+  rebase_editor = {
+    kind = "auto",
+  },
+  reflog_view = {
+    kind = "tab",
+  },
+  merge_editor = {
+    kind = "auto",
+  },
+  tag_editor = {
+    kind = "auto",
+  },
+  preview_buffer = {
+    kind = "split",
+  },
+  popup = {
+    kind = "split",
+  },
+  signs = {
+    -- { CLOSED, OPENED }
+    hunk = { "", "" },
+    item = { ">", "v" },
+    section = { ">", "v" },
+  },
+  -- Each Integration is auto-detected through plugin presence, however, it can be disabled by setting to `false`
+  integrations = {
+    -- If enabled, use telescope for menu selection rather than vim.ui.select.
+    -- Allows multi-select and some things that vim.ui.select doesn't.
+    telescope = nil,
+    -- Neogit only provides inline diffs. If you want a more traditional way to look at diffs, you can use `diffview`.
+    -- The diffview integration enables the diff popup.
+    --
+    -- Requires you to have `sindrets/diffview.nvim` installed.
+    diffview = nil,
+    -- If enabled, uses fzf-lua for menu selection. If the telescope integration
+    -- is also selected then telescope is used instead
+    -- Requires you to have `ibhagwan/fzf-lua` installed.
+    fzf_lua = nil,
+  },
+  sections = {
+    -- Reverting/Cherry Picking
+    sequencer = {
+      folded = false,
+      hidden = false,
+    },
+    untracked = {
+      folded = false,
+      hidden = false,
+    },
+    unstaged = {
+      folded = false,
+      hidden = false,
+    },
+    staged = {
+      folded = false,
+      hidden = false,
+    },
+    stashes = {
+      folded = true,
+      hidden = false,
+    },
+    unpulled_upstream = {
+      folded = true,
+      hidden = false,
+    },
+    unmerged_upstream = {
+      folded = false,
+      hidden = false,
+    },
+    unpulled_pushRemote = {
+      folded = true,
+      hidden = false,
+    },
+    unmerged_pushRemote = {
+      folded = false,
+      hidden = false,
+    },
+    recent = {
+      folded = true,
+      hidden = false,
+    },
+    rebase = {
+      folded = true,
+      hidden = false,
+    },
+  },
+  mappings = {
+    commit_editor = {
+      ["q"] = "Close",
+      ["<c-c><c-c>"] = "Submit",
+      ["<c-c><c-k>"] = "Abort",
+    },
+    commit_editor_I = {
+      ["<c-c><c-c>"] = "Submit",
+      ["<c-c><c-k>"] = "Abort",
+    },
+    rebase_editor = {
+      ["p"] = "Pick",
+      ["r"] = "Reword",
+      ["e"] = "Edit",
+      ["s"] = "Squash",
+      ["f"] = "Fixup",
+      ["x"] = "Execute",
+      ["d"] = "Drop",
+      ["b"] = "Break",
+      ["q"] = "Close",
+      ["<cr>"] = "OpenCommit",
+      ["gk"] = "MoveUp",
+      ["gj"] = "MoveDown",
+      ["<c-c><c-c>"] = "Submit",
+      ["<c-c><c-k>"] = "Abort",
+      ["[c"] = "OpenOrScrollUp",
+      ["]c"] = "OpenOrScrollDown",
+    },
+    rebase_editor_I = {
+      ["<c-c><c-c>"] = "Submit",
+      ["<c-c><c-k>"] = "Abort",
+    },
+    finder = {
+      ["<cr>"] = "Select",
+      ["<c-c>"] = "Close",
+      ["<esc>"] = "Close",
+      ["<c-n>"] = "Next",
+      ["<c-p>"] = "Previous",
+      ["<down>"] = "Next",
+      ["<up>"] = "Previous",
+      ["<tab>"] = "MultiselectToggleNext",
+      ["<s-tab>"] = "MultiselectTogglePrevious",
+      ["<c-j>"] = "NOP",
+    },
+    -- Setting any of these to `false` will disable the mapping.
+    popup = {
+      ["?"] = "HelpPopup",
+      ["A"] = "CherryPickPopup",
+      ["D"] = "DiffPopup",
+      ["M"] = "RemotePopup",
+      ["P"] = "PushPopup",
+      ["X"] = "ResetPopup",
+      ["Z"] = "StashPopup",
+      ["b"] = "BranchPopup",
+      ["B"] = "BisectPopup",
+      ["c"] = "CommitPopup",
+      ["f"] = "FetchPopup",
+      ["l"] = "LogPopup",
+      ["m"] = "MergePopup",
+      ["p"] = "PullPopup",
+      ["r"] = "RebasePopup",
+      ["v"] = "RevertPopup",
+      ["w"] = "WorktreePopup",
+    },
+    status = {
+      ["k"] = "MoveUp",
+      ["j"] = "MoveDown",
+      ["q"] = "Close",
+      ["o"] = "OpenTree",
+      ["I"] = "InitRepo",
+      ["1"] = "Depth1",
+      ["2"] = "Depth2",
+      ["3"] = "Depth3",
+      ["4"] = "Depth4",
+      ["<tab>"] = "Toggle",
+      ["x"] = "Discard",
+      ["s"] = "Stage",
+      ["S"] = "StageUnstaged",
+      ["<c-s>"] = "StageAll",
+      ["K"] = "Untrack",
+      ["u"] = "Unstage",
+      ["U"] = "UnstageStaged",
+      ["$"] = "CommandHistory",
+      ["Y"] = "YankSelected",
+      ["<c-r>"] = "RefreshBuffer",
+      ["<enter>"] = "GoToFile",
+      ["<c-v>"] = "VSplitOpen",
+      ["<c-x>"] = "SplitOpen",
+      ["<c-t>"] = "TabOpen",
+      ["{"] = "GoToPreviousHunkHeader",
+      ["}"] = "GoToNextHunkHeader",
+      ["[c"] = "OpenOrScrollUp",
+      ["]c"] = "OpenOrScrollDown",
+    },
+  },
+}
+EOF
+
