@@ -143,3 +143,23 @@ _note() {
   _files -W $notes_dir -g '*.md(:r)'
 }
 compdef _note note
+
+# Fork a repo with gh cli
+fork() {
+  local flags=( $(printf -- '%s\n' "$@" | grep -Eo '^--\w*') )
+  local args=( $(printf -- '%s\n' "$@" | grep -Eo '^[^-].*') )
+  local repo="$args[1]"
+  local dir="$args[2]"
+
+  local repo_name="${repo#*/}"
+  repo_name="${repo_name%.git}"
+
+  # gh repo fork --clone $@
+
+  cd ${dir:-$repo_name}
+
+  echo $(echo "cd ${dir:-$repo_name}/" | bat --plain --force-colorization --language=sh)
+  echo $(echo "$PWD" | bat --plain --force-colorization --language=sh)
+  echo $(echo "origin: $(git remote get-url origin)" | bat --plain --force-colorization --language=yaml)
+  echo $(echo "upstream: $(git remote get-url upstream)" | bat --plain --force-colorization --language=yaml)
+}

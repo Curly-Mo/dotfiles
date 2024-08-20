@@ -10,7 +10,7 @@ bindkey "^E" fzf-history-widget
 bindkey -M vicmd "^E" fzf-history-widget
 
 # config
-export FZF_FILE_PREVIEW_CMD="(highlight -O ansi --line-range 0-200 {} 2> /dev/null || bat --force-colorization --line-range 0:200 --plain {-1})"
+export FZF_FILE_PREVIEW_CMD="(bat --force-colorization --line-range 0:200 --plain {-1} 2> /dev/null || highlight -O ansi --line-range 0-200 {} )"
 export FZF_DIR_PREVIEW_CMD="(eza --tree --level 5 --all --color=always {})"
 export FZF_FALLBACK_PREVIEW_CMD="(highlight -O ansi --syntax=sh)"
 export FZF_PREVIEW_CMD="($FZF_FILE_PREVIEW_CMD 2> /dev/null || $FZF_DIR_PREVIEW_CMD 2> /dev/null || $FZF_FALLBACK_PREVIEW_CMD) | head -200"

@@ -10,7 +10,7 @@ zstyle ':fzf-tab:*' continuous-trigger 'tab'
 # zstyle ':fzf-tab:*' fzf-command fzf
 # zstyle ':fzf-tab:*' fzf-flags fzf
 # fzf-preview
-zstyle ':fzf-tab:*' fzf-preview "(highlight -O ansi --line-range 0-200 $realpath || bat --color=always --line-range :200 --plain ${(Q)realpath} || eza --tree --level 4 --all --color=always $realpath) 2> /dev/null | head -200"
+zstyle ':fzf-tab:*' fzf-preview "(bat --color=always --line-range :200 --plain ${(Q)realpath} || highlight -O ansi --line-range 0-200 $realpath || eza --tree --level 4 --all --color=always $realpath) 2> /dev/null | head -200"
 
 # tmux
 # zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
@@ -45,7 +45,7 @@ zstyle ':fzf-tab:complete:systemctl-*:*' fzf-preview 'SYSTEMD_COLORS=1 systemctl
 
 # show file contents
 # zstyle ':fzf-tab:complete:*:*' fzf-preview 'bat --color=always --plain ${(Q)realpath}'
-zstyle ':fzf-tab:complete:*:*' fzf-preview '(highlight -O ansi --line-range 0-200 $realpath || bat --color=always --line-range :200 --plain ${(Q)realpath} || eza --tree --level 4 --all --color=always $realpath) 2> /dev/null | head -200'
+zstyle ':fzf-tab:complete:*:*' fzf-preview '(bat --color=always --line-range :200 --plain ${(Q)realpath} || highlight -O ansi --line-range 0-200 $realpath || eza --tree --level 4 --all --color=always $realpath) 2> /dev/null | head -200'
 
 # environment variable
 zstyle ':fzf-tab:complete:(-command-|-parameter-|-brace-parameter-|export|unset|expand):*' \
