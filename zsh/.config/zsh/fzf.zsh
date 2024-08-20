@@ -1,50 +1,101 @@
 # keys
-bindkey '^I' fzf-completion
-bindkey "^Y" $fzf_default_completion
+# bindkey '^I' fzf-completion
+# bindkey "^Y" $fzf_default_completion
 # bindkey "^[c" fzf-cd-widget
 # bindkey "^T" fzf-file-widget
+bindkey "^[t" fzf-file-widget
 bindkey "^R" history-incremental-search-backward
+bindkey -M vicmd "^R" history-incremental-search-backward
 bindkey "^E" fzf-history-widget
+bindkey -M vicmd "^E" fzf-history-widget
+
 # config
-export FZF_PREVIEW_CMD="(highlight -O ansi --line-range 0-200 {} 2> /dev/null || bat --force-colorization --line-range 0:200 --plain {-1} || tree -C {}) 2> /dev/null | head -200"
+export FZF_FILE_PREVIEW_CMD="(highlight -O ansi --line-range 0-200 {} 2> /dev/null || bat --force-colorization --line-range 0:200 --plain {-1})"
+export FZF_DIR_PREVIEW_CMD="(eza --tree --level 5 --all --color=always {})"
+export FZF_FALLBACK_PREVIEW_CMD="(highlight -O ansi --syntax=sh)"
+export FZF_PREVIEW_CMD="($FZF_FILE_PREVIEW_CMD 2> /dev/null || $FZF_DIR_PREVIEW_CMD 2> /dev/null || $FZF_FALLBACK_PREVIEW_CMD) | head -200"
 export FZF_COMMAND='fd --hidden --follow --exclude .git --color=always --max-depth 12'
 # export FZF_DEFAULT_COMMAND="${FZF_COMMAND} | proximity-sort ."
 export FZF_DEFAULT_COMMAND="${FZF_COMMAND}"
-FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --bind 'tab:replace-query+down' --bind 'shift-tab:backward-kill-word' --bind 'right:replace-query+down' --bind 'left:backward-kill-word' --bind 'change:first' --bind 'ctrl-f:jump' --bind 'ctrl-d:delete-char/eof+clear-query'  --bind 'alt-j:down' --bind 'alt-k:up'"
-export FZF_DEFAULT_OPTS="--height 60% --border --ansi --info=inline --algo v2 ${FZF_BINDINGS_OPTS}"
+FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --bind 'tab:replace-query+down' --bind 'shift-tab:backward-kill-word' --bind 'right:replace-query+down' --bind 'left:backward-kill-word' --bind 'change:first' --bind 'ctrl-f:jump' --bind 'ctrl-d:delete-char/eof+clear-query' --bind 'alt-j:down' --bind 'alt-k:up' --bind '?:toggle-preview'"
+export FZF_DEFAULT_OPTS="--height 70% --border --ansi --info=inline --algo v2 ${FZF_BINDINGS_OPTS}"
 # export FZF_DEFAULT_OPTS="--height 50% --border --ansi --info=inline --algo v1 --tiebreak=index ${FZF_BINDINGS_OPTS}"
-FZF_CTRL_R_PREVIEW_OPTS="--preview 'echo {} | highlight --syntax sh -O ansi' --preview-window down:3:hidden:wrap --bind '?:toggle-preview'"
-export FZF_CTRL_R_OPTS="--exact --bind 'ctrl-e:up' --bind 'ctrl-E:down' ${FZF_CTRL_R_PREVIEW_OPTS}"
-export FZF_CTRL_T_COMMAND="${FZF_COMMAND}"
-export FZF_CTRL_T_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview '${FZF_PREVIEW_CMD}'"
+# always have a preview
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --preview '${FZF_PREVIEW_CMD}'"
+# use tmux popup
+# export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --tmux 100%,60%"
+
+FZF_CTRL_R_PREVIEW_CMD="echo {} | highlight --syntax sh -O ansi"
+FZF_CTRL_R_PREVIEW_OPTS="--preview '$FZF_CTRL_R_PREVIEW_CMD' --preview-window down:4:wrap"
+export FZF_CTRL_R_OPTS="--exact --bind 'ctrl-e:up' --bind 'ctrl-E:down' --height 80% $FZF_CTRL_R_PREVIEW_OPTS"
+
+export FZF_CTRL_T_COMMAND="${FZF_COMMAND} --type f"
+export FZF_CTRL_T_OPTS="--select-1 --exit-0 --preview '${FZF_FILE_PREVIEW_CMD}'"
+
 # export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type d | proximity-sort ."
 export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type d"
 # export FZF_ALT_C_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview 'tree -C {} | head -200' --bind 'alt-c:down' --bind 'alt-C:up' --bind 'tab:down' --bind 'shift-tab:up'"
-export FZF_ALT_C_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview 'tree -C {} | head -200' --bind 'alt-c:down' --bind 'alt-C:up'"
+export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'eza --tree --level 5 --all --color=always {}' --bind 'alt-c:down' --bind 'alt-C:up' --preview '${FZF_DIR_PREVIEW_CMD}'"
 FZF_COMPLETION_BINDINGS_OPTS=""
-export FZF_COMPLETION_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview '${FZF_PREVIEW_CMD}' ${FZF_COMPLETION_BINDINGS_OPTS}"
+export FZF_COMPLETION_OPTS="--select-1 --exit-0 ${FZF_COMPLETION_BINDINGS_OPTS}"
+
+
+FZF_COMPLETION_TRIGGER=''
+
+FZF_COMPLETION_DIR_COMMANDS="cd pushd rmdir"
+FZF_COMPLETION_PATH_COMMANDS="ls ll"
+FZF_COMPLETION_FILE_COMMANDS="vi vim nvim v cat bat"
+
+# Use fd (https://github.com/sharkdp/fd) for listing path candidates.
+# - The first argument to the function ($1) is the base path to start traversal
+# - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  # fd --hidden --follow --exclude .git --full-path --color=always . "$1" | proximity-sort .
+  # fd --hidden --follow --exclude .git --full-path --color=always | proximity-sort .
+  # fd --hidden --follow --exclude .git --color=always --max-depth 10 --type f
   fd --hidden --follow --exclude .git --color=always --max-depth 10 . "$1"
 }
 _fzf_compgen_dir() {
-  # fd --hidden --follow --exclude .git --full-path --color=always --type d . "$1" | proximity-sort .
+  # fd --hidden --follow --exclude .git --full-path --color=always --type d | proximity-sort .
   fd --hidden --follow --exclude .git --color=always --max-depth 10 --type d . "$1"
+}
+_fzf_compgen_file() {
+  # fd --hidden --follow --exclude .git --full-path --color=always --type f | proximity-sort .
+  fd --hidden --follow --exclude .git --color=always --max-depth 10 --type f . "$1"
+}
+
+_fzf_file_completion() {
+  __fzf_generic_path_completion "$1" "$2" _fzf_compgen_file \
+    "-m" "" " "
 }
 
 # Advanced customization of fzf options via _fzf_comprun function
 # - The first argument to the function is the name of the command.
 # - You should make sure to pass the rest of the arguments to fzf.
-# _fzf_comprun() {
-#   local command=$1
-#   shift
+_fzf_comprun() {
+  local command=$1
+  shift
 
-#   case "$command" in
-#     cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
-#     export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
-#     ssh)          fzf --preview 'dig {}'                   "$@" ;;
-#     *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
-#   esac
+  case "$command" in
+    export|unset) fzf --preview "eval 'echo \$'{} | $FZF_FALLBACK_PREVIEW_CMD" "$@" ;;
+    ssh)          fzf --preview "dig {}" "$@" ;;
+    # up)           fzf --preview "fd --hidden --follow --type d --full-path {} / -1 | eza --stdin --tree --level 2 --all --color=always" "$@" ;;
+    # down)         fzf --preview "fd --hidden --follow --type d --full-path {} . -1 | eza --stdin --tree --level 4 --all --color=always" "$@" ;;
+    *)            fzf "$@" ;;
+  esac
+  # case "$command" in
+  #   cd)           fzf --preview 'tree -C {} | head -200'   "$@" ;;
+  #   export|unset) fzf --preview "eval 'echo \$'{}"         "$@" ;;
+  #   ssh)          fzf --preview 'dig {}'                   "$@" ;;
+  #   *)            fzf --preview 'bat -n --color=always {}' "$@" ;;
+  # esac
+}
+
+# # # exclude commands from completion
+# _fzf_complete_notrigger() {
+#   FZF_COMPLETION_TRIGGER='**' _fzf_complete -- "$@"
+# }
+# _fzf_complete_vim() {
+#   _fzf_complete_notrigger "$@"
 # }
 
 
@@ -90,6 +141,66 @@ _fzf_compgen_dir() {
 # }
 
 
+# # another hack https://github.com/Aloxaf/fzf-tab/issues/65
+# _files() {
+#   # fd --hidden --exclude .git --type=f | {
+#   fd --hidden --exclude .git --type=f | proximity-sort . | {
+#     while read line; do
+#       compadd -f -- $line
+#     done
+#   }
+# }
+# _cd() {
+#   fd --hidden --exclude .git --type=d | proximity-sort . | {
+#     while read line; do
+#       compadd -f -- $line
+#     done
+#   }
+#   # local dirs=($(fd --hidden --exclude .git --type=d | proximity-sort .))
+#   # compadd -a -f dirs
+# }
+# second hack attempt
+# _files() {
+#   compadd -f -- "$(fd --hidden --exclude .git --follow --type=f | fzf)"
+# }
+# _cd() {
+#   compadd -f -- "$(fd --hidden --exclude .git --follow --type=d | fzf)"
+# }
+
+# yet another awful hack
+# autoload +X -Uz _files
+# autoload +X -Uz _dirs
+# autoload +X -Uz _path_files
+# functions[_files_orig]=$functions[_files]
+# functions[_cd_orig]=$functions[_cd]
+# functions[_path_files_orig]=$functions[_path_files_orig]
+# FZF_FILE_CMDS=(vim nvim cat v)
+# _files() {
+#   if (( $FZF_FILE_CMDS[(I)$words[1]] )); then
+#     compadd -f -- "$(fd --hidden --follow --exclude .git --color=always --max-depth 12 --type=f | fzf --preview 'bat --force-colorization --line-range 0:200 --plain {-1} 2> /dev/null || highlight -O ansi --line-range 0-200 {}')"
+#   else
+#     _files_orig
+#   fi
+# }
+# FZF_DIR_CMDS=(cd pushd rmdir)
+# _cd() {
+#   if (( $FZF_DIR_CMDS[(I)$words[1]] )); then
+#     compadd -f -- "$(fd --hidden --follow --exclude .git --color=always --max-depth 12 --type=d | fzf --preview 'tree -C {} | head -200')"
+#   else
+#     _cd_orig
+#   fi
+# }
+# FZF_PATH_CMDS=(ls)
+# _path_files() {
+#   if (( $FZF_PATH_CMDS[(I)$words[1]] )); then
+#     compadd -f -- "$(fd --hidden --follow --exclude .git --color=always --max-depth 12 | fzf --preview 'bat --force-colorization --line-range 0:200 --plain {-1} 2> /dev/null || tree -C {} 2> /dev/null | head -200 || highlight -O ansi --line-range 0-200 {}')"
+#   else
+#     _path_files_orig
+#   fi
+# }
+
+
+
 # custom keybinds
 fzf-edit-file-widget() {
   local result=$(fd --hidden --follow --exclude .git --color=always --type f | fzf)
@@ -104,4 +215,68 @@ fzf-edit-file-widget() {
 }
 zle -N fzf-edit-file-widget
 bindkey "^P" fzf-edit-file-widget
+bindkey "^[p" fzf-edit-file-widget
 bindkey -M vicmd "^P" fzf-edit-file-widget
+bindkey -M vicmd "^[p" fzf-edit-file-widget
+
+
+# custom override of fzf-completion https://github.com/junegunn/fzf/pull/1299
+# declare -A -x FZF_PER_CMD_COMPLETION_TRIGGERS
+# FZF_PER_CMD_COMPLETION_TRIGGERS[man]="**"
+# export FZF_PER_CMD_COMPLETION_TRIGGERS_EXPORT=$(declare -p FZF_PER_CMD_COMPLETION_TRIGGERS)
+fzf-completion () {
+	local tokens cmd prefix trigger tail matches lbuf d_cmds
+	setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
+	tokens=(${(z)LBUFFER}) 
+	if [ ${#tokens} -lt 1 ]
+	then
+		zle ${fzf_default_completion:-expand-or-complete}
+		return
+	fi
+	cmd=$(__fzf_extract_command "$LBUFFER") 
+
+  # Use a per-command completion trigger if available. Otherwise, fall
+  # back to $FZF_COMPLETION_TRIGGER.
+  source <(printf "%s" "$FZF_PER_CMD_COMPLETION_TRIGGERS_EXPORT")
+  trigger=${FZF_PER_CMD_COMPLETION_TRIGGERS[$cmd]-${FZF_COMPLETION_TRIGGER-'**'}}
+
+	[ -z "$trigger" -a ${LBUFFER[-1]} = ' ' ] && tokens+=("") 
+	if [[ ${LBUFFER} = *"${tokens[-2]-}${tokens[-1]}" ]]
+	then
+		tokens[-2]="${tokens[-2]-}${tokens[-1]}" 
+		tokens=(${tokens[0,-2]}) 
+	fi
+	lbuf=$LBUFFER 
+	tail=${LBUFFER:$(( ${#LBUFFER} - ${#trigger} ))} 
+	if [ ${#tokens} -gt 1 -a "$tail" = "$trigger" ]
+	then
+		d_cmds=(${=FZF_COMPLETION_DIR_COMMANDS-cd pushd rmdir}) 
+		p_cmds=(${=FZF_COMPLETION_PATH_COMMANDS-ls}) 
+		f_cmds=(${=FZF_COMPLETION_FILE_COMMANDS-vi vim cat}) 
+		[ -z "$trigger" ] && prefix=${tokens[-1]}  || prefix=${tokens[-1]:0:-${#trigger}} 
+		if [[ $prefix = *'$('* ]] || [[ $prefix = *'<('* ]] || [[ $prefix = *'>('* ]] || [[ $prefix = *':='* ]] || [[ $prefix = *'`'* ]]
+		then
+			return
+		fi
+		[ -n "${tokens[-1]}" ] && lbuf=${lbuf:0:-${#tokens[-1]}} 
+		if eval "type _fzf_complete_${cmd} > /dev/null"
+		then
+			prefix="$prefix" eval _fzf_complete_${cmd} ${(q)lbuf}
+			zle reset-prompt
+		elif [ ${d_cmds[(i)$cmd]} -le ${#d_cmds} ]
+		then
+			_fzf_dir_completion "$prefix" "$lbuf"
+		elif [ ${p_cmds[(i)$cmd]} -le ${#p_cmds} ]
+		then
+			_fzf_path_completion "$prefix" "$lbuf"
+		elif [ ${f_cmds[(i)$cmd]} -le ${#f_cmds} ]
+		then
+			_fzf_file_completion "$prefix" "$lbuf"
+		else
+			# _fzf_path_completion "$prefix" "$lbuf"
+      zle ${fzf_default_completion:-expand-or-complete}
+		fi
+	else
+		zle ${fzf_default_completion:-expand-or-complete}
+	fi
+}

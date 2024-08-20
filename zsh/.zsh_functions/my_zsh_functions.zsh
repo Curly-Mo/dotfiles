@@ -8,6 +8,13 @@ up() {
 }
 _up() {
   local pwd=${PWD}
+  # local up_dirnames=(${(s:/:)pwd})
+  # local up_dirs=()
+  # prev=''
+  # for dirname in $up_dirnames; do
+  #   prev="$prev/$dirname"
+  #   up_dirs+=($prev)
+  # done
   local up_dirs=(${(s:/:)pwd})
   _alternative "dirs:directory:($up_dirs)"
 }

@@ -1,0 +1,3 @@
+#!/bin/sh
+
+find $HOME -type l -printf '%p -> ' -exec readlink -f {} ';' 2> /dev/null | grep "$PWD"

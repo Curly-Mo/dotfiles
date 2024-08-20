@@ -1,0 +1,76 @@
+#!/bin/zsh
+
+pomfile="pom.xml"
+sbtfile="build.sbt"
+wrong_dir=false
+default_command="package"
+
+if [ -e "$PWD/$pomfile" ]; then
+  tool="mvn"
+elif [ -e "$PWD/$sbtfile" ]; then
+  tool="sbt"
+else
+  gitroot=$(git rev-parse --show-toplevel)
+  relative_groot=$(realpath -s --relative-to="$PWD" "$gitroot")
+  if [ -e "$gitroot/$pomfile" ]; then
+    tool="mvn"
+    wrong_dir=true
+  elif [ -e "$gitroot/$sbtfile" ]; then
+    tool="sbt"
+    wrong_dir=true
+  else
+    echo "I can't build this project."
+    exit 1
+  fi
+fi
+
+args=()
+for arg in "$@"; do
+  case "$arg" in
+    v|ver|verif)
+      newarg="verify"
+      ;;
+    c|cl|claen|clena)
+      newarg="clean"
+      ;;
+    co|com|comp)
+      newarg="compile"
+      ;;
+    p|pack)
+      newarg="package"
+      ;;
+    t)
+      newarg="test"
+      ;;
+    i|in|inst)
+      newarg="install"
+      ;;
+    cv)
+      newarg="clean verify"
+      ;;
+    cp)
+      newarg="clean package"
+      ;;
+    cc)
+      newarg="clean compile"
+      ;;
+    *)
+      newarg="$arg"
+      ;;
+  esac
+  args+=($newarg)
+done
+
+if [ ${#args[@]} -eq 0 ]; then
+  args+=($default_command)
+fi
+
+if [ "$wrong_dir" = true ]; then
+  echo "not in root of project"
+  echo "try running:"
+  # TODO: move this to a function to get `print -z` support 
+  print -z $relative_groot $tool "${args[@]}"
+else
+  echo "$tool "${args[@]}"" | bat --force-colorization --style plain -l sh --theme ansi
+  exec $tool "${args[@]}"
+fi

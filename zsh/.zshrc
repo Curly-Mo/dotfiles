@@ -240,9 +240,12 @@ zinit wait"0" lucid from"gh-r" lbin for \
   pick"misc/quitcd/quitcd.zsh" \
     jarun/nnn
 
+# zinit wait"0" lucid lbin'sk' lman'sk' for \
+#   atclone"cargo build --release" atpull"%atclone" \
+#   multisrc"shell/completion.zsh" \
+#     lotabout/skim
 zinit wait"0" lucid lbin'sk' lman'sk' for \
   atclone"cargo build --release" atpull"%atclone" \
-  multisrc"shell/completion.zsh" \
     lotabout/skim
 
 zinit wait"0" lucid from"gh-r" lbin for \
