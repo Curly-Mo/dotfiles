@@ -546,11 +546,9 @@ nnoremap <leader>gC :Git commit<CR>
 nnoremap <leader>gs :Git<CR>
 
 " quick-scope
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-let g:qs_max_chars=300
-highlight QuickScopePrimary guifg=#fac863 ctermfg=221 gui=underline cterm=underline
-highlight QuickScopeSecondary guifg=#fac863 ctermfg=221 gui=underline cterm=underline
-highlight QuickScopeSecondary guifg=#8fbfdc ctermfg=110 gui=underline cterm=underline
+"highlight QuickScopePrimary guifg=#fac863 ctermfg=221 gui=underline cterm=underline
+"highlight QuickScopeSecondary guifg=#fac863 ctermfg=221 gui=underline cterm=underline
+"highlight QuickScopeSecondary guifg=#8fbfdc ctermfg=110 gui=underline cterm=underline
 
 " Smoother scrolling
 " map <ScrollWheelUp> <C-Y>

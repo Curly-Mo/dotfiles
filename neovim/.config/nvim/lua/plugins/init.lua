@@ -2,6 +2,7 @@ return {
   "folke/neodev.nvim",
   "folke/which-key.nvim",
   { "folke/neoconf.nvim", cmd = "Neoconf" },
+  "Curly-Mo/phlebotinum",
 
 -- tpope
   "tpope/vim-fugitive",
@@ -41,7 +42,25 @@ return {
   "raimon49/requirements.txt.vim",
   -- "ambv/black", { "on": ["Black"] }
   "embear/vim-localvimrc",
-  -- "unblevable/quick-scope",
+  {
+    "unblevable/quick-scope",
+    -- keys = { "f", "F", "t", "T" },
+    init = function()
+      vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
+      vim.g.qs_mx_chars = 200
+      -- local quickScopeColorsGroup = vim.api.nvim_create_augroup("quickScopeColors", { clear = true })
+      -- vim.highlight.create('QuickScopeSecondary', {guifg="#8fbfdc", ctermfg=110, gui="underline", cterm="underline",},
+      -- vim.api.nvim_create_autocmd("ColorScheme", {
+      --   command = "highlight QuickScopePrimary guifg=#fac863 ctermfg=221 gui=underline cterm=underline",
+      --   group = quickScopeColorsGroup,
+      -- }),
+      -- vim.api.nvim_create_autocmd("ColorScheme", {
+      --   command = "highlight QuickScopeSecondary guifg=#fac863 ctermfg=221 gui=underline cterm=underline",
+      --   group = quickScopeColorsGroup,
+      -- }),
+    end,
+  },
+  { "alexghergh/nvim-tmux-navigation" },
   -- "andymass/vim-matchup",
   -- "uber/prototool", { "rtp":"vim/prototool" }
   "mattn/calendar-vim",
@@ -49,7 +68,6 @@ return {
   "markonm/traces.vim",
   "janko/vim-test",
   -- "rcarriga/vim-ultest", { "do": ":UpdateRemotePlugins" }
-  "Curly-Mo/phlebotinum",
   -- "tweekmonster/startuptime.vim", { "on": ["StartupTime"] }
   "nanotech/jellybeans.vim",
   -- "sheerun/vim-polyglot",
