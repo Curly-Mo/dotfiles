@@ -5,6 +5,12 @@ return {
   },
   {
     "junegunn/fzf.vim",
+    config = function()
+      vim.cmd [[
+      "let g:fzf_vim.command_prefix = 'Fzf'
+      ]]
+      -- vim.g.fzf_vim.command_prefix = "Fzf"
+    end,
   },
   {
     "nvim-telescope/telescope-fzf-native.nvim",

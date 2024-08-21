@@ -144,28 +144,6 @@ _note() {
 }
 compdef _note note
 
-# Fork a repo with gh cli
-fork() {
-  local flags=( $(printf -- '%s\n' "$@" | grep -Eo '^--?.*') )
-  local args=( $(printf -- '%s\n' "$@" | grep -Eo '^[^-].*') )
-  local repo="$args[1]"
-  local dir="$args[2]"
-  local dir_path=$(realpath ${dir:-$repo_name})
-
-  local repo_name="${repo#*/}"
-  repo_name="${repo_name%.git}"
-
-  gh repo fork --clone $@
-
-  cd $dir_path
-
-  echo
-  echo $(echo "cd $dir_path" | bat --plain --color=always --language=sh)
-  echo $(echo "origin: $(git remote get-url origin)" | bat --plain --color=always --language=yaml)
-  echo $(echo "upstream: $(git remote get-url upstream)" | bat --plain --color=always --language=yaml)
-  echo $(git status --long | bat --color=always --language=toml)
-}
-
 # Convenience wrapper around syntax highlighters like bat
 colorize() {
   local cmd=(bat --style=plain --color=always --pager=never --language=sh)
@@ -201,4 +179,26 @@ colorize() {
   else
     (echo $args[@] | $cmd $bat_opts[@] $flags[@]) 2>/dev/null || (echo $args[@] | $fallback_cmd $highlight_opts[@] $flags[@])
   fi
+}
+
+# Fork a repo with gh cli
+fork() {
+  local flags=( $(printf -- '%s\n' "$@" | grep -Eo '^--?.*') )
+  local args=( $(printf -- '%s\n' "$@" | grep -Eo '^[^-].*') )
+  local repo="$args[1]"
+  local dir="$args[2]"
+  local dir_path=$(realpath ${dir:-$repo_name})
+
+  local repo_name="${repo#*/}"
+  repo_name="${repo_name%.git}"
+
+  gh repo fork --clone $@
+
+  cd $dir_path
+
+  echo
+  echo $(colorize "cd $dir_path")
+  echo $(colorize -l yaml "origin: $(git remote get-url origin)")
+  echo $(colorize -l yaml "upstream: $(git remote get-url upstream)")
+  echo $(colorize -l toml $(git status --long))
 }
