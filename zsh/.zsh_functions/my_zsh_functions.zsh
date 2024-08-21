@@ -146,20 +146,59 @@ compdef _note note
 
 # Fork a repo with gh cli
 fork() {
-  local flags=( $(printf -- '%s\n' "$@" | grep -Eo '^--\w*') )
+  local flags=( $(printf -- '%s\n' "$@" | grep -Eo '^--?.*') )
   local args=( $(printf -- '%s\n' "$@" | grep -Eo '^[^-].*') )
   local repo="$args[1]"
   local dir="$args[2]"
+  local dir_path=$(realpath ${dir:-$repo_name})
 
   local repo_name="${repo#*/}"
   repo_name="${repo_name%.git}"
 
-  # gh repo fork --clone $@
+  gh repo fork --clone $@
 
-  cd ${dir:-$repo_name}
+  cd $dir_path
 
-  echo $(echo "cd ${dir:-$repo_name}/" | bat --plain --force-colorization --language=sh)
-  echo $(echo "$PWD" | bat --plain --force-colorization --language=sh)
-  echo $(echo "origin: $(git remote get-url origin)" | bat --plain --force-colorization --language=yaml)
-  echo $(echo "upstream: $(git remote get-url upstream)" | bat --plain --force-colorization --language=yaml)
+  echo
+  echo $(echo "cd $dir_path" | bat --plain --color=always --language=sh)
+  echo $(echo "origin: $(git remote get-url origin)" | bat --plain --color=always --language=yaml)
+  echo $(echo "upstream: $(git remote get-url upstream)" | bat --plain --color=always --language=yaml)
+  echo $(git status --long | bat --color=always --language=toml)
+}
+
+# Convenience wrapper around syntax highlighters like bat
+colorize() {
+  local cmd=(bat --style=plain --color=always --pager=never --language=sh)
+  local fallback_cmd=(highlight --out-format=ansi --syntax=sh)
+
+  local args=()
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -l|--language) language="$2"; shift 2 ;;
+      -l=*|--language=*) language="${1#*=}"; shift 1 ;;
+      -s|--syntax) language="$2"; shift 2 ;;
+      -s=*|--syntax=*) language="${1#*=}"; shift 1 ;;
+      * ) args+=($1) ; shift 1 ;;
+    esac
+  done
+  # echo $args[@]
+  # echo $language
+
+  local flags=( $(printf -- '%s\n' "$args" | grep -Eo '^--?.*') )
+  local args=( $(printf -- '%s\n' "$args" | grep -Eo '^[^-].*') )
+
+  setopt localoptions extended_glob
+  declare -A bat_kwargs=()
+  [ -n "${language}" ] && bat_kwargs[language]=${language}
+  bat_opts=( ${(zkj| |)bat_kwargs/(#m)*/--$MATCH="$bat_kwargs[$MATCH]"} )
+  declare -A highlight_kwargs=()
+  [ -n "${language}" ] && highlight_kwargs[syntax]=${language}
+  highlight_opts=( ${(zkj| |)highlight_kwargs/(#m)*/--$MATCH="$highlight_kwargs[$MATCH]"} )
+
+  # Check to see if a pipe exists on stdin.
+  if [ -p /dev/stdin ]; then
+    ($cmd $bat_opts[@] $flags[@] - 2>/dev/null) || ($fallback_cmd $highlight_opts[@] $flags[@] -)
+  else
+    (echo $args[@] | $cmd $bat_opts[@] $flags[@]) 2>/dev/null || (echo $args[@] | $fallback_cmd $highlight_opts[@] $flags[@])
+  fi
 }

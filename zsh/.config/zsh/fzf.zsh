@@ -10,32 +10,32 @@ bindkey "^E" fzf-history-widget
 bindkey -M vicmd "^E" fzf-history-widget
 
 # config
-export FZF_FILE_PREVIEW_CMD="(bat --force-colorization --line-range 0:200 --plain {-1} 2> /dev/null || highlight -O ansi --line-range 0-200 {} )"
-export FZF_DIR_PREVIEW_CMD="(eza --tree --level 5 --all --color=always {})"
-export FZF_FALLBACK_PREVIEW_CMD="(highlight -O ansi --syntax=sh)"
+export FZF_FILE_PREVIEW_CMD="(bat --color=always --line-range 0:200 --plain {-1} 2> /dev/null || highlight --out-format=ansi --line-range 0-200 {} )"
+export FZF_DIR_PREVIEW_CMD="(eza --tree --level=5 --all --color=always {})"
+export FZF_FALLBACK_PREVIEW_CMD="(highlight --out-format=ansi --syntax=sh)"
 export FZF_PREVIEW_CMD="($FZF_FILE_PREVIEW_CMD 2> /dev/null || $FZF_DIR_PREVIEW_CMD 2> /dev/null || $FZF_FALLBACK_PREVIEW_CMD) | head -200"
-export FZF_COMMAND='fd --hidden --follow --exclude .git --color=always --max-depth 12'
+export FZF_COMMAND='fd --hidden --follow --exclude=".git" --color=always --max-depth 12'
 # export FZF_DEFAULT_COMMAND="${FZF_COMMAND} | proximity-sort ."
 export FZF_DEFAULT_COMMAND="${FZF_COMMAND}"
 FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --bind 'tab:replace-query+down' --bind 'shift-tab:backward-kill-word' --bind 'right:replace-query+down' --bind 'left:backward-kill-word' --bind 'change:first' --bind 'ctrl-f:jump' --bind 'ctrl-d:delete-char/eof+clear-query' --bind 'alt-j:down' --bind 'alt-k:up' --bind '?:toggle-preview'"
-export FZF_DEFAULT_OPTS="--height 70% --border --ansi --info=inline --algo v2 ${FZF_BINDINGS_OPTS}"
+export FZF_DEFAULT_OPTS="--height=70% --border --ansi --info=inline --algo=v2 ${FZF_BINDINGS_OPTS}"
 # export FZF_DEFAULT_OPTS="--height 50% --border --ansi --info=inline --algo v1 --tiebreak=index ${FZF_BINDINGS_OPTS}"
 # always have a preview
 export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --preview '${FZF_PREVIEW_CMD}'"
 # use tmux popup
 # export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --tmux 100%,60%"
 
-FZF_CTRL_R_PREVIEW_CMD="echo {} | highlight --syntax sh -O ansi"
+FZF_CTRL_R_PREVIEW_CMD="echo {} | highlight --syntax=sh --out-format=ansi"
 FZF_CTRL_R_PREVIEW_OPTS="--preview '$FZF_CTRL_R_PREVIEW_CMD' --preview-window down:4:wrap"
-export FZF_CTRL_R_OPTS="--exact --bind 'ctrl-e:up' --bind 'ctrl-E:down' --height 80% $FZF_CTRL_R_PREVIEW_OPTS"
+export FZF_CTRL_R_OPTS="--exact --bind 'ctrl-e:up' --bind 'ctrl-E:down' --height=80% $FZF_CTRL_R_PREVIEW_OPTS"
 
-export FZF_CTRL_T_COMMAND="${FZF_COMMAND} --type f"
+export FZF_CTRL_T_COMMAND="${FZF_COMMAND} --type=f"
 export FZF_CTRL_T_OPTS="--select-1 --exit-0 --preview '${FZF_FILE_PREVIEW_CMD}'"
 
 # export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type d | proximity-sort ."
-export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type d"
+export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type=d"
 # export FZF_ALT_C_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview 'tree -C {} | head -200' --bind 'alt-c:down' --bind 'alt-C:up' --bind 'tab:down' --bind 'shift-tab:up'"
-export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'eza --tree --level 5 --all --color=always {}' --bind 'alt-c:down' --bind 'alt-C:up' --preview '${FZF_DIR_PREVIEW_CMD}'"
+export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'eza --tree --level=5 --all --color=always {}' --bind 'alt-c:down' --bind 'alt-C:up' --preview '${FZF_DIR_PREVIEW_CMD}'"
 FZF_COMPLETION_BINDINGS_OPTS=""
 export FZF_COMPLETION_OPTS="--select-1 --exit-0 ${FZF_COMPLETION_BINDINGS_OPTS}"
 
@@ -52,15 +52,15 @@ FZF_COMPLETION_FILE_COMMANDS="vi vim nvim v cat bat"
 _fzf_compgen_path() {
   # fd --hidden --follow --exclude .git --full-path --color=always | proximity-sort .
   # fd --hidden --follow --exclude .git --color=always --max-depth 10 --type f
-  fd --hidden --follow --exclude .git --color=always --max-depth 10 . "$1"
+  fd --hidden --follow --exclude=.git --color=always --max-depth=10 . "$1"
 }
 _fzf_compgen_dir() {
   # fd --hidden --follow --exclude .git --full-path --color=always --type d | proximity-sort .
-  fd --hidden --follow --exclude .git --color=always --max-depth 10 --type d . "$1"
+  fd --hidden --follow --exclude=.git --color=always --max-depth=10 --type=d . "$1"
 }
 _fzf_compgen_file() {
   # fd --hidden --follow --exclude .git --full-path --color=always --type f | proximity-sort .
-  fd --hidden --follow --exclude .git --color=always --max-depth 10 --type f . "$1"
+  fd --hidden --follow --exclude=.git --color=always --max-depth=10 --type=f . "$1"
 }
 
 _fzf_file_completion() {
@@ -203,7 +203,7 @@ _fzf_comprun() {
 
 # custom keybinds
 fzf-edit-file-widget() {
-  local result=$(fd --hidden --follow --exclude .git --color=always --type f | fzf)
+  local result=$(fd --hidden --follow --exclude=.git --color=always --type=f | fzf)
   local ret=$?
   if [[ -n $result ]]
   then
