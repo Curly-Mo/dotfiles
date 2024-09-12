@@ -49,6 +49,12 @@ alias v="vim_wrapper"
 # fzf
 alias fzv='vim $(fzf)'
 
+# the silver searcher
+alias ag='ag --follow --hidden'
+
+# ripgrep
+alias rg='rg --follow --hidden'
+
 # python
 # python poetry activate
 alias poetry_shell='. "$(dirname $(poetry run which python))/activate"'
@@ -161,3 +167,7 @@ alias todosw="todos -d $TODOTXT_CFG_FILE_WORK"
 
 # build tools
 alias b="build"
+alias bc="build c"
+alias bv="build v"
+alias bt="build t"
+alias bcv="build c v"

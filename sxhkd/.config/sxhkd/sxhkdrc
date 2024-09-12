@@ -17,10 +17,26 @@ alt + shift + g
   launch_or_focus gpclient
 
 ### SELECTION ###
-# alt + c
-#   xsel -po|xsel -bi
-# alt + @v
-#   xdotool type --clearmodifiers --delay 0 -- "$(xclip -out -selection clipboard)"
+alt + c
+  xsel -po|xsel -bi
+alt + shift + c
+  xsel -po|xsel -bi
+alt + @v
+  xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+alt + shift + @v
+  xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+# alt + v
+#   sleep 0.1 && xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+# alt + shift + v
+#   sleep 0.1 &&  xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+# alt + v
+#   sleep 0.1 && ydotool type --key-delay 0 -- "$(xclip -out -selection clipboard -4)"
+# alt + shift + v
+#   sleep 0.1 && ydotool type --key-delay 0 -- "$(xclip -out -selection clipboard -4)"
+# alt + v
+#   sleep 0.1 && (echo typedelay 0 | dotoolc) && (echo typehold 0 | dotoolc) && echo type "$(xclip -out -selection clipboard -4)" | dotoolc
+# alt + shift + v
+#   sleep 0.1 && (echo typedelay 0 | dotoolc) && (echo typehold 0 | dotoolc) && echo type "$(xclip -out -selection clipboard -r)" | dotoolc
 
 #alt + c
 #  xclip -in -selection clipboard

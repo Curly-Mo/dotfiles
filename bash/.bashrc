@@ -85,3 +85,5 @@ set -o vi
 
 # added by travis gem
 # [ ! -s /home/colinfahy/.travis/travis.sh ] || source /home/colinfahy/.travis/travis.sh
+
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash

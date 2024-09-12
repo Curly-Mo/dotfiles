@@ -15,8 +15,9 @@ export FZF_DIR_PREVIEW_CMD="(eza --tree --level=5 --all --color=always {})"
 export FZF_FALLBACK_PREVIEW_CMD="(highlight --out-format=ansi --syntax=sh)"
 export FZF_PREVIEW_CMD="($FZF_FILE_PREVIEW_CMD 2> /dev/null || $FZF_DIR_PREVIEW_CMD 2> /dev/null || $FZF_FALLBACK_PREVIEW_CMD) | head -200"
 export FZF_COMMAND='fd --hidden --follow --exclude=".git" --color=always --max-depth 12'
-# export FZF_DEFAULT_COMMAND="${FZF_COMMAND} | proximity-sort ."
+# export FZF_COMMAND="${FZF_COMMAND} --tiebreak=index"
 export FZF_DEFAULT_COMMAND="${FZF_COMMAND}"
+# export FZF_DEFAULT_COMMAND="${FZF_COMMAND} | proximity-sort ."
 FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --bind 'tab:replace-query+down' --bind 'shift-tab:backward-kill-word' --bind 'right:replace-query+down' --bind 'left:backward-kill-word' --bind 'change:first' --bind 'ctrl-f:jump' --bind 'ctrl-d:delete-char/eof+clear-query' --bind 'alt-j:down' --bind 'alt-k:up' --bind '?:toggle-preview'"
 export FZF_DEFAULT_OPTS="--height=70% --border --ansi --info=inline --algo=v2 ${FZF_BINDINGS_OPTS}"
 # export FZF_DEFAULT_OPTS="--height 50% --border --ansi --info=inline --algo v1 --tiebreak=index ${FZF_BINDINGS_OPTS}"
@@ -216,8 +217,10 @@ fzf-edit-file-widget() {
 zle -N fzf-edit-file-widget
 bindkey "^P" fzf-edit-file-widget
 bindkey "^[p" fzf-edit-file-widget
+bindkey "^V" fzf-edit-file-widget
 bindkey -M vicmd "^P" fzf-edit-file-widget
 bindkey -M vicmd "^[p" fzf-edit-file-widget
+bindkey -M vicmd "^V" fzf-edit-file-widget
 
 
 # custom override of fzf-completion https://github.com/junegunn/fzf/pull/1299

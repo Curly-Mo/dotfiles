@@ -26,12 +26,12 @@ down() {
     echo "Usage: down [directory]";
     return 1
   else
-    cd (^target/)#$@([1]/^D)
+    cd (^(target|.git)/)#$@(om,/,[1])
   fi  
 }
 _down() {
   local pwd=${PWD}
-  local down_dirs=((^target/)#(/^D))
+  local down_dirs=((^(target|.git)/)#(Om,/))
   local down_dirs=(${down_dirs##(*/_*)})
   local down_dir_names=(${${down_dirs%%(/)}##(*/)})
   local down_dir_names=(${^down_dir_names}/)
@@ -187,10 +187,9 @@ fork() {
   local args=( $(printf -- '%s\n' "$@" | grep -Eo '^[^-].*') )
   local repo="$args[1]"
   local dir="$args[2]"
-  local dir_path=$(realpath ${dir:-$repo_name})
-
   local repo_name="${repo#*/}"
   repo_name="${repo_name%.git}"
+  local dir_path=$(realpath ${dir:-$repo_name})
 
   gh repo fork --clone $@
 

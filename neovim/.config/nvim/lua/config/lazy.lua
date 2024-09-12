@@ -153,10 +153,10 @@ require("lazy").setup({
   },
   checker = {
     -- automatically check for plugin updates
-    enabled = true,
+    enabled = false,
     concurrency = 1, ---@type number? set to 1 to check for updates very slowly
     notify = true, -- get a notification when new updates are found
-    frequency = 3600, -- check for updates every hour
+    frequency = 86400, -- check for updates every 24 hour
     check_pinned = false, -- check for pinned packages that can't be updated
   },
   change_detection = {

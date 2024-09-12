@@ -131,13 +131,26 @@ zinit wait"0" lucid id-as"my_zsh_functions" for \
 
 
 # Plugins
+
+# zsh-vi-mode
 function zvm_config() {
-  # This function called by zsh-vi-mode
   ZVM_KEYTIMEOUT=0.3
   ZVM_ESCAPE_KEYTIMEOUT=0.03
   ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
 }
+# patch all modify functions to copy/paste from/to the clipboard
+function zvm_patch_functions() {
+  for f in zvm_backward_kill_region zvm_yank zvm_replace_selection zvm_change_surround_text_object zvm_vi_delete zvm_vi_change zvm_vi_change_eol; do
+    eval "$(echo "_$f() {"; declare -f $f | tail -n +2)"
+    eval "$f() { _$f; echo -en \$CUTBUFFER | xsel -bi }"
+  done
+  for f in zvm_vi_put_after zvm_vi_put_before; do
+    eval "$(echo "_$f() {"; declare -f $f | tail -n +2)"
+    eval "$f() { CUTBUFFER=\$(xclip -out -selection clipboard); _$f; zvm_highlight clear }"
+  done
+}
 zinit lucid depth=1 for \
+  atload"zvm_patch_functions" \
   jeffreytse/zsh-vi-mode
 
 zinit lucid for Curly-Mo/last-working-dir-tmux
@@ -374,3 +387,5 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete
 
 # uncomment for profiling
 # zprof
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

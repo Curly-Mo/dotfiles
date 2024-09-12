@@ -141,6 +141,7 @@
 lua <<EOF
 -- lazy.nvim plugin manager
 require("config.lazy")
+require("custom.utils")
 EOF
 
 
@@ -573,14 +574,6 @@ nnoremap <leader>gs :Git<CR>
 " Markdown
 let g:markdown_fenced_languages = ['html', 'css', 'javascript', 'js=javascript', 'typescript', 'python', 'java', 'scala', 'bash=sh']
 
-" vim-matchup
-" hi MatchParen guifg=#b1d8f6 ctermfg=012 ctermbg=none
-" hi MatchWord guifg=#b1d8f6 ctermfg=012 ctermbg=none
-" let g:matchup_enabled = 0
-" let g:matchup_matchparen_enabled = 0
-" let g:matchup_motion_enabled = 0
-" let g:matchup_text_obj_enabled = 0
-
 " vim-commentary
 nmap <M-/> :Commentary<CR>
 vmap <M-/> :Commentary<CR>
@@ -612,46 +605,53 @@ let g:github_enterprise_urls = ['https://ghe.spotify.net']
 " fzf
 " Mapping selecting mappings
 " nnoremap <C-p> :<C-u>FZF<CR>
-command! -nargs=* GFilesOrFiles execute (len(system('git rev-parse'))) ? ':Files <args>' : ':GFiles <args>'
-command! FilesFromDirOrRoot execute (len(system('fd | wc -l')) < 3) ? ':Files ' . FindRootDirectory() : ':GFilesOrFiles'
-function! Fd_cmd()
-  let l:root = FindRootDirectory()
-  if len(l:root) == 0
-    " return  printf("fd --hidden --exclude .git --full-path --color=always | proximity-sort %s", expand('%:p:h'))
-    return  printf("fd --hidden --exclude .git --full-path | proximity-sort %s", expand('%:p:h'))
-  endif
-  " return  printf("fd --hidden --exclude .git --full-path --color=always --base-directory %s | proximity-sort %s", root, expand('%:p:h'))
-  return  printf("fd --hidden --exclude .git --full-path --base-directory %s | proximity-sort %s", root, expand('%:p:h'))
-  " return  printf("fd --hidden --exclude .git --full-path --base-directory %s", root)
-endfunction
-command! -bang -nargs=? -complete=dir FilesProximity
-  \ call fzf#vim#files(<q-args>, {'source': Fd_cmd(),
-  \                               'options': '--tiebreak=index'}, <bang>0)
-"" nnoremap <C-p> :GFilesOrFiles<CR>
-"" nnoremap <C-p> :FilesFromDirOrRoot<CR>
-"nnoremap <C-p> :FilesProximity<CR>
-"" nnoremap <C-p> :Files<CR>
-"nnoremap <C-b> :Buffers<CR>
-"" nnoremap <leader>s :<C-u>FZF<CR>
-"nnoremap <leader>s :Files<CR>
-"" nnoremap <leader>f :GFiles<CR>
-nmap <leader><tab> <plug>(fzf-maps-n)
-xmap <leader><tab> <plug>(fzf-maps-x)
-omap <leader><tab> <plug>(fzf-maps-o)
-" Insert mode completion
-imap <c-x><c-k> <plug>(fzf-complete-word)
-imap <c-x><c-f> <plug>(fzf-complete-path)
-imap <c-x><c-l> <plug>(fzf-complete-line)
-" Path completion with custom source command
-inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd --type f --hidden --exclude .git')
-" inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
-" Word completion with custom spec with popup layout option
-inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
-" Config
-let g:fzf_preview_window = ['right:60%', 'ctrl-/']
-" TODO: experimental, remoe these
-" let g:fzf_preview_use_dev_icons = 1
-" let g:fzf_preview_command = 'bat --color=always --plain {-1}'
+"command! -nargs=* GFilesOrFiles execute (len(system('git rev-parse'))) ? ':Files <args>' : ':GFiles <args>'
+"command! FilesFromDirOrRoot execute (len(system('fd | wc -l')) < 3) ? ':Files ' . FindRootDirectory() : ':GFilesOrFiles'
+"function! Fd_cmd()
+"  let l:root = FindRootDirectory()
+"  if len(l:root) == 0
+"    " return  printf("fd --hidden --exclude .git --full-path --color=always | proximity-sort %s", expand('%:p:h'))
+"    return  printf("fd --hidden --exclude .git --full-path | proximity-sort %s", expand('%:p:h'))
+"  endif
+"  " return  printf("fd --hidden --exclude .git --full-path --color=always --base-directory %s | proximity-sort %s", root, expand('%:p:h'))
+"  return  printf("fd --hidden --exclude .git --full-path --base-directory %s | proximity-sort %s", root, expand('%:p:h'))
+"  " return  printf("fd --hidden --exclude .git --full-path --base-directory %s", root)
+"endfunction
+"command! -bang -nargs=? -complete=dir FilesProximity
+"  \ call fzf#vim#files(<q-args>, {'source': Fd_cmd(),
+"  \                               'options': '--tiebreak=index'}, <bang>0)
+""" nnoremap <C-p> :GFilesOrFiles<CR>
+""" nnoremap <C-p> :FilesFromDirOrRoot<CR>
+""nnoremap <C-p> :FilesProximity<CR>
+""" nnoremap <C-p> :Files<CR>
+""nnoremap <C-b> :Buffers<CR>
+""" nnoremap <leader>s :<C-u>FZF<CR>
+""nnoremap <leader>s :Files<CR>
+""" nnoremap <leader>f :GFiles<CR>
+"nmap <leader><tab> <plug>(fzf-maps-n)
+"xmap <leader><tab> <plug>(fzf-maps-x)
+"omap <leader><tab> <plug>(fzf-maps-o)
+"" Insert mode completion
+"imap <c-x><c-k> <plug>(fzf-complete-word)
+"imap <c-x><c-f> <plug>(fzf-complete-path)
+"imap <c-x><c-l> <plug>(fzf-complete-line)
+"" Path completion with custom source command
+"inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd --type f --hidden --exclude .git')
+"" inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+"" Word completion with custom spec with popup layout option
+"inoremap <expr> <c-x><c-k> fzf#vim#complete#word({'window': { 'width': 0.2, 'height': 0.9, 'xoffset': 1 }})
+"" Config
+"let g:fzf_layout = { 'window': { 'width': 0.99, 'height': 0.99 } }
+"let g:fzf_preview_window = ['right:50%', 'ctrl-/']
+"let g:fzf_history_dir = '~/.config/nvim/tmp/fzf-history'
+"" TODO: experimental, remoe these
+"" let g:fzf_preview_use_dev_icons = 1
+"" let g:fzf_preview_command = 'bat --color=always --plain {-1}'
+"" fzf cd
+"command! -bang -bar -nargs=? -complete=dir C
+"    \ call fzf#run(fzf#wrap(
+"    \ {'source': 'fd --type d --hidden --exclude .git',
+"    \ 'sink': 'cd'}))
 
 " Vista.vim
 " let g:vista_icon_indent = ["╰─▸", "├─▸"]
