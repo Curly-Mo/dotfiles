@@ -24,6 +24,8 @@
   helper = cache --timeout=2600000
 [credential "https://github.com"]
   username = Curly-Mo
+  helper = 
+  helper = !/usr/bin/gh auth git-credential
 [credential "https://ghe.spotify.net"]
   username = colinfahy
 [alias]
@@ -99,6 +101,9 @@
 [git-extras]
   default-branch = master
 [git-extras "create-branch"]
-	remote = origin
+  remote = origin
 [help]
-	autocorrect = prompt
+  autocorrect = prompt
+[credential "https://gist.github.com"]
+  helper = 
+  helper = !/usr/bin/gh auth git-credential
