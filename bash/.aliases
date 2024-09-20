@@ -52,9 +52,6 @@ alias fzv='vim $(fzf)'
 # the silver searcher
 alias ag='ag --follow --hidden'
 
-# ripgrep
-alias rg='rg --follow --hidden'
-
 # python
 # python poetry activate
 alias poetry_shell='. "$(dirname $(poetry run which python))/activate"'

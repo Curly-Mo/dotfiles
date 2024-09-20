@@ -2,6 +2,7 @@
 # bindkey '^I' fzf-completion
 # bindkey "^Y" $fzf_default_completion
 # bindkey "^[c" fzf-cd-widget
+bindkey "^[j" fzf-cd-widget
 # bindkey "^T" fzf-file-widget
 bindkey "^[t" fzf-file-widget
 bindkey "^R" history-incremental-search-backward
@@ -14,15 +15,36 @@ export FZF_FILE_PREVIEW_CMD="(bat --color=always --line-range 0:200 --plain {-1}
 export FZF_DIR_PREVIEW_CMD="(eza --tree --level=5 --all --color=always {})"
 export FZF_FALLBACK_PREVIEW_CMD="(highlight --out-format=ansi --syntax=sh)"
 export FZF_PREVIEW_CMD="($FZF_FILE_PREVIEW_CMD 2> /dev/null || $FZF_DIR_PREVIEW_CMD 2> /dev/null || $FZF_FALLBACK_PREVIEW_CMD) | head -200"
-export FZF_COMMAND='fd --hidden --follow --exclude=".git" --color=always --max-depth 12'
-# export FZF_COMMAND="${FZF_COMMAND} --tiebreak=index"
+export FZF_PREVIEW_OPTS="--preview-window=right,45%"
+
+export LS_TIME_SORT="atime"
+export LS_SORT_AND_COLOR_CMD="/bin/ls --directory --sort=time --time=$LS_TIME_SORT --color=always"
+export FD_COMMAND='fd --hidden --follow --exclude=".git" --color=always --max-depth 12'
+export FD_FILES_COMMAND="${FD_COMMAND} --type=f"
+export FD_DIR_COMMAND="${FD_COMMAND} --type=d"
+export SORTED_FD_COMMAND="${FD_COMMAND} --exec-batch $LS_SORT_AND_COLOR_CMD"
+export SORTED_FD_FILES_COMMAND="${FD_FILES_COMMAND} --exec-batch $LS_SORT_AND_COLOR_CMD"
+export SORTED_FD_DIR_COMMAND="${FD_DIR_COMMAND} --exec-batch $LS_SORT_AND_COLOR_CMD"
+export RG_COMMAND='rg --max-depth=12 --sort=accessed --color=always'
+export RG_FILES_COMMAND="${RG_COMMAND} --files"
+export FZF_COMMAND="${FD_COMMAND}"
+# export FZF_COMMAND="${RG_COMMAND}"
+export FZF_FILES_COMMAND="${SORTED_FD_FILES_COMMAND}"
+# export FZF_FILES_COMMAND="${FD_FILES_COMMAND}"
+# export FZF_FILES_COMMAND="${RG_FILES_COMMAND}"
+export FZF_DIR_COMMAND="${SORTED_FD_DIR_COMMAND}"
+# export FZF_DIR_COMMAND="${FD_DIR_COMMAND}"
+# export FZF_DIR_COMMAND="${RG_DIR_COMMAND}"
 export FZF_DEFAULT_COMMAND="${FZF_COMMAND}"
-# export FZF_DEFAULT_COMMAND="${FZF_COMMAND} | proximity-sort ."
+
+# export FZF_TIEBREAK_OPTS_OPTS="--tiebreak=index,length"
+export FZF_TIEBREAK_OPTS_OPTS="--tiebreak=index"
+
 FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --bind 'tab:replace-query+down' --bind 'shift-tab:backward-kill-word' --bind 'right:replace-query+down' --bind 'left:backward-kill-word' --bind 'change:first' --bind 'ctrl-f:jump' --bind 'ctrl-d:delete-char/eof+clear-query' --bind 'alt-j:down' --bind 'alt-k:up' --bind '?:toggle-preview'"
 export FZF_DEFAULT_OPTS="--height=70% --border --ansi --info=inline --algo=v2 ${FZF_BINDINGS_OPTS}"
-# export FZF_DEFAULT_OPTS="--height 50% --border --ansi --info=inline --algo v1 --tiebreak=index ${FZF_BINDINGS_OPTS}"
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} $FZF_TIEBREAK_OPTS_OPTS"
 # always have a preview
-export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --preview '${FZF_PREVIEW_CMD}'"
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --preview '${FZF_PREVIEW_CMD}' ${FZF_PREVIEW_OPTS}"
 # use tmux popup
 # export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --tmux 100%,60%"
 
@@ -30,13 +52,12 @@ FZF_CTRL_R_PREVIEW_CMD="echo {} | highlight --syntax=sh --out-format=ansi"
 FZF_CTRL_R_PREVIEW_OPTS="--preview '$FZF_CTRL_R_PREVIEW_CMD' --preview-window down:4:wrap"
 export FZF_CTRL_R_OPTS="--exact --bind 'ctrl-e:up' --bind 'ctrl-E:down' --height=80% $FZF_CTRL_R_PREVIEW_OPTS"
 
-export FZF_CTRL_T_COMMAND="${FZF_COMMAND} --type=f"
-export FZF_CTRL_T_OPTS="--select-1 --exit-0 --preview '${FZF_FILE_PREVIEW_CMD}'"
+export FZF_CTRL_T_COMMAND="${FZF_FILES_COMMAND}"
+export FZF_CTRL_T_OPTS="--select-1 --exit-0 --preview '${FZF_FILE_PREVIEW_CMD}' $FZF_TIEBREAK_OPTS_OPTS"
 
-# export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type d | proximity-sort ."
-export FZF_ALT_C_COMMAND="${FZF_COMMAND} --type=d"
+export FZF_ALT_C_COMMAND="${FZF_DIR_COMMAND}"
 # export FZF_ALT_C_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview 'tree -C {} | head -200' --bind 'alt-c:down' --bind 'alt-C:up' --bind 'tab:down' --bind 'shift-tab:up'"
-export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'eza --tree --level=5 --all --color=always {}' --bind 'alt-c:down' --bind 'alt-C:up' --preview '${FZF_DIR_PREVIEW_CMD}'"
+export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'eza --tree --level=5 --all --color=always {}' --bind 'alt-c:down' --bind 'alt-C:up' --preview '${FZF_DIR_PREVIEW_CMD}' $FZF_TIEBREAK_OPTS_OPTS"
 FZF_COMPLETION_BINDINGS_OPTS=""
 export FZF_COMPLETION_OPTS="--select-1 --exit-0 ${FZF_COMPLETION_BINDINGS_OPTS}"
 
@@ -51,17 +72,16 @@ FZF_COMPLETION_FILE_COMMANDS="vi vim nvim v cat bat"
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  # fd --hidden --follow --exclude .git --full-path --color=always | proximity-sort .
-  # fd --hidden --follow --exclude .git --color=always --max-depth 10 --type f
-  fd --hidden --follow --exclude=.git --color=always --max-depth=10 . "$1"
+  local cmd=( $(echo $FZF_COMMAND) )
+  "${cmd[@]}"
 }
 _fzf_compgen_dir() {
-  # fd --hidden --follow --exclude .git --full-path --color=always --type d | proximity-sort .
-  fd --hidden --follow --exclude=.git --color=always --max-depth=10 --type=d . "$1"
+  local cmd=( $(echo $FZF_DIR_COMMAND) )
+  "${cmd[@]}"
 }
 _fzf_compgen_file() {
-  # fd --hidden --follow --exclude .git --full-path --color=always --type f | proximity-sort .
-  fd --hidden --follow --exclude=.git --color=always --max-depth=10 --type=f . "$1"
+  local cmd=( $(echo $FZF_FILES_COMMAND) )
+  "${cmd[@]}"
 }
 
 _fzf_file_completion() {
@@ -145,7 +165,6 @@ _fzf_comprun() {
 # # another hack https://github.com/Aloxaf/fzf-tab/issues/65
 # _files() {
 #   # fd --hidden --exclude .git --type=f | {
-#   fd --hidden --exclude .git --type=f | proximity-sort . | {
 #     while read line; do
 #       compadd -f -- $line
 #     done
@@ -200,11 +219,10 @@ _fzf_comprun() {
 #   fi
 # }
 
-
-
 # custom keybinds
 fzf-edit-file-widget() {
-  local result=$(fd --hidden --follow --exclude=.git --color=always --type=f | fzf)
+  local cmd=( $(echo $FZF_FILES_COMMAND) )
+  local result=$(${cmd[@]} | fzf)
   local ret=$?
   if [[ -n $result ]]
   then

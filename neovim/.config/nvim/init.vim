@@ -137,115 +137,8 @@
 " Plug 'NeogitOrg/neogit'
  "call plug#end()
 
-" TODO: replace with init.lua
-lua <<EOF
--- lazy.nvim plugin manager
-require("config.lazy")
-require("custom.utils")
-EOF
-
-
-" syntax
-syntax on
-" set relativenumber
-set number
-" Turn off auto-commenting
-autocmd FileType * setlocal formatoptions-=c
-autocmd FileType * setlocal formatoptions-=r
-autocmd FileType * setlocal formatoptions-=o
-filetype plugin indent on
-"set ruler
-set formatoptions-=cro "don't continue comment marks
-" Relative numbering
-function! NumberToggle()
-  if(&relativenumber == 1)
-    set nonu
-    set nornu
-  else
-    set nu
-    set rnu
-  endif
-endfunc
-
-" Colors
-if exists('+termguicolors')
-  set termguicolors
-endif
-colorscheme phlebotinum
-set cursorline
-" vimdiff
-" highlight DiffAdd    cterm=bold ctermbg=darkgrey
-" highlight DiffDelete cterm=bold ctermbg=darkyellow
-" highlight DiffChange cterm=bold ctermbg=darkcyan
-" highlight DiffText   cterm=bold ctermbg=darkblue ctermfg=darkgrey
-" " fold colors
-" " set fillchars=fold:\
-" highlight Folded ctermbg=235
-" highlight FoldColumn ctermbg=black
-" " vertical divider colors
-" hi VertSplit ctermfg=Black ctermbg=248
-" hi StatusLine ctermfg=236 ctermbg=248
-" hi StatusLineNC ctermfg=236 ctermbg=248
-set fillchars+=vert:│
-" print Syntax Highlight Group of what is under cursor
-function! s:syntax_query()
-  let s = synID(line('.'), col('.'), 1) | echo synIDattr(s, 'name') . ' -> ' . synIDattr(synIDtrans(s), 'name')
-  return s
-endfunc
-command! SynID call s:syntax_query()
-
-" search
-set hlsearch
-nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
-set ignorecase
-set smartcase
-set incsearch
-"set gdefault
-set magic
-" very magic mode for %s/
-" disable because it was confusing
-" cnoremap %s/ %s/\v
-
-" tabs
-set tabstop=2
-set softtabstop=2
-set shiftwidth=2
-set expandtab
-autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
-
-" aliases
-:command WQ wq
-:command Wq wq
-:command Q qa!
-:command CQ cq
-:command Cq cq
-:command Bd bd
-:command BD bd
-" :command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
-" :command W :execute '!sudo tee % > /dev/null'
-" :command W w
-:command! W :SudoWrite
-:command WW :SudaWrite
-:command Wd :Mkdir | w
-:command WD :Mkdir | :SudoWrite
-:command WWD :Mkdir | :SudaWrite
-" reload vimrc
-:command! Reload source $MYVIMRC
-" csv
-:command! CSV %!column -t
-" cd
-:command CD :cd %:h
-:command Groot :cd `git rev-parse --show-toplevel`
-:command Proot :Groot
-
-" paste
-nnoremap <F2> :set invpaste paste?<CR>
-set pastetoggle=<F10>
-set noshowmode
-" clipboard
-set clipboard+=unnamedplus
-set mouse=a
-
+" BASICS
+" keeping these in init.vim for now to ensure they never get broken by invalid lua configs
 " set tempfile location
 " in neovim, no need to create these dirs first
 "silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/backup > /dev/null 2>&1
@@ -267,35 +160,165 @@ endif
 if has("autocmd")
     au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
 endif
+" END BASICS
 
-" Split navigation
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-H> <C-W><C-H>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-S-LEFT> <C-W><C-H>
-nnoremap <C-S-RIGHT> <C-W><C-L>
-nnoremap <C-S-UP> <C-W><C-K>
-nnoremap <C-S-DOWN> <C-W><C-J>
+" TODO: replace with init.lua
+lua <<EOF
+require("config")
+require("custom.utils")
+EOF
 
-" vimdiff settings
-set diffopt+=vertical
-set diffopt+=foldcolumn:1
-
-" status
-" set shortmess=a
-
-" Neovim
-" Python
-let g:python3_host_prog = "~/.pyenv/shims/python3"
-let g:python_host_prog = "~/.pyenv/shims/python2"
-
-" delete without yanking
-nnoremap <leader>d "_d
-vnoremap <leader>d "_d
-" replace currently selected text with default register
-" without yanking it
-vnoremap <leader>p "_dP
+"" syntax
+"syntax on
+"" set relativenumber
+"set number
+"" Turn off auto-commenting
+"autocmd FileType * setlocal formatoptions-=c
+"autocmd FileType * setlocal formatoptions-=r
+"autocmd FileType * setlocal formatoptions-=o
+"filetype plugin indent on
+""set ruler
+"set formatoptions-=cro "don't continue comment marks
+"" Relative numbering
+"function! NumberToggle()
+"  if(&relativenumber == 1)
+"    set nonu
+"    set nornu
+"  else
+"    set nu
+"    set rnu
+"  endif
+"endfunc
+"
+"" Colors
+"if exists('+termguicolors')
+"  set termguicolors
+"endif
+"colorscheme phlebotinum
+"set cursorline
+"" vimdiff
+"" highlight DiffAdd    cterm=bold ctermbg=darkgrey
+"" highlight DiffDelete cterm=bold ctermbg=darkyellow
+"" highlight DiffChange cterm=bold ctermbg=darkcyan
+"" highlight DiffText   cterm=bold ctermbg=darkblue ctermfg=darkgrey
+"" " fold colors
+"" " set fillchars=fold:\
+"" highlight Folded ctermbg=235
+"" highlight FoldColumn ctermbg=black
+"" " vertical divider colors
+"" hi VertSplit ctermfg=Black ctermbg=248
+"" hi StatusLine ctermfg=236 ctermbg=248
+"" hi StatusLineNC ctermfg=236 ctermbg=248
+"set fillchars+=vert:│
+"" print Syntax Highlight Group of what is under cursor
+"function! s:syntax_query()
+"  let s = synID(line('.'), col('.'), 1) | echo synIDattr(s, 'name') . ' -> ' . synIDattr(synIDtrans(s), 'name')
+"  return s
+"endfunc
+"command! SynID call s:syntax_query()
+"
+"" search
+"set hlsearch
+"nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR>
+"set ignorecase
+"set smartcase
+"set incsearch
+""set gdefault
+"set magic
+"" very magic mode for %s/
+"" disable because it was confusing
+"" cnoremap %s/ %s/\v
+"
+"" tabs
+"set tabstop=2
+"set softtabstop=2
+"set shiftwidth=2
+"set expandtab
+"autocmd Filetype python setlocal ts=4 sw=4 sts=4 expandtab
+"
+"" aliases
+":command WQ wq
+":command Wq wq
+":command Q qa!
+":command CQ cq
+":command Cq cq
+":command Bd bd
+":command BD bd
+"" :command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
+"" :command W :execute '!sudo tee % > /dev/null'
+"" :command W w
+":command! W :SudoWrite
+":command WW :SudaWrite
+":command Wd :Mkdir | w
+":command WD :Mkdir | :SudoWrite
+":command WWD :Mkdir | :SudaWrite
+"" reload vimrc
+":command! Reload source $MYVIMRC
+"" csv
+":command! CSV %!column -t
+"" cd
+":command CD :cd %:h
+":command Groot :cd `git rev-parse --show-toplevel`
+":command Proot :Groot
+"
+"" paste
+"nnoremap <F2> :set invpaste paste?<CR>
+"set pastetoggle=<F10>
+"set noshowmode
+"" clipboard
+"set clipboard+=unnamedplus
+"set mouse=a
+"
+"" set tempfile location
+"" in neovim, no need to create these dirs first
+""silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/backup > /dev/null 2>&1
+""silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/swap > /dev/null 2>&1
+""silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/undo > /dev/null 2>&1
+"set backupdir=~/.config/nvim/tmp/backup//
+"set directory=~/.config/nvim/tmp/swap//
+"set undodir=~/.config/nvim/tmp/undo//
+"" Persistent undo
+"set undofile
+"set undolevels=50000
+"
+"" Always open readonly if swapfile exists
+"if has("autocmd")
+"  autocmd SwapExists * let v:swapchoice = "o"
+"endif
+"
+"" Remember last cursor position
+"if has("autocmd")
+"    au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+"endif
+"
+"" Split navigation
+"nnoremap <C-K> <C-W><C-K>
+"nnoremap <C-J> <C-W><C-J>
+"nnoremap <C-H> <C-W><C-H>
+"nnoremap <C-L> <C-W><C-L>
+"nnoremap <C-S-LEFT> <C-W><C-H>
+"nnoremap <C-S-RIGHT> <C-W><C-L>
+"nnoremap <C-S-UP> <C-W><C-K>
+"nnoremap <C-S-DOWN> <C-W><C-J>
+"
+"" vimdiff settings
+"set diffopt+=vertical
+"set diffopt+=foldcolumn:1
+"
+"" status
+"" set shortmess=a
+"
+"" Neovim
+"" Python
+"let g:python3_host_prog = "~/.pyenv/shims/python3"
+"let g:python_host_prog = "~/.pyenv/shims/python2"
+"
+"" delete without yanking
+"nnoremap <leader>d "_d
+"vnoremap <leader>d "_d
+"" replace currently selected text with default register
+"" without yanking it
+"vnoremap <leader>p "_dP
 
 
 """"""PLUGINS"""""""

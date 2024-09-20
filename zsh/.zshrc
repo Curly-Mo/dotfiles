@@ -230,15 +230,19 @@ zinit lucid light-mode \
   git id-as'trapd00r/LS_COLORS' \
     @trapd00r/LS_COLORS
 
-zinit wait"0" from"gh-r" lucid lbin for \
+zinit wait"0" lucid lbin completions for \
+  atpull="zinit creinstall -q ." \
     eza-community/eza
 
 # sharkdp
 zinit wait"0" from"gh-r" lucid lbin for \
   nocd atload"export BAT_THEME='ansi'" \
+  cp="bat-*/autocomplete/bat.zsh -> _bat" \
+  atpull="zinit creinstall -q ." \
     @sharkdp/bat
 zinit wait"0" from"gh-r" lucid lbin for \
-  @sharkdp/fd
+  cp="fd-*/autocomplete/_fd -> _fd" \
+    @sharkdp/fd
 zinit wait"0" from"gh-r" lucid lbin for \
   @sharkdp/hexyl
 zinit wait"0" from"gh-r" lucid lbin for \
@@ -266,6 +270,7 @@ zinit wait"0" lucid from"gh-r" lbin for \
 
 zinit wait"0" lucid from"gh-r" for \
   lbin="rg" \
+	cp="ripgrep-*/complete/_rg -> _rg" \
     BurntSushi/ripgrep
 
 zinit wait"0" lucid from"gh-r" lbin'jq* -> jq' for \
@@ -275,10 +280,12 @@ zinit wait"0" lucid from"gh-r" lbin'jq* -> jq' for \
 zinit wait"0" lucid lbin for \
   Fakerr/git-recall \
   davidosomething/git-my \
-  iwata/git-now \
   paulirish/git-open \
   paulirish/git-recent \
   arzzen/git-quick-stats
+zinit wait"0" lucid lbin for \
+  atpull="zinit creinstall -q ." \
+    iwata/git-now
 zinit wait"0" lucid from"gh-r" lbin for \
   dandavison/delta
 zinit wait"0" lucid from"gh-r" lbin for \
@@ -292,7 +299,8 @@ zinit wait"0" lucid as:"program" make for \
     tj/git-extras 
   # src"etc/git-extras-completion.zsh" \
 zinit wait"0" lucid make lbin for \
-  pick"hub/etc/hub.zsh_completion" \
+  cp="etc/hub.zsh_completion -> _hub" \
+  atpull="zinit creinstall -q ." \
     @github/hub
 # zinit wait"0" lucid for \
 #   wfxr/forgit

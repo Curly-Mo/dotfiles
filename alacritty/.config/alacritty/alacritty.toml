@@ -26,10 +26,22 @@ background = "0x171717"
 foreground = "0xbcbcbc"
 
 [font]
-size = 19.5
-
+# size = 19.5
+# size = 17.5
+size = 18.5
 [font.normal]
-family = "Roboto Mono for Powerline"
+# family = "Roboto Mono for Powerline"
+family = "Roboto Mono Nerd Font Mono"
+style = "Regular"
+[font.bold]
+family = "Roboto Mono Nerd Font Mono"
+style = "Bold"
+[font.italic]
+family = "Roboto Mono Nerd Font Mono"
+style = "Italic"
+[font.bold_italic]
+family = "Roboto Mono Nerd Font Mono"
+style = "Bold Italic"
 
 # [hints.mouse]
 # enabled = true

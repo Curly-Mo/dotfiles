@@ -31,7 +31,7 @@ M.relative_path = function(original_path, reference_path, root_path)
 
 		result = "../" .. result
     if (string.find(result, "../../../") and root_path ~= nil) then
-      print(root_path)
+      -- print(root_path)
       return ":GROOT/" .. orig_path:make_relative(root_path)
     end
 	end

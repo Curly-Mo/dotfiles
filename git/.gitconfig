@@ -1,7 +1,7 @@
 [core]
   editor = vim
   excludesfile = ~/.gitignore
-  ; pager = delta
+  pager = delta
 [diff]
   tool = nvimdiff
   colorMoved = default
@@ -14,7 +14,7 @@
   # cmd = "nvim -d \"$LOCAL\" \"$REMOTE\""
 [merge]
   tool = nvimdiff
-  # conflictstyle = diff3
+  conflictstyle = diff3
 [mergetool "nvimdiff"]
   path = nvim
   # cmd = "nvim -d \"$LOCAL\" \"$REMOTE\" \"$MERGED\""
@@ -81,11 +81,27 @@
   # fetch = +refs/pull/*/head:refs/remotes/origin/pr/*
 [interactive]
   diffFilter = delta --color-only --features=interactive
+[pager]
+  blame  = delta
+  diff   = delta
+  reflog = delta
+  show   = delta
 [delta]
   navigate = true  # use n and N to move between diff sections
   side-by-side = true
-  features = line-numbers styles
+  line-numbers-left-format = "{nm:>3}┊"
+  line-numbers-right-format = "{np:>3}│"
+  features = decorations styles line-numbers
+[delta "decorations"]
+  commit-decoration-style = blue ol
+  commit-style = raw
+  file-style = red
+  hunk-header-decoration-style = blue box
+  hunk-header-file-style = blue
+  hunk-header-line-number-style = "#067a00"
+  hunk-header-style = file line-number syntax
 [delta "styles"]
+  dark = true
   syntax-theme = base16
   plus-style = black "#8787af"
   plus-non-emph-style = black "#8787af"
@@ -96,8 +112,8 @@
 [delta "line-numbers"]
   line-numbers = true
   line-numbers-right-format = "│"
-  line-numbers-left-format = "{nm:>3}┊"
-  line-numbers-right-format = "{np:>3}│"
+[delta "interactive"]
+    keep-plus-minus-markers = false
 [git-extras]
   default-branch = master
 [git-extras "create-branch"]
