@@ -69,6 +69,74 @@ vim.g.python3_host_prog = "~/.pyenv/shims/python3"
 vim.g.python_host_prog = "~/.pyenv/shims/python2"
 -- END BASICS
 
+vim.g.icons = { error = "✗", warn = "⚠", hint = "󰌶", info = "ⓘ", dot = "⏺" }
+
+-- Diagnostics
+vim.opt.signcolumn = "auto:1"
+local signs = {
+  text = {
+    [vim.diagnostic.severity.ERROR] = vim.g.icons.error,
+    [vim.diagnostic.severity.WARN] = vim.g.icons.warn,
+    [vim.diagnostic.severity.INFO] = vim.g.icons.info,
+    [vim.diagnostic.severity.HINT] = vim.g.icons.hint,
+  },
+  numhl = {
+    [vim.diagnostic.severity.ERROR] = "DiagnosticSignError",
+    [vim.diagnostic.severity.WARN]  = "DiagnosticSignWarn",
+    [vim.diagnostic.severity.INFO]  = "DiagnosticSignInfo",
+    [vim.diagnostic.severity.HINT]  = "DiagnosticSignHint",
+  },
+}
+local diagnostic_config = {
+  virtual_text = false,
+  -- virtual_text = {
+  --   severity = {vim.diagnostic.severity.ERROR},
+  --   source = "if_many",
+  --   spacing = 2,
+  --   prefix = function(diagnostic, i, total)
+  --     return signs.text[diagnostic.severity]
+  --   end,
+  -- },
+  underline = {severity = {vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN}},
+  update_in_insert = false,
+  severity_sort = true,
+  -- float = false,
+  float = {
+    -- border = 'rounded',
+    severity_sort = true,
+    source = "if_many",
+  },
+  signs = signs,
+}
+vim.diagnostic.config(diagnostic_config)
+-- Show line diagnostics automatically in hover window
+-- You will likely want to reduce updatetime which affects CursorHold
+-- note: this setting is global and should be set only once
+vim.o.updatetime = 750 -- default 4000
+-- only hover float for non-errors (errors are handled by tiny-inline-diagnostic.nvim
+local cursor_severity_filter = {vim.diagnostic.severity.WARN}
+local line_severity_filter = {vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT}
+-- show only diagnostic of word under cursor
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+  group = vim.api.nvim_create_augroup("float_diagnostic_cursor", { clear = true }),
+  callback = function ()
+    vim.diagnostic.open_float(nil, {focus=false, scope="cursor", severity = cursor_severity_filter})
+  end
+})
+-- show all diagnostics on line
+vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+  group = vim.api.nvim_create_augroup("float_diagnostic", { clear = true }),
+  callback = function ()
+    vim.diagnostic.open_float(nil, {focus=false, severity = line_severity_filter})
+  end
+})
+
+-- colors TODO: add these to phlebotinum
+vim.cmd([[
+highlight DiagnosticInfo guifg=#6c6c6c
+]])
+
+
 -- LEGACY CONFIGS
 vim.cmd([[
 " Turn off auto-commenting

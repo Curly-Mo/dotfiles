@@ -128,6 +128,7 @@ return {
     "hrsh7th/cmp-buffer",
     "hrsh7th/cmp-path",
     -- "hrsh7th/cmp-cmdline",
+    "onsails/lspkind.nvim",
   },
   event = { "InsertEnter", "CmdlineEnter" },
   config = function()
@@ -153,20 +154,62 @@ return {
         -- completion = require("cmp").config.window.bordered(),
         -- documentation = require("cmp").config.window.bordered(),
       },
+      formatting = {
+        format = require("lspkind").cmp_format({
+          mode = "symbol_text",
+          maxwidth = 50,
+          show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+          menu = ({
+            buffer = "[Buffer]",
+            nvim_lsp = "[LSP]",
+            luasnip = "[LuaSnip]",
+            nvim_lua = "[Lua]",
+            latex_symbols = "[Latex]",
+          }),
+        }),
+      },
+      performance = {
+        max_view_entries = 10,
+      },
+      -- preselect = cmp.PreselectMode.Item,
+      preselect = cmp.PreselectMode.None,
       mapping = require("cmp").mapping.preset.insert({
         ['<C-b>'] = require("cmp").mapping.scroll_docs(-4),
         ['<C-f>'] = require("cmp").mapping.scroll_docs(4),
         ['<C-Space>'] = require("cmp").mapping.complete(),
         ['<C-e>'] = require("cmp").mapping.abort(),
-        ['<CR>'] = require("cmp").mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        -- ['<CR>'] = require("cmp").mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
         -- my mappings
+         ["<CR>"] = cmp.mapping({
+           i = function(fallback)
+             if cmp.visible() and cmp.get_active_entry() then
+               cmp.confirm({ select = false })
+             elseif cmp.visible() and #cmp.get_entries() == 1 then
+               cmp.confirm({ select = true })
+             else
+               fallback()
+             end
+           end,
+           s = cmp.mapping.confirm({ select = false }),
+           c = cmp.mapping.confirm({ select = false }),
+         }),
         ['<Tab>'] = function(fallback)
-          if not cmp.select_next_item() then
-            if vim.bo.buftype ~= 'prompt' and has_words_before() then
-              cmp.complete()
+          if cmp.visible() then
+            if #cmp.get_entries() == 1 then
+              cmp.confirm({ select = true })
             else
-              fallback()
+              cmp.select_next_item()
             end
+          --[[ Replace with your snippet engine (see above sections on this page)
+          elseif snippy.can_expand_or_advance() then
+            snippy.expand_or_advance() ]]
+          elseif has_words_before() then
+            cmp.complete()
+            if #cmp.get_entries() == 1 then
+              cmp.confirm({ select = true })
+            end
+          else
+            fallback()
           end
         end,
         ['<S-Tab>'] = function(fallback)
@@ -178,16 +221,7 @@ return {
             end
           end
         end,
-        ['<C-j>'] = function(fallback)
-          if not cmp.select_next_item() then
-            if vim.bo.buftype ~= 'prompt' and has_words_before() then
-              cmp.complete()
-            else
-              fallback()
-            end
-          end
-        end,
-        ['<C-k>'] = function(fallback)
+        ['<Up>'] = cmp.mapping(function(fallback)
           if not cmp.select_prev_item() then
             if vim.bo.buftype ~= 'prompt' and has_words_before() then
               cmp.complete()
@@ -195,8 +229,8 @@ return {
               fallback()
             end
           end
-        end,
-        ['<M-j>'] = function(fallback)
+        end, { 'i', 'c' }),
+        ['<Down>'] = cmp.mapping(function(fallback)
           if not cmp.select_next_item() then
             if vim.bo.buftype ~= 'prompt' and has_words_before() then
               cmp.complete()
@@ -204,8 +238,17 @@ return {
               fallback()
             end
           end
-        end,
-        ['<M-k>'] = function(fallback)
+        end, { 'i', 'c' }),
+        ['<C-j>'] = cmp.mapping(function(fallback)
+          if not cmp.select_next_item() then
+            if vim.bo.buftype ~= 'prompt' and has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end
+        end, { 'i', 'c' }),
+        ['<C-k>'] = cmp.mapping(function(fallback)
           if not cmp.select_prev_item() then
             if vim.bo.buftype ~= 'prompt' and has_words_before() then
               cmp.complete()
@@ -213,20 +256,34 @@ return {
               fallback()
             end
           end
-        end,
+        end, { 'i', 'c' }),
+        ['<M-j>'] = cmp.mapping(function(fallback)
+          if not cmp.select_next_item() then
+            if vim.bo.buftype ~= 'prompt' and has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end
+        end, { 'i', 'c' }),
+        ['<M-k>'] = cmp.mapping(function(fallback)
+          if not cmp.select_prev_item() then
+            if vim.bo.buftype ~= 'prompt' and has_words_before() then
+              cmp.complete()
+            else
+              fallback()
+            end
+          end
+        end, { 'i', 'c' }),
       }),
-      sources = require("cmp").config.sources(
-        {
-          { name = 'nvim_lsp' },
-          -- { name = 'vsnip' }, -- For vsnip users.
-          -- { name = 'luasnip' }, -- For luasnip users.
-          -- { name = 'ultisnips' }, -- For ultisnips users.
-          -- { name = 'snippy' }, -- For snippy users.
-        },
-        {
-          { name = 'buffer' },
-        }
-      )
+      sources = require("cmp").config.sources({
+        { name = 'nvim_lsp' },
+        -- { name = 'vsnip' }, -- For vsnip users.
+        -- { name = 'luasnip' }, -- For luasnip users.
+        -- { name = 'ultisnips' }, -- For ultisnips users.
+        -- { name = 'snippy' }, -- For snippy users.
+        { name = 'buffer', keyword_length = 2 },
+      })
     })
     -- To use git you need to install the plugin petertriho/cmp-git and uncomment lines below
     -- Set configuration for specific filetype.
@@ -242,7 +299,7 @@ return {
     require("cmp").setup.cmdline({ '/', '?' }, {
       mapping = require("cmp").mapping.preset.cmdline(),
       sources = {
-        { name = 'buffer' }
+        { name = 'buffer', keyword_length = 2 },
       }
     })
     -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).

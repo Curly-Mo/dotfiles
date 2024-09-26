@@ -42,6 +42,18 @@ style = "Italic"
 [font.bold_italic]
 family = "Roboto Mono Nerd Font Mono"
 style = "Bold Italic"
+# [font.normal]
+# family = "Noto Nerd Font"
+# style = "Regular"
+# [font.bold]
+# family = "Noto Nerd Font"
+# style = "Bold"
+# [font.italic]
+# family = "Noto Nerd Font"
+# style = "Italic"
+# [font.bold_italic]
+# family = "Noto Nerd Font"
+# style = "Bold Italic"
 
 # [hints.mouse]
 # enabled = true

@@ -165,7 +165,7 @@ endif
 " TODO: replace with init.lua
 lua <<EOF
 require("config")
-require("custom.utils")
+require("utils.paths")
 EOF
 
 "" syntax

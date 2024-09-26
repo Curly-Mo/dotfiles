@@ -42,15 +42,16 @@ if hash nvim 2>/dev/null; then
     alias vim="nvim"
     alias vimdiff="nvim -d"
 fi
-alias vimrc="vim $HOME/.config/nvim/init.vim"
 alias vl="vim $(latest)"
 alias v="vim_wrapper"
+alias vimcd="vim -c ':cd %:h'"
+alias vimrc="vimcd $HOME/.config/nvim/init.vim"
 
 # fzf
 alias fzv='vim $(fzf)'
 
 # the silver searcher
-alias ag='ag --follow --hidden'
+alias ag='ag --follow --hidden --ignore .git'
 
 # python
 # python poetry activate

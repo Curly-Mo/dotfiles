@@ -19,21 +19,22 @@ export FZF_PREVIEW_OPTS="--preview-window=right,45%"
 
 export LS_TIME_SORT="atime"
 export LS_SORT_AND_COLOR_CMD="/bin/ls --directory --sort=time --time=$LS_TIME_SORT --color=always"
-export FD_COMMAND='fd --hidden --follow --exclude=".git" --color=always --max-depth 12'
+export FD_COMMAND='fd --hidden --follow --exclude=.git --color=always --max-depth 12 --strip-cwd-prefix'
 export FD_FILES_COMMAND="${FD_COMMAND} --type=f"
 export FD_DIR_COMMAND="${FD_COMMAND} --type=d"
 export SORTED_FD_COMMAND="${FD_COMMAND} --exec-batch $LS_SORT_AND_COLOR_CMD"
 export SORTED_FD_FILES_COMMAND="${FD_FILES_COMMAND} --exec-batch $LS_SORT_AND_COLOR_CMD"
 export SORTED_FD_DIR_COMMAND="${FD_DIR_COMMAND} --exec-batch $LS_SORT_AND_COLOR_CMD"
-export RG_COMMAND='rg --max-depth=12 --sort=accessed --color=always'
+export RG_COMMAND='rg --glob="!*.git*" --max-depth=12 --sort=accessed --color=always'
 export RG_FILES_COMMAND="${RG_COMMAND} --files"
 export FZF_COMMAND="${FD_COMMAND}"
+# export FZF_COMMAND="${SORTED_FD_COMMAND}"
 # export FZF_COMMAND="${RG_COMMAND}"
-export FZF_FILES_COMMAND="${SORTED_FD_FILES_COMMAND}"
 # export FZF_FILES_COMMAND="${FD_FILES_COMMAND}"
+export FZF_FILES_COMMAND="${SORTED_FD_FILES_COMMAND}"
 # export FZF_FILES_COMMAND="${RG_FILES_COMMAND}"
-export FZF_DIR_COMMAND="${SORTED_FD_DIR_COMMAND}"
 # export FZF_DIR_COMMAND="${FD_DIR_COMMAND}"
+export FZF_DIR_COMMAND="${SORTED_FD_DIR_COMMAND}"
 # export FZF_DIR_COMMAND="${RG_DIR_COMMAND}"
 export FZF_DEFAULT_COMMAND="${FZF_COMMAND}"
 
@@ -41,7 +42,8 @@ export FZF_DEFAULT_COMMAND="${FZF_COMMAND}"
 export FZF_TIEBREAK_OPTS_OPTS="--tiebreak=index"
 
 FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --bind 'tab:replace-query+down' --bind 'shift-tab:backward-kill-word' --bind 'right:replace-query+down' --bind 'left:backward-kill-word' --bind 'change:first' --bind 'ctrl-f:jump' --bind 'ctrl-d:delete-char/eof+clear-query' --bind 'alt-j:down' --bind 'alt-k:up' --bind '?:toggle-preview'"
-export FZF_DEFAULT_OPTS="--height=70% --border --ansi --info=inline --algo=v2 ${FZF_BINDINGS_OPTS}"
+FZF_COLOR_OPTS="--color='hl:67,hl:italic'"
+export FZF_DEFAULT_OPTS="--height=70% --border --ansi --info=inline --algo=v2 ${FZF_BINDINGS_OPTS} ${FZF_COLOR_OPTS}"
 export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} $FZF_TIEBREAK_OPTS_OPTS"
 # always have a preview
 export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --preview '${FZF_PREVIEW_CMD}' ${FZF_PREVIEW_OPTS}"

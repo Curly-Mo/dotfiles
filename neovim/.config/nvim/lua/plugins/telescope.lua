@@ -142,14 +142,6 @@ return {
   keys = {
     { "<leader>u", "<cmd>Telescope undo<cr>", desc = "undo history", },
     { "<M-u>", "<cmd>Telescope undo<cr>", desc = "undo history", },
-    -- {'<C-p>', function()
-    --     require("telescope").extensions.frecency.frecency({workspaces={["GROOT"] = require("custom.utils").groot()}, cwd=require("custom.utils").groot()})
-    --   end
-    -- },
-    {'<M-p>', function()
-        require("telescope").extensions.frecency.frecency({workspaces={["GROOT"] = require("custom.utils").groot()}, cwd=require("custom.utils").groot()})
-      end
-    },
   },
   opts = {
     extensions = {
@@ -195,8 +187,8 @@ return {
           filename_first = { reverse_directories = true },
         },
         -- path_display = function(_, path)
-        --   local rel_path = require("custom.utils").relative_path(path, vim.fn.getcwd(), require("custom.utils").groot())
-        --   -- local rel_path = require("custom.utils").relative_path(path, vim.fn.getcwd())
+        --   local rel_path = require("utils.paths").relative_path(path, vim.fn.getcwd(), require("utils.paths").groot())
+        --   -- local rel_path = require("utils.path").relative_path(path, vim.fn.getcwd())
         --   -- return rel_path
         --   return require("telescope.utils").path_smart(rel_path)
         -- end,
@@ -244,6 +236,16 @@ return {
     require("telescope").setup(opts)
     require("telescope").load_extension("frecency")
   end,
+  keys = {
+    {'<C-p>', function()
+        require("telescope").extensions.frecency.frecency({workspaces={["GROOT"] = require("utils.paths").groot()}, cwd=require("utils.paths").groot()})
+      end
+    },
+    -- {'<M-p>', function()
+    --     require("telescope").extensions.frecency.frecency({workspaces={["GROOT"] = require("utils.paths").groot()}, cwd=require("utils.paths").groot()})
+    --   end
+    -- },
+  },
 },
 
 -- {
@@ -347,7 +349,7 @@ return {
     require("telescope").load_extension("smart_open")
   end,
   keys = {
-    {'<C-p>', function() require('telescope').extensions.smart_open.smart_open({cwd_only = false,}) end},
+    {'<M-p>', function() require('telescope').extensions.smart_open.smart_open({cwd_only = false,}) end},
   },
 },
 
@@ -434,7 +436,7 @@ return {
   lazy = false,
   config = function()
     Project_files = function(opts)
-      if require("custom.utils").is_inside_work_tree() then
+      if require("utils.paths").is_inside_work_tree() then
         require("telescope.builtin").git_files(opts)
       else
         require("telescope.builtin").find_files(opts)
