@@ -510,17 +510,17 @@ au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " au FileType scala,java nnoremap <localleader>0 :EnSuggestImport<CR>
 " au FileType scala,java nnoremap <localleader>o :EnOrganizeImports<CR>
 
-" Rainbow Parens
-let g:rainbow_active = 1
-let g:rainbow_conf = {
-\ 'guifgs': [g:terminal_color_14, g:terminal_color_10, g:terminal_color_13, g:terminal_color_2],
-\ 'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
-\ 'operators': '_,_',
-\ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
-\ 'separately': {
-\   '*': {},
-\ }
-\}
+" " Rainbow Parens
+" let g:rainbow_active = 1
+" let g:rainbow_conf = {
+" \ 'guifgs': [g:terminal_color_14, g:terminal_color_10, g:terminal_color_13, g:terminal_color_2],
+" \ 'ctermfgs': ['lightblue', 'lightyellow', 'lightcyan', 'lightmagenta'],
+" \ 'operators': '_,_',
+" \ 'parentheses': ['start=/(/ end=/)/ fold', 'start=/\[/ end=/\]/ fold', 'start=/{/ end=/}/ fold'],
+" \ 'separately': {
+" \   '*': {},
+" \ }
+" \}
 
 " Indent-guides
 let g:indent_guides_auto_colors = 0
@@ -546,17 +546,17 @@ let g:black_linelength = 120
 " localvimrc
 let g:localvimrc_whitelist='~/workspace/.*'
 
-" gitgutter
-let g:gitgutter_enabled = 1
-" set updatetime=500
-highlight GitGutterAdd ctermfg=65 ctermbg=none guifg=#5f875f guibg=none
-highlight GitGutterChange ctermfg=103 ctermbg=none guifg=#8787af guibg=none
-highlight GitGutterDelete ctermfg=131 ctermbg=none guifg=#703020 guibg=none
-nmap [h <Plug>(GitGutterPrevHunk)
-nmap ]h <Plug>(GitGutterNextHunk)
-nmap [g <Plug>(GitGutterPrevHunk)
-nmap ]g <Plug>(GitGutterNextHunk)
-let g:gitgutter_preview_win_floating = 1
+" " gitgutter
+" let g:gitgutter_enabled = 1
+" " set updatetime=500
+" highlight GitGutterAdd ctermfg=65 ctermbg=none guifg=#5f875f guibg=none
+" highlight GitGutterChange ctermfg=103 ctermbg=none guifg=#8787af guibg=none
+" highlight GitGutterDelete ctermfg=131 ctermbg=none guifg=#703020 guibg=none
+" nmap [h <Plug>(GitGutterPrevHunk)
+" nmap ]h <Plug>(GitGutterNextHunk)
+" nmap [g <Plug>(GitGutterPrevHunk)
+" nmap ]g <Plug>(GitGutterNextHunk)
+" let g:gitgutter_preview_win_floating = 1
 
 " fugitive
 let g:github_enterprise_urls = ['https://ghe.spotify.net']

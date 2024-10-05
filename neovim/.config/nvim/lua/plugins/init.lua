@@ -4,7 +4,7 @@ return {
   "Curly-Mo/phlebotinum",
   lazy = false, -- make sure we load this during startup if it is your main colorscheme
   priority = 1000, -- make sure to load this before all the other start plugins
-  config = function()
+  config = function(_, opts)
     vim.cmd([[colorscheme phlebotinum]])
   end,
 },
@@ -39,7 +39,7 @@ return {
     -- Check the docs for more info.
     ---@type wk.Spec
     triggers = {
-      { "<auto>", mode = "nxso" },
+      { "<auto>", mode = "nixsotc" },
     },
     -- Start hidden and wait for a key to be pressed before showing the popup
     -- Only used by enabled xo mapping modes.
@@ -75,7 +75,7 @@ return {
       -- col = 0,
       -- row = math.huge,
       -- border = "none",
-      padding = { 1, 2 }, -- extra window padding [top/bottom, right/left]
+      padding = { 1, 1 }, -- extra window padding [top/bottom, right/left]
       title = true,
       title_pos = "center",
       zindex = 1000,
@@ -105,7 +105,7 @@ return {
     --- * case: lower-case first
     sort = { "local", "order", "group", "alphanum", "mod" },
     ---@type number|fun(node: wk.Node):boolean?
-    expand = 0, -- expand groups when <= n mappings
+    expand = 3, -- expand groups when <= n mappings
     -- expand = function(node)
     --   return not node.desc -- expand all nodes without a description
     -- end,
@@ -224,7 +224,7 @@ return {
 { "mbbill/undotree", event = "VeryLazy", },
 { "godlygeek/tabular", event = "VeryLazy", },
 { "haya14busa/incsearch.vim", event = "VeryLazy", },
-{ "luochen1990/rainbow", event = "VeryLazy", },
+-- { "luochen1990/rainbow", event = "VeryLazy", },
 -- "justinmk/vim-sneak",
 { "AndrewRadev/splitjoin.vim", event = "VeryLazy", },
 -- {
@@ -237,7 +237,7 @@ return {
 --     use_default_keymaps = false,
 --     max_join_length = 150,
 --   },
---   config = function()
+--   config = function(_, opts)
 --     local treesj = require('treesj')
 --     local langs = require('treesj.langs')['presets']
 --     treesj.setup({
@@ -278,7 +278,7 @@ return {
 --     })
 --   end,
 -- },
-{ "wellle/targets.vim" },
+{ "wellle/targets.vim" }, -- mostly superceded by nvim-treesitter/nvim-treesitter-textobjects
 { "bkad/CamelCaseMotion" },
 -- "derekwyatt/vim-scala", { "for": ["scala"] }
 -- "tweekmonster/impsort.vim", { "on": ["ImpSort"] }
@@ -365,7 +365,6 @@ return {
 -- "petobens/poet-v",
 { "lukhio/vim-mapping-conflicts" },
 -- "alok/notational-fzf-vim",
-{ "michaeljsmith/vim-indent-object" },
 { "lifepillar/vim-colortemplate" },
 { "stsewd/gx-extended.vim" },
 -- "psliwka/vim-smoothie",
@@ -463,7 +462,7 @@ return {
     "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
     "MunifTanjim/nui.nvim",
   },
-  config = function ()
+  config = function(_, opts)
     -- If you want icons for diagnostic errors, you'll need to define them somewhere:
     vim.fn.sign_define("DiagnosticSignError",
       {text = " ", texthl = "DiagnosticSignError"})
@@ -930,5 +929,97 @@ return {
     },
   },
 },
+
+---- could be replaced with nvim-treesitter/nvim-treesitter-textobjects make_repeatable_move_pair instead
+--{ -- repeat any movements with ; and , 
+--  "ghostbuster91/nvim-next",
+--  dependencies = {
+--    "lewis6991/gitsigns.nvim",
+--  },
+--  opts = {
+--    default_mappings = {
+--      repeat_style = "original",
+--    },
+--  },
+--  config = function(_, opts)
+--    local next =require("nvim-next").setup(require("utils").concat(opts, {
+--      items = {
+--        require("nvim-next.builtins").f,
+--        require("nvim-next.builtins").t,
+--      },
+--    })
+--    local functions = require("nvim-next.builtins.functions")
+--    local next_integrations = require("nvim-next.integrations")
+--    local gitsigns_on_attach = require("gitsigns.config").config.on_attach
+--    require("gitsigns").setup({
+--      on_attach = function(bufnr)
+--        gitsigns_on_attach()
+--        -- override some keymaps with next wrapper
+--        local gs = package.loaded.gitsigns
+--        local nngs = next_integrations.gitsigns(gs)
+--        local opt = { buffer = bufnr }
+--        opt = {}
+--        vim.keymap.set('n', ']h', function()
+--          if vim.wo.diff then
+--            return ']h'
+--          else
+--            vim.schedule(function() nngs.next_hunk() end)
+--            return '<Ignore>'
+--          end
+--        end, { unpack(opt), expr = true })
+--        vim.keymap.set('n', '[h', function()
+--          if vim.wo.diff then
+--            return ']h'
+--          else
+--            vim.schedule(function() nngs.prev_hunk() end)
+--            return '<Ignore>'
+--          end
+--        end, { unpack(opt), expr = true })
+--      end,
+--    })
+--    local nndiag = next_integrations.diagnostic()
+--    vim.keymap.set('n', '[d', nndiag.goto_prev({ severity = {min = vim.diagnostic.severity.ERROR} }), { desc = "previous error" })
+--    vim.keymap.set('n', ']d', nndiag.goto_next({ severity = {min = vim.diagnostic.severity.ERROR} }), { desc = "next error" })
+--    vim.keymap.set('n', '[D', nndiag.goto_prev({ severity = {min = vim.diagnostic.severity.HINT} }), { desc = "previous diagnostic" })
+--    vim.keymap.set('n', ']D', nndiag.goto_next({ severity = {min = vim.diagnostic.severity.HINT} }), { desc = "next diagnostic" })
+--    vim.keymap.set('n', '[c', nndiag.goto_prev({ severity = {min = vim.diagnostic.severity.WARN} }), { desc = "previous warning" })
+--    vim.keymap.set('n', ']c', nndiag.goto_next({ severity = {min = vim.diagnostic.severity.WARN} }), { desc = "next warning" })
+--    next_integrations.treesitter_textobjects()
+--    require("nvim-treesitter.configs").setup({
+--      nvim_next = {
+--        enable = true,
+--        textobjects = {
+--          --instead of defining the move section in the textobjects scope we move it under nvim_next
+--          move = {
+--            goto_next_start = {
+--              ["]f"] = "@function.outer",
+--              ["]e"] = "@block.outer",
+--              -- ["]s"] = "@statement.outer",
+--              ["]s"] = { query = "@scope", query_group = "locals", desc = "Next scope start" },
+--            },
+--            goto_next_end = {
+--              ["]F"] = "@function.outer",
+--              ["]E"] = "@block.outer",
+--              -- ["]S"] = "@statement.outer",
+--              ["]S"] = { query = "@scope", query_group = "locals", desc = "Next scope end" },
+--            },
+--            goto_previous_start = {
+--              ["[f"] = "@function.outer",
+--              ["[e"] = "@block.outer",
+--              -- ["[s"] = "@statement.outer",
+--              ["[s"] = { query = "@scope", query_group = "locals", desc = "Previous scope start" },
+--            },
+--            goto_previous_end = {
+--              ["[F"] = "@function.outer",
+--              ["[E"] = "@block.outer",
+--              -- ["[S"] = "@statement.outer",
+--              ["[S"] = { query = "@scope", query_group = "locals", desc = "Previous scope end" },
+--            },
+--          },
+--        },
+--      },
+--    })
+--  end,
+--},
 
 }

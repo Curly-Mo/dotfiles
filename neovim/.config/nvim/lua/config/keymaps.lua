@@ -1,55 +1,70 @@
 -- vim.diagnostic keybinds
 vim.keymap.set('n', '<leader>e', function() vim.diagnostic.open_float(nil, {focus=false}) end)
-vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev({ severity = {vim.diagnostic.severity.ERROR} }) end)
-vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next({ severity = {vim.diagnostic.severity.ERROR} }) end)
-vim.keymap.set('n', '[D', function() vim.diagnostic.goto_prev({ severity = {vim.diagnostic.severity.WARN, vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT} }) end)
-vim.keymap.set('n', ']D', function() vim.diagnostic.goto_next({ severity = {vim.diagnostic.severity.WARN, vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT} }) end)
--- vim.keymap.set('n', '[c', function() vim.diagnostic.goto_prev({ severity = {vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT} }) end)
-vim.keymap.set('n', ']c', function() vim.diagnostic.goto_next({ severity = {vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT} }) end)
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist)
--- all workspace diagnostics
-vim.keymap.set("n", "<leader>aa", vim.diagnostic.setqflist)
--- all workspace errors
+vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev({ severity = {min = vim.diagnostic.severity.ERROR} }) end, { desc = "previous error" })
+vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next({ severity = {min = vim.diagnostic.severity.ERROR} }) end, { desc = "next error" })
+vim.keymap.set('n', '[D', function() vim.diagnostic.goto_prev({ severity = {min = vim.diagnostic.severity.HINT} }) end, { desc = "previous diagnostic" })
+vim.keymap.set('n', ']D', function() vim.diagnostic.goto_next({ severity = {min = vim.diagnostic.severity.HINT} }) end, { desc = "next diagnostic" })
+vim.keymap.set('n', '[c', function() vim.diagnostic.goto_prev({ severity = {min = vim.diagnostic.severity.WARN} }) end, { desc = "previous warning" })
+vim.keymap.set('n', ']c', function() vim.diagnostic.goto_next({ severity = {min = vim.diagnostic.severity.WARN} }) end, { desc = "next warning" })
+vim.keymap.set('n', '<leader>Q', vim.diagnostic.setloclist, { desc = "setloclist" })
+vim.keymap.set("n", "<leader>aa", vim.diagnostic.setqflist, { desc = "all workspace diagnostics" })
 vim.keymap.set("n", "<leader>ae", function()
   vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.ERROR })
-end)
--- all workspace warnings
+end, { desc = "all workspace errors" })
 vim.keymap.set("n", "<leader>aw", function()
   vim.diagnostic.setqflist({ severity = vim.diagnostic.severity.WARN })
-end)
+end, { desc = "all workspace warnings" })
 
 -- lsp keybinds
 -- Use LspAttach autocommand to only map the following keys
 -- after the language server attaches to the current buffer
 vim.api.nvim_create_autocmd('LspAttach', {
-  group = vim.api.nvim_create_augroup('UserLspConfig', {}),
-  callback = function(ev)
-    -- Enable completion triggered by <c-x><c-o>
-    vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+  group = vim.api.nvim_create_augroup('UserLspKeybinds', {clear = false}),
+  callback = function(args)
+    local opts = { buffer = args.buf }
+    local client = vim.lsp.get_client_by_id(args.data.client_id) or {}
+    -- local capabilities = client.server_capabilities
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    local opts = { buffer = ev.buf }
-    vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
-    vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+    if client.supports_method("textDocument/implementation") then
+      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
+    end
+    if client.supports_method("textDocument/definition") then
+      vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
+    end
+    if client.supports_method("textDocument/references") then
+      vim.keymap.set("n", "gwr", vim.lsp.buf.references, opts)
+    end
+    if client.supports_method("textDocument/declaration") then
+      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
+    end
+    if client.supports_method("textDocument/rename") then
+      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
+    end
+    if client.supports_method("textDocument/code_action") then
+      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+    end
+    -- TODO: put these under contidional supports_method blocks
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-    vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
     vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
     vim.keymap.set("n", "<leader>sh", vim.lsp.buf.signature_help)
-    vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
-    vim.keymap.set("n", "gds", vim.lsp.buf.document_symbol)
+    vim.keymap.set("n", "gs", vim.lsp.buf.document_symbol)
     vim.keymap.set("n", "gws", vim.lsp.buf.workspace_symbol)
     vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts)
-    vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
     vim.keymap.set("n", "<leader>cl", vim.lsp.codelens.run)
     vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts)
     vim.keymap.set('n', '<leader>F', function()
-      vim.lsp.buf.format { async = true }
+      vim.lsp.buf.format({ async = true })
     end, opts)
     vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts)
     vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts)
     vim.keymap.set('n', '<leader>wl', function()
       print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
     end, opts)
+    -- conditional keybinds based on server_capabilities, still not sure if there is a reason to use this over supports_method
+    -- if capabilities ~= nil and capabilities.renameProvider then
+    --   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
+    -- end
     -- custom lsp stuffs
     local function preview_location_callback(_, result)
       if result == nil or vim.tbl_isempty(result) then

@@ -1,28 +1,39 @@
--- misc plugin config. Can be moved to lua/config?
+-- misc plugin config
+
+-- lsp
 vim.api.nvim_create_autocmd("LspAttach", {
+  group = vim.api.nvim_create_augroup('UserLspConfig', {clear = false}),
   callback = function(args)
     local opts = { buffer = args.buf }
-    local client = vim.lsp.get_client_by_id(args.data.client_id)
-    if client.supports_method("textDocument/implementation") then
-      vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts)
-    end
-    if client.supports_method("textDocument/definition") then
-      vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-    end
-    if client.supports_method("textDocument/references") then
-      vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-    end
-    if client.supports_method("textDocument/declaration") then
-      vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts)
-    end
-    if client.supports_method("textDocument/rename") then
-      vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-    end
-    if client.supports_method("textDocument/code_action") then
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-    end
+    local client = vim.lsp.get_client_by_id(args.data.client_id) or {}
+    -- local capabilities = client.server_capabilities
+    -- Enable completion triggered by <c-x><c-o>
+    vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
     if client.supports_method("textDocument/inlayHint") then
       vim.lsp.inlay_hint.enable(true, opts)
+      -- disable inlay_hints in insert mode
+      vim.api.nvim_create_autocmd({ 'InsertEnter', 'InsertLeave' }, {
+        group = vim.api.nvim_create_augroup('UserLspInlayConfig', {clear = false}),
+        callback = function(inlay_args)
+          local enabled = inlay_args.event ~= "InsertEnter"
+          vim.lsp.inlay_hint.enable(enabled, opts)
+        end,
+      })
+      -- toggle inlay_hints
+      vim.keymap.set("n", "<leader>q", function()
+        local was_enabled = vim.lsp.inlay_hint.is_enabled()
+        local enabled = not was_enabled
+        vim.lsp.inlay_hint.enable(enabled, opts)
+        -- make sure we don't re-enable when exiting insert mode
+        vim.api.nvim_create_autocmd({ 'InsertEnter', 'InsertLeave' }, {
+          group = vim.api.nvim_create_augroup('UserLspInlayConfig', {clear = true}),
+          callback = function(_)
+            -- if args.event == "InsertLeave" then
+            --   vim.lsp.inlay_hint.enable(enabled, opts)
+            -- end
+          end,
+        })
+      end, opts)
     end
   end,
 })

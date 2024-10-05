@@ -524,7 +524,7 @@ return {
     -- {'<C-p>', function() require('telescope.builtin').find_files() end},
     {'<C-g>', function() Project_files() end},
     -- {'<M-p>', function() require('telescope.builtin').find_files() end},
-    {'<leader>s', function() require('telescope.builtin').find_files() end},
+    -- {'<leader>s', function() require('telescope.builtin').find_files() end},
     {'<leader>ff', function() require('telescope.builtin').find_files() end},
     {'<M-w>', function() require('telescope.builtin').grep_string() end},
     -- {'<C-[>', function() require('telescope.builtin').live_grep() end},
