@@ -403,6 +403,10 @@ return {
 {
   "neovim/nvim-lspconfig",
   config = function(_, opts)
+    -- If diff-mode, don't load any LSP Configs
+    if (vim.opt.diff:get()) then
+        return
+    end
     local lsp = require("lspconfig")
     -- lsp.pyright.setup{
     --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
