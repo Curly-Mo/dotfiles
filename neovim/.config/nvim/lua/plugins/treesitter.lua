@@ -292,7 +292,9 @@ return {
     require('mini.splitjoin').setup(opts)
     -- wrap join function to always fallback to vim.cmd.join if it fails for any reason
     local join = require('mini.splitjoin').join
+    local toggle = require('mini.splitjoin').toggle
     require('mini.splitjoin').join = require("utils").with_fallback(join, vim.cmd.join)
+    require('mini.splitjoin').toggle = require("utils").with_fallback(toggle, vim.cmd.join)
   end,
 },
 {
@@ -367,8 +369,8 @@ return {
           -- -- vim.keymap.set('n', '<leader>J', require('treesj').split, opts({desc = "Split (treesj)"}))
         else
           vim.keymap.set('n', 'J', require('mini.splitjoin').toggle, opts({desc = "Toggle (mini.splitjoin)"}))
-          vim.keymap.set('n', '<C-J>', require('mini.splitjoin').split, opts({desc = "Split (mini.splitjoin)"}))
-          vim.keymap.set('n', '<C-j>', require('mini.splitjoin').join, opts({desc = "Join (mini.splitjoin)"}))
+          vim.keymap.set('n', '<c-J>', require('mini.splitjoin').split, opts({desc = "Split (mini.splitjoin)"}))
+          vim.keymap.set('n', '<c-j>', require('mini.splitjoin').join, opts({desc = "Join (mini.splitjoin)"}))
           vim.keymap.set('n', 'gJ', require('mini.splitjoin').split, opts({desc = "Split (mini.splitjoin)"}))
           vim.keymap.set('n', 'gj', require('mini.splitjoin').join, opts({desc = "Join (mini.splitjoin)"}))
           -- vim.keymap.set('n', '<leader>j', require('mini.splitjoin').join, opts({desc = "join (mini.splitjoin)"}))
