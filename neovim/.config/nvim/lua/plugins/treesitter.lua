@@ -254,6 +254,131 @@ return {
   end,
 },
 
+-- fallback for when treesj isn't cutting it
+{
+  "echasnovski/mini.splitjoin",
+  opts = {
+    -- Module mappings. Use `''` (empty string) to disable one.
+    -- Created for both Normal and Visual modes.
+    mappings = {
+      toggle = 'J',
+      split = '<leader>J',
+      join = '<leader>j',
+    },
+    -- Detection options: where split/join should be done
+    detect = {
+      -- Array of Lua patterns to detect region with arguments.
+      -- Default: { '%b()', '%b[]', '%b{}' }
+      brackets = nil,
+      -- String Lua pattern defining argument separator
+      separator = ',',
+      -- Array of Lua patterns for sub-regions to exclude separators from.
+      -- Enables correct detection in presence of nested brackets and quotes.
+      -- Default: { '%b()', '%b[]', '%b{}', '%b""', "%b''" }
+      exclude_regions = nil,
+    },
+    -- Split options
+    split = {
+      hooks_pre = {},
+      hooks_post = {},
+    },
+    -- Join options
+    join = {
+      hooks_pre = {},
+      hooks_post = {},
+    },
+  },
+  config = function(_, opts)
+    require('mini.splitjoin').setup(opts)
+    -- wrap join function to always fallback to vim.cmd.join if it fails for any reason
+    local join = require('mini.splitjoin').join
+    require('mini.splitjoin').join = require("utils").with_fallback(join, vim.cmd.join)
+  end,
+},
+{
+  "Wansmer/treesj",
+  dependencies = {
+    "nvim-treesitter/nvim-treesitter",
+    "echasnovski/mini.splitjoin",
+  },
+  event = "VeryLazy",
+  opts = {
+    ---@type boolean Use default keymaps (<space>m - toggle, <space>j - join, <space>s - split)
+    use_default_keymaps = false,
+    ---@type boolean Node with syntax error will not be formatted
+    check_syntax_error = true,
+    ---If line after join will be longer than max value,
+    ---@type number If line after join will be longer than max value, node will not be formatted
+    max_join_length = 999999999, -- 120,
+    ---Cursor behavior:
+    ---hold - cursor follows the node/place on which it was called
+    ---start - cursor jumps to the first symbol of the node being formatted
+    ---end - cursor jumps to the last symbol of the node being formatted
+    ---@type 'hold'|'start'|'end'
+    cursor_behavior = 'hold',
+    ---@type boolean Notify about possible problems or not
+    notify = true,
+    ---@type boolean Use `dot` for repeat action
+    dot_repeat = true,
+    ---@type nil|function Callback for treesj error handler. func (err_text, level, ...other_text)
+    -- on_error = require('mini.splitjoin').toggle,
+    -- on_error = vim.cmd.join,
+    ---@type table Presets for languages
+    -- langs = {}, -- See the default presets in lua/treesj/langs
+  },
+  keys = {
+    { "J", function() require('treesj').toggle() end, desc = "Join Toggle (treesj)" },
+    { "<C-J>", function() require('treesj').split() end, desc = "Join Split (treesj)" },
+    { "<C-j>", function() require('treesj').join() end, desc = "Join (treesj)" },
+    { "gJ", function() require('treesj').split() end, desc = "Join Split (treesj)" },
+    { "gj", function() require('treesj').join() end, desc = "Join (treesj)" },
+    -- { "<leader>J", "<cmd>TSJJoin<cr>", desc = "Join" },
+    -- { "<leader>j", "<cmd>TSJSplit<cr>", desc = "Join Split" },
+  },
+  config = function(_, options)
+    -- Add fallback to all language
+    -- for _, nodes in pairs(langs) do
+    --   for _, node in ipairs(nodes) do
+    --     node.fallback = function(ts_node)
+    --       require('mini.splitjoin').toggle()
+    --     end
+    --   end
+    -- end
+    require('treesj').setup(require("utils").default_opts(options){
+    })
+    -- configure custom fallbacks for whenever treesj errors
+    local toggle = require('treesj').toggle
+    local join = require('treesj').join
+    local split = require('treesj').split
+    require('treesj').toggle = require("utils").with_fallback(toggle, require('mini.splitjoin').toggle)
+    require('treesj').join = require("utils").with_fallback(join, require('mini.splitjoin').join)
+    require('treesj').split = require("utils").with_fallback(split, require('mini.splitjoin').split)
+    -- configure fallback for unsupported langs https://github.com/Wansmer/treesj/discussions/19
+    local langs = require('treesj.langs')['presets']
+    vim.api.nvim_create_autocmd({ 'FileType' }, {
+      pattern = '*',
+      callback = function()
+        local opts = require("utils").default_opts({ buffer = true })
+        if langs[vim.bo.filetype] then
+          -- vim.keymap.set('n', 'J', require('treesj').toggle, opts({desc = "treesj toggle"}))
+          -- vim.keymap.set('n', '<C-J>', require('treesj').split, opts({desc = "Split (treesj)"}))
+          -- vim.keymap.set('n', '<C-j>', require('treesj').join, opts({desc = "Join (treesj)"}))
+          -- -- vim.keymap.set('n', '<leader>j', require('treesj').join, opts({desc = "Join (treesj)"}))
+          -- -- vim.keymap.set('n', '<leader>J', require('treesj').split, opts({desc = "Split (treesj)"}))
+        else
+          vim.keymap.set('n', 'J', require('mini.splitjoin').toggle, opts({desc = "Toggle (mini.splitjoin)"}))
+          vim.keymap.set('n', '<C-J>', require('mini.splitjoin').split, opts({desc = "Split (mini.splitjoin)"}))
+          vim.keymap.set('n', '<C-j>', require('mini.splitjoin').join, opts({desc = "Join (mini.splitjoin)"}))
+          vim.keymap.set('n', 'gJ', require('mini.splitjoin').split, opts({desc = "Split (mini.splitjoin)"}))
+          vim.keymap.set('n', 'gj', require('mini.splitjoin').join, opts({desc = "Join (mini.splitjoin)"}))
+          -- vim.keymap.set('n', '<leader>j', require('mini.splitjoin').join, opts({desc = "join (mini.splitjoin)"}))
+          -- vim.keymap.set('n', '<leader>J', require('mini.splitjoin').split, opts({desc = "split (mini.splitjoin)"}))
+        end
+      end,
+    })
+  end,
+},
+
 {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
