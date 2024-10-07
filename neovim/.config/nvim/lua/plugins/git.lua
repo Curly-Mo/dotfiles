@@ -59,38 +59,37 @@ return {
     require('gitsigns').setup(require("utils").default_opts(opts){
       on_attach = function(bufnr)
         -- Navigation
-        local opt = { buffer = bufnr }
-        opt = {}
+        local opts = require("utils").default_opts({ buffer = bufnr })
         vim.keymap.set('n', ']h', function()
           if vim.wo.diff then
             vim.cmd.normal({']h', bang = true})
           else
             require('gitsigns').nav_hunk('next')
           end
-        end, opt)
+        end, opts({ desc = "next hunk" }))
         vim.keymap.set('n', '[h', function()
           if vim.wo.diff then
             vim.cmd.normal({'[h', bang = true})
           else
             require('gitsigns').nav_hunk('prev')
           end
-        end, opt)
+        end, opts({ desc = "prev hunk" }))
         -- Actions
-        vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, opt)
-        vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk, opt)
-        vim.keymap.set('v', '<leader>hs', function() require('gitsigns').stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, opt)
-        vim.keymap.set('v', '<leader>hr', function() require('gitsigns').reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, opt)
-        vim.keymap.set('n', '<leader>hS', require('gitsigns').stage_buffer, opt)
-        vim.keymap.set('n', '<leader>hu', require('gitsigns').undo_stage_hunk, opt)
-        vim.keymap.set('n', '<leader>hR', require('gitsigns').reset_buffer, opt)
-        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, opt)
-        vim.keymap.set('n', '<leader>hb', function() require('gitsigns').blame_line{full=true} end, opt)
-        vim.keymap.set('n', '<leader>hB', require('gitsigns').toggle_current_line_blame, opt)
-        vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, opt)
-        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end, opt)
-        vim.keymap.set('n', '<leader>td', require('gitsigns').toggle_deleted, opt)
+        vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, opts({ desc = "stage hunk" }))
+        vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk, opts({ desc = "reset hunk" }))
+        vim.keymap.set('v', '<leader>hs', function() require('gitsigns').stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, opts({ desc = "stage hunk" }))
+        vim.keymap.set('v', '<leader>hr', function() require('gitsigns').reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, opts({ desc = "reset hunk" }))
+        vim.keymap.set('n', '<leader>hS', require('gitsigns').stage_buffer, opts({ desc = "stage buffer" }))
+        vim.keymap.set('n', '<leader>hu', require('gitsigns').undo_stage_hunk, opts({ desc = "undo stage hunk" }))
+        vim.keymap.set('n', '<leader>hR', require('gitsigns').reset_buffer, opts({ desc = "reset buffer" }))
+        vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, opts({ desc = "preview hunk" }))
+        vim.keymap.set('n', '<leader>hb', function() require('gitsigns').blame_line{full=true} end, opts({ desc = "blame line" }))
+        vim.keymap.set('n', '<leader>hB', require('gitsigns').toggle_current_line_blame, opts({ desc = "toggle current line blame" }))
+        vim.keymap.set('n', '<leader>hd', require('gitsigns').diffthis, opts({ desc = "gitsigns.diffthis" }))
+        vim.keymap.set('n', '<leader>hD', function() require('gitsigns').diffthis('~') end, opts({ desc = "gitsigns.diffthis('~')" }))
+        vim.keymap.set('n', '<leader>td', require('gitsigns').toggle_deleted, opts({ desc = "gitsigns.toggle_deleted" }))
         -- Text object
-        vim.keymap.set({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>', opt)
+        vim.keymap.set({'o', 'x'}, 'ih', ':<C-U>Gitsigns select_hunk<CR>', opts({ desc = "select hunk" }))
       end,
     })
   end,

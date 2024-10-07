@@ -337,8 +337,8 @@ return {
 
     -- TODO: replace with native lua keymapping attempted below
     -- vim.cmd([[ nnoremap "[[" <plug>(matchup-[%) ]])
-    vim.keymap.set({'n', 'v'}, '[[', "<Plug>(matchup-[%)", { noremap = false })
-    vim.keymap.set({'n', 'v'}, ']]', "<Plug>(matchup-]%)", { noremap = false })
+    vim.keymap.set({'n', 'v'}, '[[', "<Plug>(matchup-[%)", { noremap = false, desc = "matchup.prev" })
+    vim.keymap.set({'n', 'v'}, ']]', "<Plug>(matchup-]%)", { noremap = false, desc = "matchup.next" })
   end,
   -- keys = {
   --   {"[[", "<plug>(matchup-[%)", desc = "go to previous match using matchup" },

@@ -178,7 +178,7 @@ return {
       on_attach = nil, -- (fun(buf: integer): boolean) return false to disable attaching
       vim.keymap.set("n", "[C", function()
         tsc.go_to_context(vim.v.count1)
-      end, { silent = true })
+      end, { silent = true, desc = "treesitter-context.go_to_context" })
     }
   end,
 },

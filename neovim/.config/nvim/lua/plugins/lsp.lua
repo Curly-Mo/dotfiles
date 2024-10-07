@@ -346,11 +346,11 @@ return {
     metals_config.on_attach = function(client, bufnr)
       vim.keymap.set("n", "<leader>mc", function()
         require("telescope").extensions.metals.commands()
-      end)
+      end, { desc = "metals commands" })
       require("metals").setup_dap()
       vim.keymap.set("n", "<leader>ws", function()
         require("metals").hover_worksheet()
-      end)
+      end, { desc = "metals hover worksheet" })
     end
     return metals_config
   end,
@@ -405,7 +405,7 @@ return {
   config = function(_, opts)
     -- If diff-mode, don't load any LSP Configs
     if (vim.opt.diff:get()) then
-        return
+      return
     end
     local lsp = require("lspconfig")
     -- lsp.pyright.setup{
