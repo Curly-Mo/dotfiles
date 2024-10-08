@@ -403,12 +403,123 @@ return {
 },
 
 {
+  's1n7ax/nvim-window-picker',
+  name = 'window-picker',
+  event = 'VeryLazy',
+  opts = {
+    -- type of hints you want to get
+    -- following types are supported
+    -- 'statusline-winbar' | 'floating-big-letter'
+    -- 'statusline-winbar' draw on 'statusline' if possible, if not 'winbar' will be
+    -- 'floating-big-letter' draw big letter on a floating window
+    -- used
+    hint = 'statusline-winbar',
+    -- when you go to window selection mode, status bar will show one of
+    -- following letters on them so you can use that letter to select the window
+    selection_chars = 'FJDKSLA;CMRUEIWOQP',
+    -- This section contains picker specific configurations
+    picker_config = {
+      statusline_winbar_picker = {
+        -- You can change the display string in status bar.
+        -- It supports '%' printf style. Such as `return char .. ': %f'` to display
+        -- buffer file path. See :h 'stl' for details.
+        selection_display = function(char, windowid)
+          return '%=' .. char .. '%='
+        end,
+        -- whether you want to use winbar instead of the statusline
+        -- "always" means to always use winbar,
+        -- "never" means to never use winbar
+        -- "smart" means to use winbar if cmdheight=0 and statusline if cmdheight > 0
+        use_winbar = 'never', -- "always" | "never" | "smart"
+      },
+      floating_big_letter = {
+        -- window picker plugin provides bunch of big letter fonts
+        -- fonts will be lazy loaded as they are being requested
+        -- additionally, user can pass in a table of fonts in to font
+        -- property to use instead
+        font = 'ansi-shadow', -- ansi-shadow |
+      },
+    },
+    -- whether to show 'Pick window:' prompt
+    show_prompt = true,
+    -- prompt message to show to get the user input
+    prompt_message = 'Pick window: ',
+    -- if you want to manually filter out the windows, pass in a function that
+    -- takes two parameters. You should return window ids that should be
+    -- included in the selection
+    -- EX:-
+    -- function(window_ids, filters)
+    --    -- folder the window_ids
+    --    -- return only the ones you want to include
+    --    return {1000, 1001}
+    -- end
+    filter_func = nil,
+    -- following filters are only applied when you are using the default filter
+    -- defined by this plugin. If you pass in a function to "filter_func"
+    -- property, you are on your own
+    filter_rules = {
+      -- when there is only one window available to pick from, use that window
+      -- without prompting the user to select
+      autoselect_one = true,
+      -- whether you want to include the window you are currently on to window
+      -- selection or not
+      include_current_win = false,
+      -- filter using buffer options
+      bo = {
+        -- if the file type is one of following, the window will be ignored
+        filetype = { 'NvimTree', 'neo-tree', 'neo-tree-popup', 'notify' },
+        -- if the file type is one of following, the window will be ignored
+        buftype = { 'terminal', 'quickfix' },
+      },
+      -- filter using window options
+      wo = {},
+      -- if the file path contains one of following names, the window
+      -- will be ignored
+      file_path_contains = {},
+      -- if the file name contains one of following names, the window will be
+      -- ignored
+      file_name_contains = {},
+    },
+    -- You can pass in the highlight name or a table of content to set as
+    -- highlight
+    highlights = {
+      statusline = {
+        focused = {
+          fg = '#ededed',
+          bg = '#e35e4f',
+          bold = true,
+        },
+        unfocused = {
+          fg = '#ededed',
+          bg = '#44cc41',
+          bold = true,
+        },
+      },
+      winbar = {
+        focused = {
+          fg = '#ededed',
+          bg = '#e35e4f',
+          bold = true,
+        },
+        unfocused = {
+          fg = '#ededed',
+          bg = '#44cc41',
+          bold = true,
+        },
+      },
+    },
+  },
+},
+
+{
   "nvim-neo-tree/neo-tree.nvim",
   -- branch = "v3.x",
   dependencies = {
     "nvim-lua/plenary.nvim",
     "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
     "MunifTanjim/nui.nvim",
+    "3rd/image.nvim", -- Optional image support in preview window: See `# Preview Mode` for more information
+    's1n7ax/nvim-window-picker',
   },
   config = function(_, opts)
     -- If you want icons for diagnostic errors, you'll need to define them somewhere:
@@ -420,7 +531,6 @@ return {
       {text = " ", texthl = "DiagnosticSignInfo"})
     vim.fn.sign_define("DiagnosticSignHint",
       {text = "󰌵", texthl = "DiagnosticSignHint"})
-
     require("neo-tree").setup({
       close_if_last_window = false, -- Close Neo-tree if it is the last window left in the tab
       popup_border_style = "rounded",
@@ -449,7 +559,7 @@ return {
           last_indent_marker = "└",
           highlight = "NeoTreeIndentMarker",
           -- expander config, needed for nesting files
-          with_expanders = nil, -- if nil and file nesting is enabled, will enable expanders
+          with_expanders = true, -- if nil and file nesting is enabled, will enable expanders
           expander_collapsed = "",
           expander_expanded = "",
           expander_highlight = "NeoTreeExpander",
@@ -469,7 +579,7 @@ return {
         },
         name = {
           trailing_slash = false,
-          use_git_status_colors = true,
+          use_git_status_colors = false,
           highlight = "NeoTreeFileName",
         },
         git_status = {
@@ -480,7 +590,7 @@ return {
             deleted   = "✖",-- this can only be used in the git_status source
             renamed   = "󰁕",-- this can only be used in the git_status source
             -- Status type
-            untracked = "",
+            untracked = "",
             ignored   = "",
             unstaged  = "󰄱",
             staged    = "",
@@ -512,9 +622,18 @@ return {
       -- that will be available in all sources (if not overridden in `opts[source_name].commands`)
       -- see `:h neo-tree-custom-commands-global`
       commands = {},
+      event_handlers = {
+        -- auto close when file is opened
+        {
+          event = "file_opened",
+          handler = function(_)
+            require("neo-tree.command").execute({ action = "close" })
+          end,
+        },
+      },
       window = {
         position = "left",
-        width = 24,
+        width = 30,
         mapping_options = {
           noremap = true,
           nowait = true,
@@ -602,11 +721,11 @@ return {
           },
         },
         follow_current_file = {
-          enabled = false, -- This will find and focus the file in the active buffer every time
-          --               -- the current file is changed while the tree is open.
-          leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+          enabled = true, -- This will find and focus the file in the active buffer every time
+          --              -- the current file is changed while the tree is open.
+          leave_dirs_open = true, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
         },
-        group_empty_dirs = false, -- when true, empty folders will be grouped together
+        group_empty_dirs = true, -- when true, empty folders will be grouped together
         hijack_netrw_behavior = "open_default", -- netrw disabled, opening a directory opens neo-tree
                                                 -- in whatever position is specified in window.position
                               -- "open_current",  -- netrw disabled, opening a directory opens within the
@@ -645,7 +764,6 @@ return {
             -- ['<key>'] = function(state, scroll_padding) ... end,
           },
         },
-
         commands = {} -- Add a custom command or override a global one using the same function name
       },
       buffers = {
@@ -693,8 +811,8 @@ return {
         }
       }
     })
-
     vim.cmd([[nnoremap <m-\> :Neotree toggle<cr>]])
+    vim.cmd([[nnoremap <leader><leader> :Neotree toggle<cr>]])
   end
 },
 
