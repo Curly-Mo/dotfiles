@@ -44,7 +44,7 @@ autoload -Uz _zinit
 
 
 # zinit annexes
-zinit for \
+zinit light-mode for \
   zdharma-continuum/zinit-annex-bin-gem-node \
   zdharma-continuum/zinit-annex-binary-symlink \
   zdharma-continuum/zinit-annex-link-man \
@@ -53,6 +53,9 @@ zinit for \
   zdharma-continuum/zinit-annex-submods \
   zdharma-continuum/zinit-annex-patch-dl \
   zdharma-continuum/zinit-annex-man
+zinit light-mode for \
+  atinit'Z_A_USECOMP=1' \
+  NICHOLAS85/z-a-eval
 
 
 # Load Oh My Zsh Libs
@@ -182,7 +185,7 @@ zinit wait lucid for \
 
 
 # Packages https://github.com/zdharma-continuum/zinit-packages
-zinit pack for dircolors-material
+# zinit pack for dircolors-material
 
 # any-gem installs https://github.com/zdharma-continuum/zinit-packages/tree/main/any-gem
 # zinit pack param="GEM → colorls" for any-gem
@@ -221,18 +224,16 @@ zinit wait"0" lucid make"!" lbin lman for \
     direnv/direnv
 
 zinit wait"0" from"gh-r" lucid lbin lman for \
-  nocd atload:'!eval "$(zoxide init zsh)"' \
+  eval'./zoxide init zsh' \
     ajeetdsouza/zoxide
 
-# zinit wait"0" pack for ls_colors
-zinit lucid light-mode \
-  atclone"[[ -z ${commands[dircolors]} ]] &&
-    local P=${${(M)OSTYPE##darwin}:+g};
-    ${P}dircolors -b LS_COLORS >! clrs.zsh" \
+zinit lucid light-mode for \
+  eval"dircolors -b LS_COLORS" \
   atload'zstyle ":completion:*:default" list-colors "${(s.:.)LS_COLORS}";' \
-  atpull'%atclone' nocompile'!' pick'clrs.zsh' for \
   git id-as'trapd00r/LS_COLORS' \
     @trapd00r/LS_COLORS
+# zinit lucid light-mode for \
+#     zpm-zsh/theme-neutral
 
 zinit wait"0" lucid lbin lman completions for \
   atpull="zinit creinstall -q ." \
