@@ -137,6 +137,11 @@ function zvm_config() {
   ZVM_KEYTIMEOUT=0.3
   ZVM_ESCAPE_KEYTIMEOUT=0.03
   ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
+  ZVM_LAZY_KEYBINDINGS=true
+}
+function zvm_after_lazy_keybindings() {
+  # bindkey -M vicmd 's' your_normal_widget
+  # bindkey -M visual 'n' your_visual_widget
 }
 # patch all modify functions to copy/paste from/to the clipboard
 function zvm_patch_functions() {
@@ -331,10 +336,6 @@ zinit snippet "https://github.com/jwilm/alacritty/blob/master/extra/completions/
 #bindkey '^[[A' up-line-or-search
 #bindkey '^[[B' down-line-or-search
 
-# Fn navigation keys
-bindkey "^[[7~" beginning-of-line
-bindkey "^[[8~" end-of-line
-
 # Welcome message
 if [[ -o login && -x "$(command -v fortune)" && -x "$(command -v lolcat)" ]]; then
   # wget http://skeeto.s3.amazonaws.com/share/showerthoughts -O /usr/share/fortune/showerthoughts
@@ -346,6 +347,9 @@ fi
 HISTSIZE=10000000
 SAVEHIST=10000000
 
+# Fn navigation keys
+bindkey "^[[7~" beginning-of-line
+bindkey "^[[8~" end-of-line
 # setup special keys
 bindkey  "\e[1~"  beginning-of-line
 bindkey  "\e[4~"  end-of-line
@@ -359,7 +363,6 @@ bindkey  "\e[3~"  delete-char
 bindkey  "\e[2~"  overwrite-mode
 # quit current buffer
 bindkey '^q' push-line-or-edit
-
 # Stop stupid behavior of ctrl-d after a space
 exit_zsh() { exit }
 zle -N exit_zsh

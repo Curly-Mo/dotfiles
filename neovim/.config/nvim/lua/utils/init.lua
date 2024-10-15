@@ -6,7 +6,11 @@ M.concat = function(...)
   local result = {}
   for _, arg in ipairs(args) do
     for key, val in pairs(arg) do
-      result[key] = val
+      if result[key] and type(result[key]) == 'table' and type(val) == 'table' then
+        result[key] = M.concat(result[key], val)
+      else
+        result[key] = val
+      end
     end
   end
   return result

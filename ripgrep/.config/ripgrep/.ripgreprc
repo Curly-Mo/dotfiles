@@ -1,5 +1,5 @@
 --follow
 --hidden
 --smart-case
---glob='!.git/'
+--glob=!.git/
 --color=auto

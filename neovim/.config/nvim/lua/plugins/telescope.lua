@@ -9,10 +9,9 @@ return {
   init = function()
     vim.g.fzf_layout = { window = { width=0.99, height=0.99 } }
     -- vim.g.fzf_preview_window = { right='50%', 'ctrl-/'}
-    vim.g.fzf_history_dir = vim.env.NVIM_TMP_DIR .. "/fzf-history"
-    -- TODO: experimental, remove these
-    -- let g:fzf_preview_use_dev_icons = 1
-    -- let g:fzf_preview_command = 'bat --color=always --plain {-1}'
+    vim.g.fzf_history_dir = vim.fn.stdpath("state") .. "/fzf-history/"
+    vim.g.fzf_preview_use_dev_icons = 1
+    -- vim.g.fzf_preview_command = 'bat --color=always --plain {-1}'
     -- fzf cd
     vim.cmd([[
       command! -bang -bar -nargs=? -complete=dir C
@@ -349,7 +348,7 @@ return {
     require("telescope").load_extension("smart_open")
   end,
   keys = {
-    {'<M-p>', function() require('telescope').extensions.smart_open.smart_open({cwd_only = false,}) end},
+    {'<M-p>', function() require('telescope').extensions.smart_open.smart_open({cwd_only = true,}) end},
   },
 },
 
@@ -519,6 +518,7 @@ return {
       extensions = {
       },
     }
+    vim.api.nvim_create_user_command('Maps', 'Telescope keymaps', {})
   end,
   keys = {
     -- {'<C-p>', function() require('telescope.builtin').find_files() end},
@@ -534,7 +534,7 @@ return {
     {'<M-b>', function() require('telescope.builtin').buffers() end},
     {'<leader>fb', function() require('telescope.builtin').buffers() end},
     {'<leader>fh', function() require('telescope.builtin').help_tags() end},
-    {'<M-t>', function() require('telescope.builtin').help_tags() end},
+    {'<M-h>', function() require('telescope.builtin').help_tags() end},
     -- {'<M-r>', function() require('telescope.builtin').lsp_references() end},
     -- {'<M-r>', function() require('telescope.builtin').lsp_definitions() end},
     -- {'<M-r>', function() require('telescope.builtin').lsp_definitions() end},

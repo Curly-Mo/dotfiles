@@ -4,12 +4,16 @@ return {
   "Curly-Mo/phlebotinum",
   lazy = false, -- make sure we load this during startup if it is your main colorscheme
   priority = 1000, -- make sure to load this before all the other start plugins
-  config = function(_, opts)
+  init = function()
     vim.cmd([[colorscheme phlebotinum]])
+    -- color overrides TODO: add these to phlebotinum
+    vim.cmd([[
+      highlight DiagnosticInfo guifg=#6c6c6c
+      highlight CurSearch guibg=#3a3a3a guifg=#c594c5
+      highlight IncSearch guibg=#3a3a3a guifg=#c594c5
+    ]])
   end,
 },
-
-{ "folke/neodev.nvim", event = "VeryLazy", },
 
 {
   "folke/which-key.nvim",
@@ -217,25 +221,257 @@ return {
 { "tpope/vim-vinegar", event = "VeryLazy", },
 { "tpope/vim-projectionist", event = "VeryLazy", },
 
-{ "vim-airline/vim-airline", event = "VeryLazy", },
-{ "vim-airline/vim-airline-themes", event = "VeryLazy", },
+-- { "vim-airline/vim-airline", event = "VeryLazy", },
+-- { "vim-airline/vim-airline-themes", event = "VeryLazy", },
 -- "romainl/Apprentice", { "branch": "fancylines-and-neovim" }
 -- "romainl/Apprentice", { "branch": "fancylines-and-neovim", "as": "apprentice-airline" }
-{ "mbbill/undotree", event = "VeryLazy", },
+
+{
+  'nvim-lualine/lualine.nvim',
+  dependencies = {
+    'nvim-tree/nvim-web-devicons',
+    'stevearc/aerial.nvim',
+  },
+  opts = {
+    options = {
+      icons_enabled = true,
+      theme = 'auto',
+      component_separators = { left = '', right = ''},
+      section_separators = { left = '', right = ''},
+      disabled_filetypes = {
+        statusline = {},
+        winbar = {},
+      },
+      ignore_focus = {},
+      always_divide_middle = false,
+      globalstatus = true,
+      refresh = {
+        statusline = 1000,
+        tabline = 1000,
+        winbar = 1000,
+      }
+    },
+    sections = {
+      lualine_a = {'mode'},
+      lualine_b = {
+        'branch',
+        {
+          'diff',
+          -- https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#using-external-source-for-diff
+          source = function()
+            local gitsigns = vim.b.gitsigns_status_dict
+            if gitsigns then
+              return {
+                added = gitsigns.added,
+                modified = gitsigns.changed,
+                removed = gitsigns.removed
+              }
+            end
+          end,
+        },
+      },
+      -- lualine_c = {
+      --   {
+      --     'filename',
+      --     file_status = true,      -- Displays file status (readonly status, modified status)
+      --     newfile_status = true,   -- Display new file status (new file means no write after created)
+      --     path = 3,                -- 0: Just the filename
+      --                              -- 1: Relative path
+      --                              -- 2: Absolute path
+      --                              -- 3: Absolute path, with tilde as the home directory
+      --                              -- 4: Filename and parent dir, with tilde as the home directory
+      --     shorting_target = 70,    -- Shortens path to leave 40 spaces in the window
+      --                              -- for other components. (terrible name, any suggestions?)
+      --     symbols = {
+      --       modified = '[+]',      -- Text to show when the file is modified.
+      --       readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
+      --       unnamed = '[No Name]', -- Text to show for unnamed buffers.
+      --       newfile = '[New]',     -- Text to show for newly created file before first write
+      --     },
+      --   },
+      -- },
+      lualine_x = {
+        -- 'encoding',
+        {
+          "aerial",
+          -- The separator to be used to separate symbols in status line.
+          -- sep = " ) ",
+          -- The number of symbols to render top-down. In order to render only 'N' last
+          -- symbols, negative numbers may be supplied. For instance, 'depth = -1' can
+          -- be used in order to render only current symbol.
+          depth = nil,
+          -- When 'dense' mode is on, icons are not rendered near their symbols. Only
+          -- a single icon that represents the kind of current symbol is rendered at
+          -- the beginning of status line.
+          dense = true,
+          -- The separator to be used to separate symbols in dense mode.
+          dense_sep = "⟩",
+          -- Color the symbol icons.
+          colored = true,
+        },
+        'fileformat',
+        'filetype',
+        -- show trailing whitespaces https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#trailing-whitespaces
+        function()
+          local space = vim.fn.search([[\s\+$]], 'nwc')
+          return space ~= 0 and "TW:"..space or ""
+        end,
+        {
+          'diagnostics',
+          sources = { 'nvim_diagnostic', 'nvim_lsp' },
+          sections = { 'error', 'warn', 'info', 'hint' },
+          diagnostics_color = {
+            error = 'DiagnosticError',
+            warn  = 'DiagnosticWarn',
+            info  = 'DiagnosticInfo',
+            hint  = 'DiagnosticHint',
+          },
+          symbols = {error = vim.g.icons.error, warn = vim.g.icons.warn, info = vim.g.icons.info, hint = vim.g.icons.hint},
+          colored = true,
+          update_in_insert = false,
+          always_visible = false,
+        },
+      },
+      lualine_y = {'selectioncount', 'searchcount', 'progress'},
+      lualine_z = {
+        'location',
+      },
+    },
+    inactive_sections = {
+      lualine_a = {},
+      lualine_b = {},
+      lualine_c = {'filename'},
+      lualine_x = {'location'},
+      lualine_y = {},
+      lualine_z = {}
+    },
+    tabline = {},
+    winbar = {},
+    inactive_winbar = {},
+    extensions = {}
+  },
+  config = function(_, opts)
+    local highlight = require('lualine.highlight')
+    -- custom filename to set color based on modified status https://github.com/nvim-lualine/lualine.nvim/wiki/Component-snippets#changing-filename-color-based-on--modified-status
+    local custom_filename = require('lualine.components.filename'):extend()
+    function custom_filename:init(options)
+      custom_filename.super.init(self, options)
+      self.status_colors = {
+        saved = highlight.create_component_highlight_group(
+          {fg = require("utils.phlebotinum").status_colors.saved}, 'filename_status_saved', self.options),
+        modified = highlight.create_component_highlight_group(
+          {fg = require("utils.phlebotinum").status_colors.modified}, 'filename_status_modified', self.options),
+      }
+      if self.options.color == nil then self.options.color = '' end
+    end
+    function custom_filename:update_status()
+      local data = custom_filename.super.update_status(self)
+      data = highlight.component_format_highlight(vim.bo.modified
+                                                  and self.status_colors.modified
+                                                  or self.status_colors.saved) .. data
+      return data
+    end
+    require('lualine').setup(require("utils").default_opts(opts){
+      -- override opts
+      options = {
+        -- TODO: get custom theme looking good
+        -- theme = require("utils.phlebotinum").lualine_theme,
+      },
+      -- override sections
+      sections = {
+        lualine_c = {
+          {
+            custom_filename,
+            file_status = true,      -- Displays file status (readonly status, modified status)
+            newfile_status = true,   -- Display new file status (new file means no write after created)
+            path = 3,                -- 0: Just the filename
+                                     -- 1: Relative path
+                                     -- 2: Absolute path
+                                     -- 3: Absolute path, with tilde as the home directory
+                                     -- 4: Filename and parent dir, with tilde as the home directory
+            shorting_target = 73,    -- Shortens path to leave 40 spaces in the window
+                                     -- for other components. (terrible name, any suggestions?)
+            symbols = {
+              modified = '[+]',      -- Text to show when the file is modified.
+              readonly = '[-]',      -- Text to show when the file is non-modifiable or readonly.
+              unnamed = '[No Name]', -- Text to show for unnamed buffers.
+              newfile = '[New]',     -- Text to show for newly created file before first write
+            },
+          },
+        },
+      },
+    })
+  end,
+},
+
+-- { "mbbill/undotree", event = "VeryLazy", },
 { "godlygeek/tabular", event = "VeryLazy", },
-{ "haya14busa/incsearch.vim", event = "VeryLazy", },
 -- { "luochen1990/rainbow", event = "VeryLazy", },
 -- "justinmk/vim-sneak",
 { "wellle/targets.vim" }, -- mostly superceded by nvim-treesitter/nvim-treesitter-textobjects
-{ "bkad/CamelCaseMotion" },
+{
+  "bkad/CamelCaseMotion",
+  init = function()
+    vim.cmd([[
+      let g:camelcasemotion_key = '<leader>'
+    ]])
+  end,
+},
 -- "derekwyatt/vim-scala", { "for": ["scala"] }
 -- "tweekmonster/impsort.vim", { "on": ["ImpSort"] }
 -- "lervag/vimtex", { "for": ["tex"] }
 { "NLKNguyen/vim-maven-syntax" },
--- "mechatroner/rainbow_csv",
+-- { "mechatroner/rainbow_csv" },
+{
+  'cameron-wags/rainbow_csv.nvim',
+  ft = {
+    'csv',
+    'tsv',
+    'csv_semicolon',
+    'csv_whitespace',
+    'csv_pipe',
+    'rfc_csv',
+    'rfc_semicolon'
+  },
+  cmd = {
+    'RainbowDelim',
+    'RainbowDelimSimple',
+    'RainbowDelimQuoted',
+    'RainbowMultiDelim'
+  },
+  init = function()
+    vim.cmd([[
+      let g:disable_rainbow_hover = 0
+      let g:rainbow_hover_debounce_ms = 500
+      let g:disable_rainbow_statusline = 0
+      let g:disable_rainbow_key_mappings = 0
+      let g:rcsv_colorpairs = [ ['DarkGrey', 'DarkGrey'], ['DarkCyan','DarkCyan'], ['DarkGreen','DarkGreen'], ['LightBlue','LightBlue'], ['DarkMagenta','DarkMagenta'], ['Brown','Brown'] ]
+      nnoremap <localleader>csv <CMD>RainbowDelim<CR>
+    ]])
+  end,
+  config = function(_, opts)
+    require("rainbow_csv").setup(opts)
+  end,
+},
 { "raimon49/requirements.txt.vim" },
--- "ambv/black", { "on": ["Black"] }
-{ "embear/vim-localvimrc" },
+{
+  "ambv/black",
+  cmd = {"Black"},
+  init = function()
+    vim.cmd([[
+      let g:black_skip_string_normalization = 1
+      let g:black_linelength = 120
+    ]])
+  end,
+},
+{
+  "embear/vim-localvimrc",
+  init = function()
+    vim.cmd([[
+      let g:localvimrc_whitelist='~/workspace/.*'
+    ]])
+  end,
+},
 {
   "unblevable/quick-scope",
   -- keys = { "f", "F", "t", "T" },
@@ -315,9 +551,376 @@ return {
 -- "alok/notational-fzf-vim",
 { "lifepillar/vim-colortemplate" },
 { "stsewd/gx-extended.vim" },
--- "psliwka/vim-smoothie",
-{ "airblade/vim-rooter" },
-{ "liuchengxu/vista.vim" },
+-- {
+--   "psliwka/vim-smoothie",
+--   init = function()
+--     vim.cmd([[
+--       let g:smoothie_enabled = 1
+--       let g:smoothie_update_interval = 1
+--       let g:smoothie_speed_constant_factor = 15
+--       let g:smoothie_speed_linear_factor = 40
+--       let g:smoothie_speed_exponentiation_factor = 0.999
+--       let g:smoothie_no_default_mappings = 0
+--       let g:smoothie_experimental_mappings = 1
+--       let g:smoothie_break_on_reverse = 0
+--     ]])
+--   end,
+-- },
+{
+  "airblade/vim-rooter",
+  init = function()
+    vim.g.rooter_manual_only = 1
+  end,
+},
+
+-- {
+--   "liuchengxu/vista.vim",
+--   init = function()
+--     vim.cmd([[
+--       " let g:vista_icon_indent = ["╰─▸", "├─▸"]
+--       " let g:vista_icon_indent = ["▸ ", ", "]
+--       " let g:vista_default_executive = 'nvim_lsp'
+--       let g:vista_default_executive = 'ctags'
+--       let g:vista_finder_alternative_executives = 'ctags'
+--       let g:vista#renderer#enable_icon = 1
+--       let g:vista_sidebar_width = 25
+--       let g:vista_fzf_preview = ['right:0%']
+--       let g:vista_keep_fzf_colors = 1
+--       let g:vista_echo_cursor_strategy = 'both'
+--       let g:vista_blink = [3, 50]
+--       let g:vista_cursor_delay = 200
+--       let g:vista_floating_delay = 400
+--       let g:vista_close_on_jump = 0
+--       let g:vista_close_on_fzf_select = 0
+--       let g:vista_highlight_whole_line = 1
+--       map <M-;> <CMD>Vista!!<CR>
+--       map <M-'> <CMD>Vista focus<CR>
+--       autocmd FileType vista,vista_kind nnoremap <buffer> <silent>/ :<c-u>call vista#finder#fzf#Run()<CR>
+--     ]])
+--   end,
+-- },
+
+{
+  "stevearc/aerial.nvim",
+  dependencies = {
+     "nvim-treesitter/nvim-treesitter",
+     "nvim-tree/nvim-web-devicons"
+  },
+  opts = {
+    -- Priority list of preferred backends for aerial.
+    -- This can be a filetype map (see :help aerial-filetype-map)
+    backends = {
+      ['_']  = {"lsp", "treesitter"},
+      -- python = {"treesitter"},
+    },
+    layout = {
+      -- These control the width of the aerial window.
+      -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
+      -- min_width and max_width can be a list of mixed types.
+      -- max_width = {40, 0.2} means "the lesser of 40 columns or 20% of total"
+      max_width = { 26, 0.25 },
+      width = nil,
+      min_width = 10,
+      -- key-value pairs of window-local options for aerial window (e.g. winhl)
+      win_opts = {},
+      -- Determines the default direction to open the aerial window. The 'prefer'
+      -- options will open the window in the other direction *if* there is a
+      -- different buffer in the way of the preferred direction
+      -- Enum: prefer_right, prefer_left, right, left, float
+      default_direction = "prefer_right",
+      -- Determines where the aerial window will be opened
+      --   edge   - open aerial at the far right/left of the editor
+      --   window - open aerial to the right/left of the current window
+      placement = "window",
+      -- When the symbols change, resize the aerial window (within min/max constraints) to fit
+      resize_to_content = true,
+      -- Preserve window size equality with (:help CTRL-W_=)
+      preserve_equality = false,
+    },
+    -- Determines how the aerial window decides which buffer to display symbols for
+    --   window - aerial window will display symbols for the buffer in the window from which it was opened
+    --   global - aerial window will display symbols for the current window
+    attach_mode = "window",
+    -- List of enum values that configure when to auto-close the aerial window
+    --   unfocus       - close aerial when you leave the original source window
+    --   switch_buffer - close aerial when you change buffers in the source window
+    --   unsupported   - close aerial when attaching to a buffer that has no symbol source
+    close_automatic_events = {},
+    -- Keymaps in aerial window. Can be any value that `vim.keymap.set` accepts OR a table of keymap
+    -- options with a `callback` (e.g. { callback = function() ... end, desc = "", nowait = true })
+    -- Additionally, if it is a string that matches "actions.<name>",
+    -- it will use the mapping at require("aerial.actions").<name>
+    -- Set to `false` to remove a keymap
+    keymaps = {
+      ["?"] = "actions.show_help",
+      ["g?"] = "actions.show_help",
+      ["<CR>"] = "actions.jump",
+      ["<2-LeftMouse>"] = "actions.jump",
+      ["<C-v>"] = "actions.jump_vsplit",
+      ["<C-s>"] = "actions.jump_split",
+      ["p"] = "actions.scroll",
+      ["<C-j>"] = "actions.down_and_scroll",
+      ["<C-k>"] = "actions.up_and_scroll",
+      ["{"] = "actions.prev",
+      ["}"] = "actions.next",
+      ["[["] = "actions.prev_up",
+      ["]]"] = "actions.next_up",
+      ["q"] = "actions.close",
+      ["o"] = "actions.tree_toggle",
+      ["za"] = "actions.tree_toggle",
+      ["O"] = "actions.tree_toggle_recursive",
+      ["zA"] = "actions.tree_toggle_recursive",
+      ["l"] = "actions.tree_open",
+      ["zo"] = "actions.tree_open",
+      ["L"] = "actions.tree_open_recursive",
+      ["zO"] = "actions.tree_open_recursive",
+      ["h"] = "actions.tree_close",
+      ["zc"] = "actions.tree_close",
+      ["H"] = "actions.tree_close_recursive",
+      ["zC"] = "actions.tree_close_recursive",
+      ["zr"] = "actions.tree_increase_fold_level",
+      ["zR"] = "actions.tree_open_all",
+      ["zm"] = "actions.tree_decrease_fold_level",
+      ["zM"] = "actions.tree_close_all",
+      ["zx"] = "actions.tree_sync_folds",
+      ["zX"] = "actions.tree_sync_folds",
+      ["/"] = "<CMD>call aerial#fzf()<CR>",
+    },
+    -- When true, don't load aerial until a command or function is called
+    -- Defaults to true, unless `on_attach` is provided, then it defaults to false
+    lazy_load = true,
+    -- Disable aerial on files with this many lines
+    disable_max_lines = 10000,
+    -- Disable aerial on files this size or larger (in bytes)
+    disable_max_size = 2000000, -- Default 2MB
+    -- A list of all symbols to display. Set to false to display all symbols.
+    -- This can be a filetype map (see :help aerial-filetype-map)
+    -- To see all available values, see :help SymbolKind
+    filter_kind = {
+      "Class",
+      "Constructor",
+      "Enum",
+      "Function",
+      "Interface",
+      "Module",
+      "Method",
+      "Struct",
+    },
+    -- Determines line highlighting mode when multiple splits are visible.
+    -- split_width   Each open window will have its cursor location marked in the
+    --               aerial buffer. Each line will only be partially highlighted
+    --               to indicate which window is at that location.
+    -- full_width    Each open window will have its cursor location marked as a
+    --               full-width highlight in the aerial buffer.
+    -- last          Only the most-recently focused window will have its location
+    --               marked in the aerial buffer.
+    -- none          Do not show the cursor locations in the aerial window.
+    highlight_mode = "split_width",
+    -- Highlight the closest symbol if the cursor is not exactly on one.
+    highlight_closest = true,
+    -- Highlight the symbol in the source buffer when cursor is in the aerial win
+    highlight_on_hover = false,
+    -- When jumping to a symbol, highlight the line for this many ms.
+    -- Set to false to disable
+    highlight_on_jump = 300,
+    -- Jump to symbol in source window when the cursor moves
+    autojump = false,
+    -- Define symbol icons. You can also specify "<Symbol>Collapsed" to change the
+    -- icon when the tree is collapsed at that symbol, or "Collapsed" to specify a
+    -- default collapsed icon. The default icon set is determined by the
+    -- "nerd_font" option below.
+    -- If you have lspkind-nvim installed, it will be the default icon set.
+    -- This can be a filetype map (see :help aerial-filetype-map)
+    icons = {},
+    -- Control which windows and buffers aerial should ignore.
+    -- Aerial will not open when these are focused, and existing aerial windows will not be updated
+    ignore = {
+      -- Ignore unlisted buffers. See :help buflisted
+      unlisted_buffers = false,
+      -- Ignore diff windows (setting to false will allow aerial in diff windows)
+      diff_windows = true,
+      -- List of filetypes to ignore.
+      filetypes = {},
+      -- Ignored buftypes.
+      -- Can be one of the following:
+      -- false or nil - No buftypes are ignored.
+      -- "special"    - All buffers other than normal, help and man page buffers are ignored.
+      -- table        - A list of buftypes to ignore. See :help buftype for the
+      --                possible values.
+      -- function     - A function that returns true if the buffer should be
+      --                ignored or false if it should not be ignored.
+      --                Takes two arguments, `bufnr` and `buftype`.
+      buftypes = "special",
+      -- Ignored wintypes.
+      -- Can be one of the following:
+      -- false or nil - No wintypes are ignored.
+      -- "special"    - All windows other than normal windows are ignored.
+      -- table        - A list of wintypes to ignore. See :help win_gettype() for the
+      --                possible values.
+      -- function     - A function that returns true if the window should be
+      --                ignored or false if it should not be ignored.
+      --                Takes two arguments, `winid` and `wintype`.
+      wintypes = "special",
+    },
+    -- Use symbol tree for folding. Set to true or false to enable/disable
+    -- Set to "auto" to manage folds if your previous foldmethod was 'manual'
+    -- This can be a filetype map (see :help aerial-filetype-map)
+    manage_folds = false,
+    -- When you fold code with za, zo, or zc, update the aerial tree as well.
+    -- Only works when manage_folds = true
+    link_folds_to_tree = false,
+    -- Fold code when you open/collapse symbols in the tree.
+    -- Only works when manage_folds = true
+    link_tree_to_folds = true,
+    -- Set default symbol icons to use patched font icons (see https://www.nerdfonts.com/)
+    -- "auto" will set it to true if nvim-web-devicons or lspkind-nvim is installed.
+    nerd_font = "auto",
+    -- Call this function when aerial attaches to a buffer.
+    -- on_attach = function(bufnr) end,
+    -- Call this function when aerial first sets symbols on a buffer.
+    -- on_first_symbols = function(bufnr) end,
+    -- Automatically open aerial when entering supported buffers.
+    -- This can be a function (see :help aerial-open-automatic)
+    open_automatic = false,
+    -- Run this command after jumping to a symbol (false will disable)
+    -- post_jump_cmd = "normal! zz",
+    -- Invoked after each symbol is parsed, can be used to modify the parsed item,
+    -- or to filter it by returning false.
+    -- bufnr: a neovim buffer number
+    -- item: of type aerial.Symbol
+    -- ctx: a record containing the following fields:
+    --   * backend_name: treesitter, lsp, man...
+    --   * lang: info about the language
+    --   * symbols?: specific to the lsp backend
+    --   * symbol?: specific to the lsp backend
+    --   * syntax_tree?: specific to the treesitter backend
+    --   * match?: specific to the treesitter backend, TS query match
+    -- post_parse_symbol = function(bufnr, item, ctx)
+    --   return true
+    -- end,
+    -- Invoked after all symbols have been parsed and post-processed,
+    -- allows to modify the symbol structure before final display
+    -- bufnr: a neovim buffer number
+    -- items: a collection of aerial.Symbol items, organized in a tree,
+    --        with 'parent' and 'children' fields
+    -- ctx: a record containing the following fields:
+    --   * backend_name: treesitter, lsp, man...
+    --   * lang: info about the language
+    --   * symbols?: specific to the lsp backend
+    --   * syntax_tree?: specific to the treesitter backend
+    -- post_add_all_symbols = function(bufnr, items, ctx)
+    --   return items
+    -- end,
+    -- When true, aerial will automatically close after jumping to a symbol
+    close_on_select = false,
+    -- The autocmds that trigger symbols update (not used for LSP backend)
+    update_events = "TextChanged,InsertLeave",
+    -- Show box drawing characters for the tree hierarchy
+    show_guides = true,
+    -- Customize the characters used when show_guides = true
+    guides = {
+      -- When the child item has a sibling below it
+      mid_item = "├─",
+      -- When the child item is the last in the list
+      last_item = "└─",
+      -- When there are nested child guides to the right
+      nested_top = "│ ",
+      -- Raw indentation
+      whitespace = "  ",
+    },
+    -- Set this function to override the highlight groups for certain symbols
+    -- get_highlight = function(symbol, is_icon, is_collapsed)
+    --   -- return "MyHighlight" .. symbol.kind
+    -- end,
+    -- Options for opening aerial in a floating win
+    float = {
+      -- Controls border appearance. Passed to nvim_open_win
+      -- border = "rounded",
+      -- Determines location of floating window
+      --   cursor - Opens float on top of the cursor
+      --   editor - Opens float centered in the editor
+      --   win    - Opens float centered in the window
+      relative = "cursor",
+      -- These control the height of the floating window.
+      -- They can be integers or a float between 0 and 1 (e.g. 0.4 for 40%)
+      -- min_height and max_height can be a list of mixed types.
+      -- min_height = {8, 0.1} means "the greater of 8 rows or 10% of total"
+      max_height = 0.9,
+      height = nil,
+      min_height = { 8, 0.1 },
+      -- override = function(conf, source_winid)
+      --   -- This is the config that will be passed to nvim_open_win.
+      --   -- Change values here to customize the layout
+      --   return conf
+      -- end,
+    },
+    -- Options for the floating nav windows
+    nav = {
+      -- border = "rounded",
+      max_height = 0.9,
+      min_height = { 10, 0.1 },
+      max_width = 0.5,
+      min_width = { 0.2, 20 },
+      win_opts = {
+        cursorline = true,
+        winblend = 10,
+      },
+      -- Jump to symbol in source window when the cursor moves
+      autojump = false,
+      -- Show a preview of the code in the right column, when there are no child symbols
+      preview = false,
+      -- Keymaps in the nav window
+      keymaps = {
+        ["<CR>"] = "actions.jump",
+        ["<2-LeftMouse>"] = "actions.jump",
+        ["<C-v>"] = "actions.jump_vsplit",
+        ["<C-s>"] = "actions.jump_split",
+        ["h"] = "actions.left",
+        ["l"] = "actions.right",
+        ["<C-c>"] = "actions.close",
+      },
+    },
+    lsp = {
+      -- If true, fetch document symbols when LSP diagnostics update.
+      diagnostics_trigger_update = false,
+      -- Set to false to not update the symbols when there are LSP errors
+      update_when_errors = true,
+      -- How long to wait (in ms) after a buffer change before updating
+      -- Only used when diagnostics_trigger_update = false
+      update_delay = 500,
+      -- Map of LSP client name to priority. Default value is 10.
+      -- Clients with higher (larger) priority will be used before those with lower priority.
+      -- Set to -1 to never use the client.
+      priority = {
+        -- pyright = 10,
+      },
+    },
+    treesitter = {
+      -- How long to wait (in ms) after a buffer change before updating
+      update_delay = 500,
+    },
+    markdown = {
+      -- How long to wait (in ms) after a buffer change before updating
+      update_delay = 500,
+    },
+    asciidoc = {
+      -- How long to wait (in ms) after a buffer change before updating
+      update_delay = 500,
+    },
+    man = {
+      -- How long to wait (in ms) after a buffer change before updating
+      update_delay = 500,
+    },
+  },
+  config = function(_, opts)
+    require('aerial').setup(require("utils").default_opts(opts){})
+  end,
+  keys = {
+    {'<M-;>', "<cmd>AerialToggle<CR>"},
+    {'<M-t>', function() require("telescope").extensions.aerial.aerial() end},
+  },
+},
+
 { "lambdalisue/vim-suda" },
 
 {
@@ -538,7 +1141,7 @@ return {
       enable_diagnostics = true,
       open_files_do_not_replace_types = { "terminal", "trouble", "qf" }, -- when opening files, do not use windows containing these filetypes or buftypes
       sort_case_insensitive = false, -- used when sorting files and directories in the tree
-      sort_function = nil , -- use a custom function for sorting files and directories in the tree 
+      sort_function = nil , -- use a custom function for sorting files and directories in the tree
       -- sort_function = function (a,b)
       --       if a.type == b.type then
       --           return a.path > b.path
@@ -641,7 +1244,7 @@ return {
         mappings = {
           ["<space>"] = {
               "toggle_node",
-              nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use 
+              nowait = false, -- disable `nowait` if you have existing combos starting with this char that you want to use
           },
           ["<2-LeftMouse>"] = "open",
           ["<cr>"] = "open",
@@ -811,8 +1414,8 @@ return {
         }
       }
     })
-    vim.cmd([[nnoremap <m-\> :Neotree toggle<cr>]])
-    vim.cmd([[nnoremap <leader><leader> :Neotree toggle<cr>]])
+    vim.cmd([[nnoremap <m-\> <CMD>Neotree toggle<cr>]])
+    vim.cmd([[nnoremap <leader><leader> <CMD>Neotree toggle<cr>]])
   end
 },
 
@@ -997,7 +1600,7 @@ return {
 },
 
 ---- could be replaced with nvim-treesitter/nvim-treesitter-textobjects make_repeatable_move_pair instead
---{ -- repeat any movements with ; and , 
+--{ -- repeat any movements with ; and ,
 --  "ghostbuster91/nvim-next",
 --  dependencies = {
 --    "lewis6991/gitsigns.nvim",
@@ -1087,5 +1690,37 @@ return {
 --    })
 --  end,
 --},
+
+{
+  "brenoprata10/nvim-highlight-colors",
+  opts = {
+    enable_named_colors = true,
+    enable_tailwind = false,
+  },
+  config = function(_, opts)
+    require('nvim-highlight-colors').setup(opts)
+  end,
+},
+
+{
+  "matze/vim-move",
+  init = function()
+    vim.cmd([[
+      let g:move_key_modifier = 'C'
+      let g:move_key_modifier_visualmode = 'C'
+    ]])
+  end,
+},
+
+-- {
+--   "inside/vim-search-pulse",
+--   init = function()
+--     vim.cmd([[
+--       let g:vim_search_pulse_mode = 'pattern'
+--       let g:vim_search_pulse_duration = 200
+--       let g:vim_search_pulse_color_list = ['#3a3a3a', '#444444', '#4e4e4e', '#585858', '#606060']
+--     ]])
+--   end,
+-- },
 
 }

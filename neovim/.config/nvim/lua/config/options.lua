@@ -11,12 +11,20 @@ vim.opt.syntax = "on"
 vim.opt.number = true
 vim.opt.cursorline = true
 
+-- state tmp locations
+vim.opt.backupdir=vim.fn.stdpath('state') .. "/backup/"
+vim.opt.directory=vim.fn.stdpath('state') .. "/swap/"
+vim.opt.undodir=vim.fn.stdpath('state') .. "/undo/"
+-- Persistent undo
+vim.opt.undofile = true
+vim.opt.undolevels=50000
+
 -- vimdiff
 vim.opt.fillchars:append({vert = '│'})
 
 -- search
 vim.opt.hlsearch = true
-vim.cmd([[ nnoremap <silent> <Space> :nohlsearch<Bar>:echo<CR> ]])
+vim.cmd([[ nnoremap <silent> <Space> <CMD>nohlsearch<Bar>:echo<CR> ]])
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
 vim.opt.incsearch = true
@@ -40,19 +48,19 @@ vim.api.nvim_create_user_command('BD', 'bd', {})
 -- :command W :execute ':silent w !sudo tee % > /dev/null' | :edit!
 -- :command W :execute '!sudo tee % > /dev/null'
 -- :command W w
-vim.api.nvim_create_user_command('W', ':SudoWrite', {})
-vim.api.nvim_create_user_command('WW', ':SudaWrite', {})
-vim.api.nvim_create_user_command('Wd', ':Mkdir | w', {})
-vim.api.nvim_create_user_command('WD', ':Mkdir | :SudoWrite', {})
-vim.api.nvim_create_user_command('WWD', ':Mkdir | :SudaWrite', {})
+vim.api.nvim_create_user_command('W', 'SudoWrite', {})
+vim.api.nvim_create_user_command('WW', 'SudaWrite', {})
+vim.api.nvim_create_user_command('Wd', 'Mkdir | w', {})
+vim.api.nvim_create_user_command('WD', 'Mkdir | SudoWrite', {})
+vim.api.nvim_create_user_command('WWD', 'Mkdir | SudaWrite', {})
 -- reload vimrc
 vim.api.nvim_create_user_command('Reload', 'source $MYVIMRC', {})
 -- csv
 vim.api.nvim_create_user_command('CSV', '%!column -t', {})
 -- cd
-vim.api.nvim_create_user_command('CD', ':cd %:h', {})
-vim.api.nvim_create_user_command('Groot', ':cd `git rev-parse --show-toplevel`', {})
-vim.api.nvim_create_user_command('Proot', ':Groot', {})
+vim.api.nvim_create_user_command('CD', 'cd %:h', {})
+vim.api.nvim_create_user_command('Groot', 'cd `git rev-parse --show-toplevel`', {})
+vim.api.nvim_create_user_command('Proot', 'Groot', {})
 
 -- paste
 vim.opt.showmode = false
@@ -130,11 +138,6 @@ vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
     vim.diagnostic.open_float(nil, {focus=false, severity = line_severity_filter})
   end
 })
-
--- colors TODO: add these to phlebotinum
-vim.cmd([[
-highlight DiagnosticInfo guifg=#6c6c6c
-]])
 
 
 -- LEGACY CONFIGS
@@ -244,7 +247,7 @@ function ShouldReenable() abort
     \ winline() <= winheight(0) - w:current_scrolloff
   return line('.') != w:current_line
 endfunction
-nnoremap <silent> <LeftMouse> :call DisableScrollOff()<CR><LeftMouse>:call MouseScrollOffAutocommand()<CR>
+nnoremap <silent> <LeftMouse> <CMD>call DisableScrollOff()<CR><LeftMouse><CMD>call MouseScrollOffAutocommand()<CR>
 ]])
 
 -- completion options

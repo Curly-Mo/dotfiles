@@ -14,7 +14,6 @@ export XDG_CONFIG_HOME="$HOME/.config"
 # nvim-conf
 export NVIM_CONF_DIR="$XDG_CONFIG_HOME/nvim"
 export NVIM_LUA_DIR="$XDG_CONFIG_HOME/nvim/lua"
-export NVIM_TMP_DIR="$XDG_CONFIG_HOME/nvim/tmp"
 # dotfiles
 export DOTFILES_DIR="$HOME/dotfiles"
 export DOTS_DIR="$DOTFILES_DIR"

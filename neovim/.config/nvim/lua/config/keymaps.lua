@@ -32,11 +32,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     if client.supports_method("textDocument/definition") then
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts({ desc = "lsp goto definition" }))
     end
-    if client.supports_method("textDocument/references") then
-      vim.keymap.set("n", "gwr", vim.lsp.buf.references, opts({ desc = "lsp goto references" }))
-    end
     if client.supports_method("textDocument/declaration") then
       vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts({ desc = "lsp goto declaration" }))
+    end
+    if client.supports_method("textDocument/references") then
+      vim.keymap.set("n", "gwr", vim.lsp.buf.references, opts({ desc = "lsp goto references" }))
     end
     if client.supports_method("textDocument/rename") then
       vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts({ desc = "lsp" }))
@@ -56,11 +56,11 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', '<leader>F', function()
       vim.lsp.buf.format({ async = true })
     end, opts({ desc = "lsp Format" }))
-    vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts({ desc = "lsp add workspace folder" }))
-    vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts({ desc = "lsp remove workspace folder" }))
-    vim.keymap.set('n', '<leader>wl', function()
-      print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-    end, opts({ desc = "lsp list workspace folders" }))
+    -- vim.keymap.set('n', '<leader>wa', vim.lsp.buf.add_workspace_folder, opts({ desc = "lsp add workspace folder" }))
+    -- vim.keymap.set('n', '<leader>wr', vim.lsp.buf.remove_workspace_folder, opts({ desc = "lsp remove workspace folder" }))
+    -- vim.keymap.set('n', '<leader>wl', function()
+    --   print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+    -- end, opts({ desc = "lsp list workspace folders" }))
     -- conditional keybinds based on server_capabilities, still not sure if there is a reason to use this over supports_method
     -- if capabilities ~= nil and capabilities.renameProvider then
     --   vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts({ desc = "lsp rename" }))
@@ -79,3 +79,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', 'gk', PeekDefinition, opts({ desc = "lsp peek definition" }))
   end,
 })
+
+-- TODO: convert to lua
+vim.cmd([[
+  nnoremap <expr> 0 (col('.') == 1) ? '^' : (col('.') == match(getline('.'),'\S')+1) ? '$' : '0'
+  nnoremap <expr> <M-0> '$'
+]])

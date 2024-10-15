@@ -247,7 +247,6 @@ return {
         'RainbowDelimiterGreen',
         'RainbowDelimiterCyan',
         'RainbowDelimiterViolet',
-        'RainbowDelimiterBlue',
       },
     }
     require("rainbow-delimiters.setup").setup(opts)
@@ -390,7 +389,7 @@ return {
     configs.setup {
       highlight = {
         enable = true,                    -- false will disable the whole extension
-        disable = { },                    -- list of language that will be disabled
+        disable = { "csv", "tsv",  },     -- list of language that will be disabled
         custom_captures = {               -- mapping of user defined captures to highlight groups
           -- ["foo.bar"] = "Identifier"   -- highlight own capture @foo.bar with highlight group "Identifier", see :h nvim-treesitter-query-extensions
         },

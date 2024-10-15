@@ -144,9 +144,13 @@
 "silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/backup > /dev/null 2>&1
 "silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/swap > /dev/null 2>&1
 "silent !mkdir -p $XDG_CONFIG_HOME/nvim/tmp/undo > /dev/null 2>&1
-set backupdir=~/.config/nvim/tmp/backup//
-set directory=~/.config/nvim/tmp/swap//
-set undodir=~/.config/nvim/tmp/undo//
+let s:config_dir = has('nvim') ? stdpath('config') : '~/.vim'
+let s:state_dir = has('nvim') ? stdpath('state') : '~/.vim/tmp'
+let s:cache_dir = has('nvim') ? stdpath('cache') : '~/.vim/tmp'
+let s:data_dir = has('nvim') ? stdpath('data') : '~/.vim/data'
+let &backupdir=s:state_dir . "/backup//"
+let &directory=s:state_dir . "/swap//"
+let &undodir=s:state_dir . "/undo//"
 " Persistent undo
 set undofile
 set undolevels=50000
@@ -165,7 +169,6 @@ endif
 " TODO: replace with init.lua
 lua <<EOF
 require("config")
-require("utils.paths")
 EOF
 
 "" syntax
@@ -522,10 +525,10 @@ au FileType scala nnoremap <localleader>8 :SortScalaImports<CR>
 " \ }
 " \}
 
-" Indent-guides
-let g:indent_guides_auto_colors = 0
-hi IndentGuidesOdd  ctermbg=black
-hi IndentGuidesEven ctermbg=235
+" " Indent-guides
+" let g:indent_guides_auto_colors = 0
+" hi IndentGuidesOdd  ctermbg=black
+" hi IndentGuidesEven ctermbg=235
 
 " IncSearch
 " map /  <Plug>(incsearch-forward)
@@ -533,18 +536,18 @@ hi IndentGuidesEven ctermbg=235
 " map g/ <Plug>(incsearch-stay)
 " highlight IncSearch ctermfg=cyan term=underline
 
-" CamelCaseMotion
-let g:camelcasemotion_key = '<leader>'
+" " CamelCaseMotion
+" let g:camelcasemotion_key = '<leader>'
 
-" rainbow csv
-nnoremap <localleader>csv :RainbowDelim<CR>
+" " rainbow csv
+" nnoremap <localleader>csv :RainbowDelim<CR>
 
-" black
-let g:black_skip_string_normalization = 1
-let g:black_linelength = 120
+" " black
+" let g:black_skip_string_normalization = 1
+" let g:black_linelength = 120
 
-" localvimrc
-let g:localvimrc_whitelist='~/workspace/.*'
+" " localvimrc
+" let g:localvimrc_whitelist='~/workspace/.*'
 
 " " gitgutter
 " let g:gitgutter_enabled = 1
@@ -676,96 +679,96 @@ let g:github_enterprise_urls = ['https://ghe.spotify.net']
 "    \ {'source': 'fd --type d --hidden --exclude .git',
 "    \ 'sink': 'cd'}))
 
-" Vista.vim
-" let g:vista_icon_indent = ["╰─▸", "├─▸"]
-" let g:vista_icon_indent = ["▸ ", ", "]
-let g:vista#renderer#enable_icon = 1
-let g:vista_sidebar_width = 25
-" let g:vista_default_executive = 'coc'
-let g:vista_fzf_preview = ['right:50%']
-let g:vista_keep_fzf_colors = 1
-let g:vista_echo_cursor_strategy = 'both'
-let g:vista_blink = [3, 50]
-let g:vista_cursor_delay = 200
-let g:vista_floating_delay = 400
-map <M-;> :Vista!!<CR>
-map <M-'> :Vista focus<CR>
-autocmd FileType vista,vista_kind nnoremap <buffer> <silent>/ :<c-u>call vista#finder#fzf#Run()<CR>
+" " Vista.vim
+" " let g:vista_icon_indent = ["╰─▸", "├─▸"]
+" " let g:vista_icon_indent = ["▸ ", ", "]
+" let g:vista#renderer#enable_icon = 1
+" let g:vista_sidebar_width = 25
+" " let g:vista_default_executive = 'coc'
+" let g:vista_fzf_preview = ['right:50%']
+" let g:vista_keep_fzf_colors = 1
+" let g:vista_echo_cursor_strategy = 'both'
+" let g:vista_blink = [3, 50]
+" let g:vista_cursor_delay = 200
+" let g:vista_floating_delay = 400
+" map <M-;> :Vista!!<CR>
+" map <M-'> :Vista focus<CR>
+" autocmd FileType vista,vista_kind nnoremap <buffer> <silent>/ :<c-u>call vista#finder#fzf#Run()<CR>
 
 
-" poet-v
-" let g:poetv_executables = ['poetry', 'pipenv']
-let g:poetv_executables = ['poetry']
-" let g:poetv_auto_activate = 0
-" let g:poetv_statusline_symbol = ''
-" let g:poetv_set_environment = 1
+" " poet-v
+" " let g:poetv_executables = ['poetry', 'pipenv']
+" let g:poetv_executables = ['poetry']
+" " let g:poetv_auto_activate = 0
+" " let g:poetv_statusline_symbol = ''
+" " let g:poetv_set_environment = 1
 
-" notational-fzf-vim
-nnoremap <silent> <c-s> :NV!<CR>
-" nnoremap <silent> <c-S> :NV<CR>work/
-let g:nv_search_paths = ['~/sync/notes/fzfvim', './notes']
-"" String. Set to '' (the empty string) if you don't want an extension appended by default.
-"" Don't forget the dot, unless you don't want one.
-"let g:nv_default_extension = '.md'
-"" String. Default is first directory found in `g:nv_search_paths`. Error thrown
-""if no directory found and g:nv_main_directory is not specified
-""let g:nv_main_directory = g:nv_main_directory or (first directory in g:nv_search_paths)
-let g:nv_main_directory = '~/sync/notes/fzfvim'
-"" Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
-"" 'command' or 'alt-KEY' : 'command'. See examples below.
-"let g:nv_keymap = {
-"                    \ 'ctrl-s': 'split ',
-"                    \ 'ctrl-v': 'vertical split ',
-"                    \ 'ctrl-t': 'tabedit ',
-"                    \ })
-"" String. Must be in the form 'ctrl-KEY' or 'alt-KEY'
-"let g:nv_create_note_key = 'ctrl-x'
-"" String. Controls how new note window is created.
-"let g:nv_create_note_window = 'vertical split'
-"" Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
-"let g:nv_show_preview = 1
-"" Boolean. Respect .*ignore files in or above nv_search_paths. Set by default.
-"let g:nv_use_ignore_files = 1
-"" Boolean. Include hidden files and folders in search. Disabled by default.
-"let g:nv_include_hidden = 0
-"" Boolean. Wrap text in preview window.
-"let g:nv_wrap_preview_text = 1
-"" String. Width of window as a percentage of screen's width.
-"let g:nv_window_width = '40%'
-"" String. Determines where the window is. Valid options are: 'right', 'left', 'up', 'down'.
-"let g:nv_window_direction = 'down'
-"" String. Command to open the window (e.g. `vertical` `aboveleft` `30new` `call my_function()`).
-"let g:nv_window_command = 'call my_function()'
-"" Float. Width of preview window as a percentage of screen's width. 50% by default.
-"let g:nv_preview_width = 50
-"" String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
-"let g:nv_preview_direction = 'right'
-"" String. Yanks the selected filenames to the default register.
-"let g:nv_yank_key = 'ctrl-y'
-"" String. Separator used between yanked filenames.
-"let g:nv_yank_separator = "\n"
-"" Boolean. If set, will truncate each path element to a single character. If
-"" you have colons in your pathname, this will fail. Set by default.
-"let g:nv_use_short_pathnames = 1
-""List of Strings. Shell glob patterns. Ignore all filenames that match any of
-"" the patterns.
-"let g:nv_ignore_pattern = ['summarize-*', 'misc*']
-"" List of Strings. Key mappings like above in case you want to define your own
-"" handler function. Most users won't want to set this to anything.
-"let g:nv_expect_keys = []
+"" notational-fzf-vim
+"nnoremap <silent> <c-s> :NV!<CR>
+"" nnoremap <silent> <c-S> :NV<CR>work/
+"let g:nv_search_paths = ['~/sync/notes/fzfvim', './notes']
+""" String. Set to '' (the empty string) if you don't want an extension appended by default.
+""" Don't forget the dot, unless you don't want one.
+""let g:nv_default_extension = '.md'
+""" String. Default is first directory found in `g:nv_search_paths`. Error thrown
+"""if no directory found and g:nv_main_directory is not specified
+"""let g:nv_main_directory = g:nv_main_directory or (first directory in g:nv_search_paths)
+"let g:nv_main_directory = '~/sync/notes/fzfvim'
+""" Dictionary with string keys and values. Must be in the form 'ctrl-KEY':
+""" 'command' or 'alt-KEY' : 'command'. See examples below.
+""let g:nv_keymap = {
+""                    \ 'ctrl-s': 'split ',
+""                    \ 'ctrl-v': 'vertical split ',
+""                    \ 'ctrl-t': 'tabedit ',
+""                    \ })
+""" String. Must be in the form 'ctrl-KEY' or 'alt-KEY'
+""let g:nv_create_note_key = 'ctrl-x'
+""" String. Controls how new note window is created.
+""let g:nv_create_note_window = 'vertical split'
+""" Boolean. Show preview. Set by default. Pressing Alt-p in FZF will toggle this for the current search.
+""let g:nv_show_preview = 1
+""" Boolean. Respect .*ignore files in or above nv_search_paths. Set by default.
+""let g:nv_use_ignore_files = 1
+""" Boolean. Include hidden files and folders in search. Disabled by default.
+""let g:nv_include_hidden = 0
+""" Boolean. Wrap text in preview window.
+""let g:nv_wrap_preview_text = 1
+""" String. Width of window as a percentage of screen's width.
+""let g:nv_window_width = '40%'
+""" String. Determines where the window is. Valid options are: 'right', 'left', 'up', 'down'.
+""let g:nv_window_direction = 'down'
+""" String. Command to open the window (e.g. `vertical` `aboveleft` `30new` `call my_function()`).
+""let g:nv_window_command = 'call my_function()'
+""" Float. Width of preview window as a percentage of screen's width. 50% by default.
+""let g:nv_preview_width = 50
+""" String. Determines where the preview window is. Valid options are: 'right', 'left', 'up', 'down'.
+""let g:nv_preview_direction = 'right'
+""" String. Yanks the selected filenames to the default register.
+""let g:nv_yank_key = 'ctrl-y'
+""" String. Separator used between yanked filenames.
+""let g:nv_yank_separator = "\n"
+""" Boolean. If set, will truncate each path element to a single character. If
+""" you have colons in your pathname, this will fail. Set by default.
+""let g:nv_use_short_pathnames = 1
+"""List of Strings. Shell glob patterns. Ignore all filenames that match any of
+""" the patterns.
+""let g:nv_ignore_pattern = ['summarize-*', 'misc*']
+""" List of Strings. Key mappings like above in case you want to define your own
+""" handler function. Most users won't want to set this to anything.
+""let g:nv_expect_keys = []
 
-" undotree
-nnoremap <F5> :UndotreeToggle<CR>
-let g:undotree_SetFocusWhenToggle = 1
+" " undotree
+" nnoremap <F5> :UndotreeToggle<CR>
+" let g:undotree_SetFocusWhenToggle = 1
 
-" vim-test
-nmap <silent> <leader>gt :TestNearest<CR>
-nmap <silent> <leader>gT :TestFile<CR>
-nmap <silent> gT :TestFile<CR>
-nmap <silent> <leader>ga :TestSuite<CR>
-nmap <silent> <leader>gl :TestLast<CR>
-let test#strategy = "neovim"
-let test#java#maventest#options = '-T 4 -Dcheckstyle.skip -Dspotbugs.skip -Ddockerfile.skip -Ddockerfile.skip'
+" " vim-test
+" nmap <silent> <leader>gt :TestNearest<CR>
+" nmap <silent> <leader>gT :TestFile<CR>
+" nmap <silent> gT :TestFile<CR>
+" nmap <silent> <leader>ga :TestSuite<CR>
+" nmap <silent> <leader>gl :TestLast<CR>
+" let test#strategy = "neovim"
+" let test#java#maventest#options = '-T 4 -Dcheckstyle.skip -Dspotbugs.skip -Ddockerfile.skip -Ddockerfile.skip'
 
 " " vim-ultest
 " let g:ultest_use_pty = 1
@@ -782,15 +785,15 @@ let test#java#maventest#options = '-T 4 -Dcheckstyle.skip -Dspotbugs.skip -Ddock
 " nmap <silent> gt :UltestSummary!<CR>
 " let g:ultest_disable_grouping = ["java"]
 
-" vim-smoothie
-let g:smoothie_enabled = 1
-let g:smoothie_update_interval = 1
-let g:smoothie_speed_constant_factor = 15
-let g:smoothie_speed_linear_factor = 40
-let g:smoothie_speed_exponentiation_factor = 0.999
-let g:smoothie_no_default_mappings = 0
-let g:smoothie_experimental_mappings = 1
-let g:smoothie_break_on_reverse = 0
+" " vim-smoothie
+" let g:smoothie_enabled = 1
+" let g:smoothie_update_interval = 1
+" let g:smoothie_speed_constant_factor = 15
+" let g:smoothie_speed_linear_factor = 40
+" let g:smoothie_speed_exponentiation_factor = 0.999
+" let g:smoothie_no_default_mappings = 0
+" let g:smoothie_experimental_mappings = 1
+" let g:smoothie_break_on_reverse = 0
 
-" rooter
-let g:rooter_manual_only = 1
+" " rooter
+" let g:rooter_manual_only = 1
