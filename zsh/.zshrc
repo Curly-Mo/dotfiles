@@ -47,9 +47,8 @@ autoload -Uz _zinit
 zinit for \
   zdharma-continuum/zinit-annex-bin-gem-node \
   zdharma-continuum/zinit-annex-binary-symlink \
-  zdharma-continuum/zinit-annex-linkman \
+  zdharma-continuum/zinit-annex-link-man \
   zdharma-continuum/zinit-annex-default-ice \
-  zdharma-continuum/zinit-annex-meta-plugins \
   zdharma-continuum/zinit-annex-rust \
   zdharma-continuum/zinit-annex-submods \
   zdharma-continuum/zinit-annex-patch-dl \
@@ -71,7 +70,7 @@ zinit wait"0" lucid for \
     OMZP::"sudo"
 
 # Load Oh My Zsh completions
-zinit wait"0" lucid for OMZP::"git-extras"
+# zinit wait"0" lucid for OMZP::"git-extras"
 
 # Workaround for zinit issue#504: remove subversion dependency. Function clones all files in plugin
 # directory (on github) that might be useful to zinit snippet directory. Should only be invoked
@@ -192,36 +191,36 @@ zinit pack for dircolors-material
 
 
 # Programs
-# zinit lucid as=program for \
-#   pick="$ZPFX/bin/(fzf|fzf-tmux)" \
-#   multisrc'shell/{completion,key-bindings}.zsh' \
-#   atclone="cp shell/completion.zsh _fzf_completion; cp bin/(fzf|fzf-tmux) $ZPFX/bin" \
-#   make="PREFIX=$ZPFX install" \
-#   atload"_fzf_config" \
-#     junegunn/fzf
-zinit wait'0' lucid for \
+zinit lucid as=program completions lman for \
+  lbin="*bin/(fzf|fzf-tmux)" \
   multisrc'shell/{completion,key-bindings}.zsh $XDG_CONFIG_HOME/zsh/fzf.zsh' \
-  id-as"junegunn/fzf_completions" \
+  atclone="cp shell/completion.zsh _fzf_completion" \
+  make="install" \
     junegunn/fzf
+  # atload"_fzf_config" \
+# zinit wait'0' lucid for \
+#   multisrc'shell/{completion,key-bindings}.zsh $XDG_CONFIG_HOME/zsh/fzf.zsh' \
+#   id-as"junegunn/fzf_completions" \
+#     junegunn/fzf
 # zinit wait"0" pack"binary+keys" for fzf
 
 zinit wait"0" lucid for \
   multisrc="$XDG_CONFIG_HOME/zsh/fzf-tab.zsh" \
     Aloxaf/fzf-tab
 
-zinit wait"0" lucid make lbin for \
+zinit wait"0" lucid make lbin lman for \
   jhawthorn/fzy
 # zinit wait lucid for \
 #   multisrc="$XDG_CONFIG_HOME/zsh/fzy.zsh" \
 #     aperezdc/zsh-fzy
 
-zinit wait"0" lucid make"!" lbin for \
+zinit wait"0" lucid make"!" lbin lman for \
   atclone"./direnv hook zsh > zhook.zsh" \
   atpull"%atclone" \
   src"zhook.zsh" \
     direnv/direnv
 
-zinit wait"0" from"gh-r" lucid lbin for \
+zinit wait"0" from"gh-r" lucid lbin lman for \
   nocd atload:'!eval "$(zoxide init zsh)"' \
     ajeetdsouza/zoxide
 
@@ -235,30 +234,30 @@ zinit lucid light-mode \
   git id-as'trapd00r/LS_COLORS' \
     @trapd00r/LS_COLORS
 
-zinit wait"0" lucid lbin completions for \
+zinit wait"0" lucid lbin lman completions for \
   atpull="zinit creinstall -q ." \
     eza-community/eza
 
 # sharkdp
-zinit wait"0" from"gh-r" lucid lbin for \
+zinit wait"0" from"gh-r" lucid lbin lman for \
   nocd atload"export BAT_THEME='ansi'" \
   cp="bat-*/autocomplete/bat.zsh -> _bat" \
   atpull="zinit creinstall -q ." \
     @sharkdp/bat
-zinit wait"0" from"gh-r" lucid lbin for \
+zinit wait"0" from"gh-r" lucid lbin lman for \
   cp="fd-*/autocomplete/_fd -> _fd" \
     @sharkdp/fd
-zinit wait"0" from"gh-r" lucid lbin for \
+zinit wait"0" from"gh-r" lucid lbin lman for \
   @sharkdp/hexyl
-zinit wait"0" from"gh-r" lucid lbin for \
+zinit wait"0" from"gh-r" lucid lbin lman for \
   @sharkdp/hyperfine
-zinit wait"0" from"gh-r" lucid lbin for \
+zinit wait"0" from"gh-r" lucid lbin lman for \
   @sharkdp/vivid
 
-zinit wait"0" lucid make lbin for \
+zinit wait"0" lucid make lbin lman for \
   mptre/yank
 
-zinit wait"0" lucid from"gh-r" lbin for \
+zinit wait"0" lucid from"gh-r" lbin lman for \
   pick"misc/quitcd/quitcd.zsh" \
     jarun/nnn
 
@@ -270,40 +269,43 @@ zinit wait"0" lucid lbin'sk' lman'sk' for \
   atclone"cargo build --release" atpull"%atclone" \
     lotabout/skim
 
-zinit wait"0" lucid from"gh-r" lbin for \
+zinit wait"0" lucid from"gh-r" lbin lman for \
   peco/peco
 
-zinit wait"0" lucid from"gh-r" for \
+zinit wait"0" lucid from"gh-r" lman for \
   lbin="rg" \
 	cp="ripgrep-*/complete/_rg -> _rg" \
     BurntSushi/ripgrep
 
-zinit wait"0" lucid from"gh-r" lbin'jq* -> jq' for \
+zinit wait"0" lucid from"gh-r" lbin'jq* -> jq' lman for \
   jqlang/jq
 
 # git stuff
-zinit wait"0" lucid lbin for \
+zinit wait"0" lucid lbin lman for \
   Fakerr/git-recall \
   davidosomething/git-my \
   paulirish/git-open \
   paulirish/git-recent \
   arzzen/git-quick-stats
-zinit wait"0" lucid lbin for \
+zinit wait"0" lucid lbin lman for \
   atpull="zinit creinstall -q ." \
     iwata/git-now
-zinit wait"0" lucid from"gh-r" lbin for \
+zinit wait"0" lucid from"gh-r" lbin lman for \
   dandavison/delta
-zinit wait"0" lucid from"gh-r" lbin for \
+zinit wait"0" lucid from"gh-r" lbin lman for \
   nocd atload="alias lg='lazygit'" \
     jesseduffield/lazygit
-zinit wait"0" lucid make lbin for \
+zinit wait"0" lucid make lbin lman for \
   zdharma-continuum/git-url
-zinit wait"0" lucid as:"program" make for \
-  pick"bin/git-*" \
+# zinit wait"0" lucid as:"program" make"PREFIX=$ZPFX" for \
+#   src"etc/git-extras-completion.zsh" \
+#     tj/git-extras 
+zinit wait"0" lucid as:"program" make"PREFIX=$ZPFX" for \
+  lbin"!bin/git-*" \
   lman"bin/git-*" \
+  src"etc/git-extras-completion.zsh" \
     tj/git-extras 
-  # src"etc/git-extras-completion.zsh" \
-zinit wait"0" lucid make lbin for \
+zinit wait"0" lucid make lbin lman for \
   cp="etc/hub.zsh_completion -> _hub" \
   atpull="zinit creinstall -q ." \
     @github/hub
@@ -398,5 +400,3 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete
 
 # uncomment for profiling
 # zprof
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

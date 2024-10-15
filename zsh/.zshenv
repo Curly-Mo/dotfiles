@@ -1,6 +1,18 @@
 # Set this when ready to move
 # ZDOTDIR=$HOME/config/zsh
-typeset -U path
-path=(~/bin $path)
-path=(~/.local/bin $path)
-path=($path /opt/brew/bin)
+
+# init paths
+typeset -U path manpath
+
+# path
+path=(
+  ~/bin
+  ~/.local/bin
+  "${path[@]}"
+  /opt/brew/bin
+)
+
+# manpath
+manpath=(
+  "${manpath[@]}"
+)
