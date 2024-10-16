@@ -112,7 +112,7 @@ colors
 zinit ice lucid
 zinit snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
 # zinit ice wait"0" lucid if"[[ -f $HOME/.zsh_theme ]]"
-zinit ice lucid link if"[[ -f $HOME/.zsh_theme ]]"
+zinit ice wait"!0" lucid link if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
 zinit ice wait"0" lucid link if"[[ -f $HOME/.localrc ]]"
@@ -183,6 +183,10 @@ zinit wait lucid for \
 zinit wait lucid for \
   urbainvaes/fzf-marks
 
+# zinit wait lucid for \
+#   MichaelAquilina/zsh-you-should-use
+# export YSU_IGNORED_ALIASES=("zini")
+
 
 # Packages https://github.com/zdharma-continuum/zinit-packages
 # zinit pack for dircolors-material
@@ -194,7 +198,7 @@ zinit wait lucid for \
 
 
 # Programs
-zinit lucid as=program completions lman for \
+zinit lucid completions lman for \
   lbin="*bin/(fzf|fzf-tmux)" \
   multisrc'shell/{completion,key-bindings}.zsh $XDG_CONFIG_HOME/zsh/fzf.zsh' \
   atclone="cp shell/completion.zsh _fzf_completion" \
@@ -218,9 +222,7 @@ zinit wait"0" lucid make lbin lman for \
 #     aperezdc/zsh-fzy
 
 zinit wait"0" lucid make"!" lbin lman for \
-  atclone"./direnv hook zsh > zhook.zsh" \
-  atpull"%atclone" \
-  src"zhook.zsh" \
+  eval"./direnv hook zsh" \
     direnv/direnv
 
 zinit wait"0" from"gh-r" lucid lbin lman for \
@@ -235,15 +237,13 @@ zinit lucid light-mode for \
 # zinit lucid light-mode for \
 #     zpm-zsh/theme-neutral
 
-zinit wait"0" lucid lbin lman completions for \
-  atpull="zinit creinstall -q ." \
+zinit wait"0" lucid lbin lman completions nocompile for \
     eza-community/eza
 
 # sharkdp
-zinit wait"0" from"gh-r" lucid lbin lman for \
+zinit wait"0" from"gh-r" lucid lbin lman completions nocompile for \
   nocd atload"export BAT_THEME='ansi'" \
   cp="bat-*/autocomplete/bat.zsh -> _bat" \
-  atpull="zinit creinstall -q ." \
     @sharkdp/bat
 zinit wait"0" from"gh-r" lucid lbin lman for \
   cp="fd-*/autocomplete/_fd -> _fd" \
@@ -288,8 +288,7 @@ zinit wait"0" lucid lbin lman for \
   paulirish/git-open \
   paulirish/git-recent \
   arzzen/git-quick-stats
-zinit wait"0" lucid lbin lman for \
-  atpull="zinit creinstall -q ." \
+zinit wait"0" lucid lbin lman completions nocompile for \
     iwata/git-now
 zinit wait"0" lucid from"gh-r" lbin lman for \
   dandavison/delta
@@ -306,9 +305,8 @@ zinit wait"0" lucid as:"program" make"PREFIX=$ZPFX" for \
   lman"bin/git-*" \
   src"etc/git-extras-completion.zsh" \
     tj/git-extras 
-zinit wait"0" lucid make lbin lman for \
+zinit wait"0" lucid make lbin lman completions nocompile for \
   cp="etc/hub.zsh_completion -> _hub" \
-  atpull="zinit creinstall -q ." \
     @github/hub
 # zinit wait"0" lucid for \
 #   wfxr/forgit
