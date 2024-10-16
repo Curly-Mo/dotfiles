@@ -640,15 +640,81 @@ return {
   end,
 },
 { "Bilal2453/luvit-meta", lazy = true }, -- optional `vim.uv` typings
+{
+  "folke/neoconf.nvim",
+  cmd = "Neoconf",
+  event = "VeryLazy",
+  opts = {
+    -- name of the local settings files
+    local_settings = ".neoconf.json",
+    -- name of the global settings file in your Neovim config directory
+    global_settings = "neoconf.json",
+    -- import existing settings from other plugins
+    import = {
+      vscode = false, -- local .vscode/settings.json
+      coc = false, -- global/local coc-settings.json
+      nlsp = false, -- global/local nlsp-settings.nvim json settings
+    },
+    -- send new configuration to lsp clients when changing json settings
+    live_reload = false,
+    -- set the filetype to jsonc for settings files, so you can use comments
+    -- make sure you have the jsonc treesitter parser installed!
+    filetype_jsonc = true,
+    plugins = {
+      -- configures lsp clients with settings in the following order:
+      -- - lua settings passed in lspconfig setup
+      -- - global json settings
+      -- - local json settings
+      lspconfig = {
+        enabled = true,
+      },
+      -- configures jsonls to get completion in .nvim.settings.json files
+      jsonls = {
+        enabled = true,
+        -- only show completion in json settings for configured lsp servers
+        configured_servers_only = true,
+      },
+      -- configures lua_ls to get completion of lspconfig server settings
+      lua_ls = {
+        -- by default, lua_ls annotations are only enabled in your neovim config directory
+        enabled_for_neovim_config = true,
+        -- explicitly enable adding annotations. Mostly relevant to put in your local .nvim.settings.json file
+        enabled = false,
+      },
+    },
+  },
+},
+
 
 {
   "neovim/nvim-lspconfig",
+  dependencies = {'folke/neoconf.nvim'},
   config = function(_, opts)
     -- If diff-mode, don't load any LSP Configs
     if (vim.opt.diff:get()) then
       return
     end
     local lsp = require("lspconfig")
+    lsp.util.default_config = vim.tbl_extend(
+      "force",
+      lsp.util.default_config,
+      {
+        -- autostart = false,
+        handlers = {
+          -- ["window/logMessage"] = function(err, method, params, client_id)
+          --   if params and params.type <= vim.lsp.protocol.MessageType.Log then
+          --     vim.lsp.handlers["window/logMessage"](err, method, params, client_id)
+          --   end
+          -- end,
+          -- ["window/showMessage"] = function(err, method, params, client_id)
+          --   if params and params.type <= vim.lsp.protocol.MessageType.Warning.Error then
+          --     vim.lsp.handlers["window/showMessage"](err, method, params, client_id)
+          --   end
+          -- end,
+        }
+      }
+    )
+
     -- lsp.pyright.setup{
     --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
     --   single_file_support = true,

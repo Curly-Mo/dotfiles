@@ -253,6 +253,37 @@ return {
   end,
 },
 
+{
+  "JoosepAlviste/nvim-ts-context-commentstring",
+  dependencies = { "tpope/vim-commentary" },
+  opts = {
+    enable_autocmd = false,
+  },
+  config = function(_, opts)
+    require('ts_context_commentstring').setup(opts)
+  end,
+},
+
+{
+  "windwp/nvim-ts-autotag",
+  opts = {
+    opts = {
+      -- Defaults
+      enable_close = true, -- Auto close tags
+      enable_rename = true, -- Auto rename pairs of tags
+      enable_close_on_slash = false, -- Auto close on trailing </
+    },
+    -- Also override individual filetype configs, these take priority.
+    -- Empty by default, useful if one of the "opts" global settings
+    -- doesn't work well in a specific filetype
+    -- per_filetype = {
+    --   ["html"] = {
+    --     enable_close = false,
+    --   },
+    -- },
+  },
+},
+
 -- fallback for when treesj isn't cutting it
 {
   "echasnovski/mini.splitjoin",
@@ -387,28 +418,6 @@ return {
   config = function(_, opts)
     local configs = require("nvim-treesitter.configs")
     configs.setup {
-      highlight = {
-        enable = true,                    -- false will disable the whole extension
-        disable = { "csv", "tsv",  },     -- list of language that will be disabled
-        custom_captures = {               -- mapping of user defined captures to highlight groups
-          -- ["foo.bar"] = "Identifier"   -- highlight own capture @foo.bar with highlight group "Identifier", see :h nvim-treesitter-query-extensions
-        },
-      },
-      incremental_selection = {
-        enable = true,
-        disable = { },
-        keymaps = {                       -- mappings for incremental selection (visual mappings)
-          init_selection = "gnn",         -- maps in normal mode to init the node/scope selection
-          node_incremental = "gNn",       -- increment to the upper named parent
-          scope_incremental = "gNc",      -- increment to the upper scope (as defined in locals.scm)
-          node_decremental = "gNm",       -- decrement to the previous node
-        }
-      },
-      matchup = {
-        enable = true,  -- mandatory, false will disable the whole extension
-        disable = { },  -- optional, list of language that will be disabled
-        include_match_words = true,
-      },
       ensure_installed = {
         "bash",
         "c",
@@ -450,6 +459,37 @@ return {
       auto_install = true,
       -- List of parsers to ignore installing (or "all")
       ignore_install = { },
+      highlight = {
+        enable = true,                    -- false will disable the whole extension
+        disable = { "csv", "tsv",  },     -- list of language that will be disabled
+        custom_captures = {               -- mapping of user defined captures to highlight groups
+          -- ["foo.bar"] = "Identifier"   -- highlight own capture @foo.bar with highlight group "Identifier", see :h nvim-treesitter-query-extensions
+        },
+        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+        -- Using this option may slow down your editor, and you may see some duplicate highlights.
+        -- Instead of true it can also be a list of languages
+        additional_vim_regex_highlighting = false,
+      },
+      incremental_selection = {
+        enable = true,
+        disable = { },
+        keymaps = {                       -- mappings for incremental selection (visual mappings)
+          init_selection = "gnn",         -- maps in normal mode to init the node/scope selection
+          node_incremental = "gNn",       -- increment to the upper named parent
+          scope_incremental = "gNc",      -- increment to the upper scope (as defined in locals.scm)
+          node_decremental = "gNm",       -- decrement to the previous node
+        }
+      },
+      indent = {
+        enable = true,
+        disable = {"lua"},
+      },
+      matchup = {
+        enable = true,  -- mandatory, false will disable the whole extension
+        disable = { },  -- optional, list of language that will be disabled
+        include_match_words = true,
+      },
     }
   end,
 },

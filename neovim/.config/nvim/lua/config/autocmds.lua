@@ -5,10 +5,19 @@ vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup('UserLspConfig', {clear = false}),
   callback = function(args)
     local opts = require("utils").default_opts({ buffer = args.buf })
-    local client = vim.lsp.get_client_by_id(args.data.client_id) or {}
-    -- local capabilities = client.server_capabilities
     -- Enable completion triggered by <c-x><c-o>
     vim.bo[args.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+    local client = vim.lsp.get_client_by_id(args.data.client_id) or {}
+    -- local capabilities = client.server_capabilities
+
+    vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+      vim.lsp.diagnostic.on_publish_diagnostics, {
+        -- delay update diagnostics
+        update_in_insert = false,
+      }
+    )
+
     if client.supports_method("textDocument/inlayHint") then
       vim.lsp.inlay_hint.enable(true, opts())
       -- disable inlay_hints in insert mode

@@ -25,7 +25,7 @@ return {
     ---@type number | fun(ctx: { keys: string, mode: string, plugin?: string }):number
     delay = function(ctx)
       -- return ctx.plugin and 0 or 750
-      return 750
+      return 1000
     end,
     ---@param mapping wk.Mapping
     filter = function(mapping)
@@ -200,8 +200,6 @@ return {
     },
   },
 },
-
-{ "folke/neoconf.nvim", cmd = "Neoconf", event = "VeryLazy", },
 
 -- tpope
 { "tpope/vim-fugitive", event = "VeryLazy", },

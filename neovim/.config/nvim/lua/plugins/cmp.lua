@@ -1,19 +1,52 @@
 return {
--- {
--- 	"L3MON4D3/LuaSnip",
--- 	-- follow latest release.
--- 	version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
--- 	-- install jsregexp (optional!).
--- 	build = "make install_jsregexp"
--- },
+{
+  'windwp/nvim-autopairs',
+  event = "InsertEnter",
+  opts = {
+    disable_filetype = { "TelescopePrompt", "spectre_panel" },
+    disable_in_macro = true,  -- disable when recording or executing a macro
+    disable_in_visualblock = true, -- disable when insert after visual block mode
+    disable_in_replace_mode = true,
+    ignored_next_char = [=[[%w%%%'%[%"%.%`%$]]=],
+    enable_moveright = true,
+    enable_afterquote = true,  -- add bracket pairs after quote
+    enable_check_bracket_line = true,  --- check bracket in same line
+    enable_bracket_in_quote = true, --
+    enable_abbr = false, -- trigger abbreviation
+    break_undo = true, -- switch for basic rule break undo sequence
+    check_ts = false,
+    map_cr = true,
+    map_bs = true,  -- map the <BS> key
+    map_c_h = false,  -- Map the <C-h> key to delete a pair
+    map_c_w = true, -- map <c-w> to delete a pair if possible
+    fast_wrap = {},
+  },
+},
 
--- {
--- 	"saadparwaiz1/cmp_luasnip",
--- },
+{
+	"L3MON4D3/LuaSnip",
+	-- install jsregexp (optional!).
+	build = "make install_jsregexp",
+  opts = {
+  },
+  config = function(_, opts)
+    local ls = require("luasnip")
+    -- load snippets source
+    require("luasnip.loaders.from_vscode").lazy_load({})
+  end,
+},
+
+{
+	"saadparwaiz1/cmp_luasnip",
+},
 
 {
   "petertriho/cmp-git",
-  dependencies = { 'hrsh7th/nvim-cmp', "hrsh7th/cmp-nvim-lsp" },
+  dependencies = {
+    'hrsh7th/nvim-cmp',
+    "hrsh7th/cmp-nvim-lsp",
+    "saadparwaiz1/cmp_luasnip",
+  },
   opts = {
     sources = {
       { name = "git" },
@@ -114,10 +147,10 @@ return {
         -- REQUIRED - you must specify a snippet engine
         expand = function(args)
           -- vim.fn["vsnip#anonymous"](args.body) -- For `vsnip` users.
-          -- require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
+          require('luasnip').lsp_expand(args.body) -- For `luasnip` users.
           -- require('snippy').expand_snippet(args.body) -- For `snippy` users.
           -- vim.fn["UltiSnips#Anon"](args.body) -- For `ultisnips` users.
-          vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
+          -- vim.snippet.expand(args.body) -- For native neovim snippets (Neovim v0.10+)
         end,
       },
       window = {
@@ -147,7 +180,7 @@ return {
         end
       },
       performance = {
-        max_view_entries = 10,
+        max_view_entries = 15,
       },
       -- preselect = cmp.PreselectMode.Item,
       preselect = cmp.PreselectMode.None,
@@ -157,7 +190,7 @@ return {
       sources = require("cmp").config.sources({
         { name = 'nvim_lsp' },
         -- { name = 'vsnip' }, -- For vsnip users.
-        -- { name = 'luasnip' }, -- For luasnip users.
+        { name = 'luasnip' }, -- For luasnip users.
         -- { name = 'ultisnips' }, -- For ultisnips users.
         -- { name = 'snippy' }, -- For snippy users.
         -- { name = 'buffer', keyword_length = 2 },
@@ -173,6 +206,7 @@ return {
         ['<C-e>'] = require("cmp").mapping.abort(),
         ['<Esc>'] = require("cmp").mapping.abort(),
         ['<CR>'] = require("cmp").mapping.confirm({ select = true }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
+        ['<Right>'] = require("cmp").mapping.confirm({ select = true }),
         -- my mappings
          -- ["<CR>"] = cmp.mapping({
          --   i = function(fallback)
@@ -329,6 +363,9 @@ return {
     vim.keymap.set({'i', 'c'}, '<C-j>', '<Down>', {})
     -- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
     require("cmp").setup.cmdline({ '/', '?' }, {
+      sources = {
+        { name = 'buffer', group_index = 2 },
+      },
       mapping = require("cmp").mapping.preset.cmdline({
         ['<CR>'] = require("cmp").mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
         ['<Tab>'] = require("cmp").mapping(function(fallback)
@@ -392,12 +429,21 @@ return {
           end
         end, { 'i', 'c' }),
       }),
-      sources = {
-        { name = 'buffer', group_index = 2 },
-      }
     })
     -- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
     require("cmp").setup.cmdline(':', {
+      sources = require("cmp").config.sources(
+        {
+          { name = 'cmdline', group_index = 1 },
+        }
+        -- {
+        --   { name = 'buffer', group_index = 2 },
+        -- },
+        -- {
+        --   { name = 'path', group_index = 2 }
+        -- }
+      ),
+      matching = { disallow_symbol_nonprefix_matching = false },
       mapping = require("cmp").mapping.preset.cmdline({
         ['<CR>'] = require("cmp").mapping.confirm({ select = false }), -- Accept currently selected item. Set `select` to `false` to only confirm explicitly selected items.
         ['<Tab>'] = require("cmp").mapping(function(fallback)
@@ -457,19 +503,8 @@ return {
           end
         end, { 'i', 'c' }),
       }),
-      sources = require("cmp").config.sources(
-        {
-          { name = 'cmdline', group_index = 1 },
-        },
-        {
-          { name = 'buffer', group_index = 2 },
-        }
-        -- {
-        --   { name = 'path', group_index = 2 }
-        -- }
-      ),
-      matching = { disallow_symbol_nonprefix_matching = false }
     })
+    -- add parens on function completions
     cmp.event:on(
       'confirm_done',
       require('nvim-autopairs.completion.cmp').on_confirm_done()
