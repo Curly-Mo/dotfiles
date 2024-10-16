@@ -11,12 +11,17 @@ vim.api.nvim_create_autocmd("LspAttach", {
     local client = vim.lsp.get_client_by_id(args.data.client_id) or {}
     -- local capabilities = client.server_capabilities
 
-    vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
-      vim.lsp.diagnostic.on_publish_diagnostics, {
-        -- delay update diagnostics
-        update_in_insert = false,
-      }
-    )
+    -- vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(
+    --   vim.lsp.diagnostic.on_publish_diagnostics, {
+    --     -- delay update diagnostics
+    --     update_in_insert = false,
+    --     diagnostic_delay = 5000,
+    --     show_diagnostic_autocmds = { 'InsertLeave', 'TextChanged' },
+    --     -- signs = true,
+    --     -- underline = false,    
+    --     -- virtual_text = true,
+    --   }
+    -- )
 
     if client.supports_method("textDocument/inlayHint") then
       vim.lsp.inlay_hint.enable(true, opts())

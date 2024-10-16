@@ -11,6 +11,10 @@ return {
       highlight DiagnosticInfo guifg=#6c6c6c
       highlight CurSearch guibg=#3a3a3a guifg=#c594c5
       highlight IncSearch guibg=#3a3a3a guifg=#c594c5
+
+      " TODO: figure out how to define these overrides outside of phlebotinum
+      highlight QuickScopePrimary guifg=#fac863 ctermfg=221 gui=underline cterm=underline
+      highlight QuickScopeSecondary guifg=#8fbfdc ctermfg=110 gui=underline cterm=underline
     ]])
   end,
 },
@@ -475,17 +479,28 @@ return {
   -- keys = { "f", "F", "t", "T" },
   init = function()
     vim.g.qs_highlight_on_keys = { "f", "F", "t", "T" }
-    vim.g.qs_mx_chars = 200
-    -- local quickScopeColorsGroup = vim.api.nvim_create_augroup("quickScopeColors", { clear = true })
-    -- vim.highlight.create('QuickScopeSecondary', {guifg="#8fbfdc", ctermfg=110, gui="underline", cterm="underline",},
+    vim.g.qs_mx_chars = 1000
+    vim.g.qs_lazy_highlight = false
+    vim.g.qs_delay = 0
+    vim.g.qs_accepted_chars = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ',', '.', '(', ')', '{', '}', '[', ']', ';', "'", '"'}
+  end,
+  config = function()
+    -- local quickScopeColorsGroup = vim.api.nvim_create_augroup("quickScopeColors", { clear = false })
     -- vim.api.nvim_create_autocmd("ColorScheme", {
-    --   command = "highlight QuickScopePrimary guifg=#fac863 ctermfg=221 gui=underline cterm=underline",
     --   group = quickScopeColorsGroup,
-    -- }),
-    -- vim.api.nvim_create_autocmd("ColorScheme", {
-    --   command = "highlight QuickScopeSecondary guifg=#fac863 ctermfg=221 gui=underline cterm=underline",
-    --   group = quickScopeColorsGroup,
-    -- }),
+    --   callback = function(args)
+    --     vim.api.nvim_set_hl(0, 'QuickScopePrimary', { fg = '#fac863', bg = 'none', underline = true })
+    --     vim.api.nvim_set_hl(0, 'QuickScopeSecondary', { fg = '#8fbfdc', bg = 'none', underline = true })
+    --   end,
+    -- })
+    -- vim.g.qs_hi_priority = 2
+    -- vim.cmd([[
+    --   augroup qs_colors
+    --     autocmd!
+    --     autocmd ColorScheme * highlight QuickScopePrimary guifg='#fac863' gui=underline ctermfg=221 cterm=underline
+    --     autocmd ColorScheme * highlight QuickScopeSecondary guifg='#8fbfdc' gui=underline ctermfg=110 cterm=underline
+    --   augroup END
+    -- ]])
   end,
 },
 { "alexghergh/nvim-tmux-navigation" },
@@ -885,7 +900,7 @@ return {
       update_when_errors = true,
       -- How long to wait (in ms) after a buffer change before updating
       -- Only used when diagnostics_trigger_update = false
-      update_delay = 500,
+      update_delay = 5000,
       -- Map of LSP client name to priority. Default value is 10.
       -- Clients with higher (larger) priority will be used before those with lower priority.
       -- Set to -1 to never use the client.
@@ -895,19 +910,19 @@ return {
     },
     treesitter = {
       -- How long to wait (in ms) after a buffer change before updating
-      update_delay = 500,
+      update_delay = 1000,
     },
     markdown = {
       -- How long to wait (in ms) after a buffer change before updating
-      update_delay = 500,
+      update_delay = 1000,
     },
     asciidoc = {
       -- How long to wait (in ms) after a buffer change before updating
-      update_delay = 500,
+      update_delay = 1000,
     },
     man = {
       -- How long to wait (in ms) after a buffer change before updating
-      update_delay = 500,
+      update_delay = 1000,
     },
   },
   config = function(_, opts)
@@ -1524,6 +1539,7 @@ return {
     },
   },
 },
+
 {
   "rachartier/tiny-inline-diagnostic.nvim",
   event = "VeryLazy",
@@ -1555,7 +1571,7 @@ return {
       -- Throttle the update of the diagnostic when moving cursor, in milliseconds.
       -- You can increase it if you have performance issues.
       -- Or set it to 0 to have better visuals.
-      throttle = 50,
+      throttle = 200,
       -- The minimum length of the message, otherwise it will be on a new line.
       softwrap = 35,
       -- If multiple diagnostics are under the cursor, display all of them.
@@ -1710,15 +1726,15 @@ return {
   end,
 },
 
--- {
---   "inside/vim-search-pulse",
---   init = function()
---     vim.cmd([[
---       let g:vim_search_pulse_mode = 'pattern'
---       let g:vim_search_pulse_duration = 200
---       let g:vim_search_pulse_color_list = ['#3a3a3a', '#444444', '#4e4e4e', '#585858', '#606060']
---     ]])
---   end,
--- },
+{
+  "inside/vim-search-pulse",
+  init = function()
+    vim.cmd([[
+      let g:vim_search_pulse_mode = 'pattern'
+      let g:vim_search_pulse_duration = 200
+      let g:vim_search_pulse_color_list = ['#3a3a3a', '#444444', '#4e4e4e', '#585858', '#606060']
+    ]])
+  end,
+},
 
 }

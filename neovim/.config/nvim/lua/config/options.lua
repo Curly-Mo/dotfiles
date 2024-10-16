@@ -120,19 +120,19 @@ vim.diagnostic.config(diagnostic_config)
 -- Show line diagnostics automatically in hover window
 -- You will likely want to reduce updatetime which affects CursorHold
 -- note: this setting is global and should be set only once
-vim.o.updatetime = 1000 -- default 4000
+vim.o.updatetime = 2000 -- default 4000
 -- only hover float for non-errors (errors are handled by tiny-inline-diagnostic.nvim
 local cursor_severity_filter = {vim.diagnostic.severity.WARN}
 local line_severity_filter = {vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT}
 -- show only diagnostic of word under cursor
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+vim.api.nvim_create_autocmd({ "CursorHold" }, {
   group = vim.api.nvim_create_augroup("float_diagnostic_cursor", { clear = true }),
   callback = function ()
     vim.diagnostic.open_float(nil, {focus=false, scope="cursor", severity = cursor_severity_filter})
   end
 })
 -- show all diagnostics on line
-vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+vim.api.nvim_create_autocmd({ "CursorHold" }, {
   group = vim.api.nvim_create_augroup("float_diagnostic", { clear = true }),
   callback = function ()
     vim.diagnostic.open_float(nil, {focus=false, severity = line_severity_filter})
