@@ -112,7 +112,7 @@ colors
 zinit ice lucid
 zinit snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
 # zinit ice wait"0" lucid if"[[ -f $HOME/.zsh_theme ]]"
-zinit ice wait"!0" lucid link if"[[ -f $HOME/.zsh_theme ]]"
+zinit ice lucid link if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
 zinit ice wait"0" lucid link if"[[ -f $HOME/.localrc ]]"
@@ -295,7 +295,7 @@ zinit wait"0" lucid from"gh-r" lbin lman for \
 zinit wait"0" lucid from"gh-r" lbin lman for \
   nocd atload="alias lg='lazygit'" \
     jesseduffield/lazygit
-zinit wait"0" lucid make lbin lman for \
+zinit wait"0" lucid lbin lman make"install PREFIX=$ZPFX" for \
   zdharma-continuum/git-url
 # zinit wait"0" lucid as:"program" make"PREFIX=$ZPFX" for \
 #   src"etc/git-extras-completion.zsh" \
