@@ -198,17 +198,15 @@ zinit wait lucid for \
 
 
 # Programs
-zinit lucid completions lman for \
+zinit lucid lman for \
   lbin="*bin/(fzf|fzf-tmux)" \
-  multisrc'shell/{completion,key-bindings}.zsh $XDG_CONFIG_HOME/zsh/fzf.zsh' \
-  atclone="cp shell/completion.zsh _fzf_completion" \
   make="install" \
     junegunn/fzf
   # atload"_fzf_config" \
-# zinit wait'0' lucid for \
-#   multisrc'shell/{completion,key-bindings}.zsh $XDG_CONFIG_HOME/zsh/fzf.zsh' \
-#   id-as"junegunn/fzf_completions" \
-#     junegunn/fzf
+zinit wait'0' lucid for \
+  multisrc'shell/{completion,key-bindings}.zsh $XDG_CONFIG_HOME/zsh/fzf.zsh' \
+  id-as"junegunn/fzf_completions" \
+    junegunn/fzf
 # zinit wait"0" pack"binary+keys" for fzf
 
 zinit wait"0" lucid for \

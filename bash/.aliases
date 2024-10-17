@@ -75,6 +75,7 @@ alias yeet="paru -Rns"
 # alias yolo='yay -Syu --noconfirm'
 alias sys='systemctl'
 alias ctl='systemctl'
+alias sysu='systemctl --user'
 
 # xdg
 if ! [ -x "$(command -v open)" ]; then

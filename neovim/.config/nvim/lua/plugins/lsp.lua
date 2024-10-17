@@ -860,6 +860,7 @@ return {
       end,
       settings = {
         java = {
+          autobuild = { enabled = false },
           signatureHelp = { enabled = true },
           contentProvider = { preferred = "fernflower" },
           sources = {
