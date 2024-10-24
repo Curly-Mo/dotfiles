@@ -1,0 +1,5 @@
+[Fix windows starting on wrong screen (window placement must be set to "Centered" to work)]
+Description=Fix windows starting on wrong screen (window placement must be set to "Centered" to work)
+ignoregeometry=true
+ignoregeometryrule=3
+types=1

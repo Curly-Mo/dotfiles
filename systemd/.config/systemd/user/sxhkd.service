@@ -1,6 +1,7 @@
 [Unit]
 Description=Simple X Hotkey Daemon
 Documentation=man:sxhkd(1)
+PartOf=graphical-session.target
 After=graphical.target
 StartLimitBurst=10
 StartLimitIntervalSec=60
@@ -13,4 +14,4 @@ RestartSec=1
 KillMode=process
 
 [Install]
-WantedBy=default.target
+WantedBy=graphical.target

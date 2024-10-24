@@ -19,7 +19,7 @@ export FZF_PREVIEW_OPTS="--preview-window=right,45%"
 
 export LS_TIME_SORT="atime"
 export LS_SORT_AND_COLOR_CMD="/bin/ls --directory --sort=time --time=$LS_TIME_SORT --color=always"
-export FD_COMMAND='fd --hidden --follow --exclude=.git --color=always --max-depth 12 --strip-cwd-prefix'
+export FD_COMMAND='fd --hidden --follow --exclude=.git --color=always --max-depth 12'
 export FD_FILES_COMMAND="${FD_COMMAND} --type=f"
 export FD_DIR_COMMAND="${FD_COMMAND} --type=d"
 export SORTED_FD_COMMAND="${FD_COMMAND} --exec-batch $LS_SORT_AND_COLOR_CMD"
@@ -45,6 +45,8 @@ FZF_BINDINGS_OPTS="--bind 'ctrl-a:toggle-all' --bind 'ctrl-space:toggle+down' --
 FZF_COLOR_OPTS="--color='hl:67,hl:italic'"
 export FZF_DEFAULT_OPTS="--height=70% --border --ansi --info=inline --algo=v2 ${FZF_BINDINGS_OPTS} ${FZF_COLOR_OPTS}"
 export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} $FZF_TIEBREAK_OPTS_OPTS"
+# keep right always visible
+export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --keep-right"
 # always have a preview
 export FZF_DEFAULT_OPTS="${FZF_DEFAULT_OPTS} --preview '${FZF_PREVIEW_CMD}' ${FZF_PREVIEW_OPTS}"
 # use tmux popup
@@ -61,7 +63,10 @@ export FZF_ALT_C_COMMAND="${FZF_DIR_COMMAND}"
 # export FZF_ALT_C_OPTS="${FZF_DEFAULT_OPTS} --select-1 --exit-0 --preview 'tree -C {} | head -200' --bind 'alt-c:down' --bind 'alt-C:up' --bind 'tab:down' --bind 'shift-tab:up'"
 export FZF_ALT_C_OPTS="--select-1 --exit-0 --preview 'eza --tree --level=5 --all --color=always {}' --bind 'alt-c:down' --bind 'alt-C:up' --preview '${FZF_DIR_PREVIEW_CMD}' $FZF_TIEBREAK_OPTS_OPTS"
 FZF_COMPLETION_BINDINGS_OPTS=""
+FZF_POST_PROCESS="sed 's|^./||'"
 export FZF_COMPLETION_OPTS="--select-1 --exit-0 ${FZF_COMPLETION_BINDINGS_OPTS}"
+# export FZF_COMPLETION_DIR_OPTS="${FZF_DEFAULT_OPTS}"
+# export FZF_COMPLETION_PATH_OPTS="${FZF_DEFAULT_OPTS}"
 
 
 FZF_COMPLETION_TRIGGER=''
@@ -74,15 +79,15 @@ FZF_COMPLETION_FILE_COMMANDS="vi vim nvim v cat bat"
 # - The first argument to the function ($1) is the base path to start traversal
 # - See the source code (completion.{bash,zsh}) for the details.
 _fzf_compgen_path() {
-  local cmd=( $(echo $FZF_COMMAND) )
+  local cmd=( $(echo $FZF_COMMAND) --search-path=$1 )
   "${cmd[@]}"
 }
 _fzf_compgen_dir() {
-  local cmd=( $(echo $FZF_DIR_COMMAND) )
+  local cmd=( $(echo $FZF_DIR_COMMAND) --search-path=$1 )
   "${cmd[@]}"
 }
 _fzf_compgen_file() {
-  local cmd=( $(echo $FZF_FILES_COMMAND) )
+  local cmd=( $(echo $FZF_FILES_COMMAND) --search-path=$1 )
   "${cmd[@]}"
 }
 
@@ -90,6 +95,9 @@ _fzf_file_completion() {
   __fzf_generic_path_completion "$1" "$2" _fzf_compgen_file \
     "-m" "" " "
 }
+# _fzf_complete_post() {
+#   sed 's|^./||'
+# }
 
 # Advanced customization of fzf options via _fzf_comprun function
 # - The first argument to the function is the name of the command.

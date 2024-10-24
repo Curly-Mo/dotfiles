@@ -1,0 +1,16 @@
+[Added Associations]
+application/pdf=firefox.desktop;
+; x-scheme-handler/geo=google-maps-geo-handler.desktop;
+x-scheme-handler/http=firefox.desktop;
+x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/slack=slack.desktop;Slack.desktop;
+; application/x-desktop=dex.desktop;
+
+[Default Applications]
+application/pdf=firefox.desktop;
+; x-scheme-handler/geo=google-maps-geo-handler.desktop;
+x-scheme-handler/http=firefox.desktop;
+x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/slack=slack.desktop
+
+[Removed Associations]

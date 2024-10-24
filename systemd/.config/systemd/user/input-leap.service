@@ -1,10 +1,13 @@
 [Unit]
 Description=Input Leap Client
+Documentation=man:input-leap(1)
+PartOf=graphical-session.target
 After=network.target
 
 [Service]
 ExecStart=input-leap
 Restart=always
+RestartSec=3
 
 [Install]
-WantedBy=default.target
+WantedBy=graphical.target

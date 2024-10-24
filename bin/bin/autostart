@@ -9,9 +9,9 @@
 # xmodmap ~/.Xmodmap
 
 # dex $HOME/.local/share/applications/google-chrome.desktop
-dex $HOME/.local/share/applications/firefox.desktop
+# dex $HOME/.local/share/applications/firefox.desktop
 # dex $HOME/.local/share/applications/alacritty-prime.desktop
-# dex $HOME/.local/share/applications/alacritty.desktop
+dex $HOME/.local/share/applications/alacritty.desktop
 
 # give terminal focus
 wmctrl -x -a alacritty

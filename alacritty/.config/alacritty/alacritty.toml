@@ -28,7 +28,7 @@ foreground = "0xbcbcbc"
 [font]
 # size = 19.5
 # size = 17.5
-size = 18.5
+size = 14.25
 [font.normal]
 # family = "Roboto Mono for Powerline"
 family = "Roboto Mono Nerd Font Mono"

@@ -18,8 +18,8 @@ Id_2=ba913a49-985d-4f5e-8929-aee9fd24c85d
 Id_3=29de415b-d0f1-48ce-997d-361bb0b1c2ee
 Id_4=b7c117a4-fdb1-41a9-8a31-8233020e5c2e
 Name_1=Work
-Name_2=Hack
-Name_3=Project
+Name_2=Project
+Name_3=Hack
 Name_4=Personal
 Number=4
 Rows=1
@@ -45,18 +45,23 @@ BorderActivate=9
 BorderActivateAll=9
 BorderActivateClass=9
 
+[Effect-diminactive]
+Strength=2
+
 [Effect-windowview]
 BorderActivateAll=9
 
 [ElectricBorders]
 Bottom=None
-BottomLeft=None
 BottomRight=None
 Left=None
 Right=None
 Top=None
 TopLeft=None
 TopRight=None
+
+[Input]
+TabletMode=on
 
 [ModifierOnlyShortcuts]
 Meta=
@@ -88,6 +93,7 @@ NightTemperature=2000
 TransitionTime=120
 
 [Plugins]
+diminactiveEnabled=true
 highlightwindowEnabled=true
 windowgeometryEnabled=false
 
@@ -99,8 +105,7 @@ BorderAlternativeActivate=9
 DesktopLayout=org.kde.breeze.desktop
 DesktopListLayout=org.kde.breeze.desktop
 DesktopMode=1
-HighlightWindows=true
-LayoutName=thumbnails
+HighlightWindows=false
 MinimizedMode=0
 MultiScreenMode=0
 ShowDesktopMode=0
@@ -134,10 +139,16 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 [Tiling][49f114f0-e397-599f-9b28-4ee59c0ae238]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
+[Tiling][58ca410b-ce44-58d6-82b9-fefe44aba0e3]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Tiling][58f8e0ea-4424-5c42-b71e-399c59a9a7a0]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][5b7a5ba4-43cc-5910-8e98-f358f9d54b43]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][616eb015-7be7-5ebc-ac38-b7421b162867]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][6241797b-414a-582e-8732-28c2e39d6ac5]
@@ -147,6 +158,15 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][8df035f6-9c38-59e0-83c0-9372231be0b5]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][bb5b1357-f6f6-59c1-9f77-0fa1783115f7]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][bbda7c10-e89b-53d6-a478-a04f739af74e]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][c1c82fcc-3f4b-58b2-9e87-a17bdca89851]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][ea69addc-bc12-58fb-9d6d-9a8d4aa9fd37]
@@ -159,7 +179,6 @@ BorderSnapZone=10
 BorderlessMaximizedWindows=true
 CenterSnapZone=0
 ClickRaise=true
-DelayFocusInterval=300
 ElectricBorderCooldown=350
 ElectricBorderCornerRatio=0.25
 ElectricBorderDelay=100
@@ -174,8 +193,6 @@ MaximizeButtonLeftClickCommand=Maximize
 MaximizeButtonMiddleClickCommand=Maximize (vertical only)
 MaximizeButtonRightClickCommand=Maximize (horizontal only)
 NextFocusPrefersMouse=false
-Placement=Maximizing
-SeparateScreenFocus=false
 ShadeHover=false
 ShadeHoverInterval=250
 SnapOnlyWhenOverlapping=false
@@ -183,7 +200,9 @@ TitlebarDoubleClickCommand=Maximize
 WindowSnapZone=10
 
 [Xwayland]
-Scale=1
+Scale=2.25
 
 [org.kde.kdecoration2]
 ButtonsOnLeft=MN
+library=org.kde.breeze
+theme=Breeze

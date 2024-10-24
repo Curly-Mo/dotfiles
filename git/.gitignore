@@ -45,6 +45,7 @@ Thumbs.db
 # .env managers
 .java-version
 .python-version
+.sdkmanrc
 
 # jdt.ls
 .classpath
