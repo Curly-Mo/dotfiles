@@ -1,1 +1,12 @@
-../../.local/share/applications/autostart.desktop
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Autostart
+Comment=autostart
+Exec=sh -c "autostart"
+Icon=application-x-executable-script
+Terminal=false
+StartupNotify=false
+Categories=Application;
+MimeType=application/x-shellscript;
+X-KDE-AutostartScript=true

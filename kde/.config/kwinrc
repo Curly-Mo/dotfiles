@@ -90,7 +90,7 @@ EveningBeginFixed=0030
 Mode=Times
 MorningBeginFixed=0800
 NightTemperature=2000
-TransitionTime=120
+TransitionTime=180
 
 [Plugins]
 diminactiveEnabled=true

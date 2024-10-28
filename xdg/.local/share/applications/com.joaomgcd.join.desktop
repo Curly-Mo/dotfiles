@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Join Desktop
-Exec=com.joaomgcd.join
+Exec=joindesktop
 Terminal=false
 Type=Application
 Icon=com.joaomgcd.join

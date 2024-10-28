@@ -209,6 +209,8 @@ zinit wait'0' lucid for \
     junegunn/fzf
 # zinit wait"0" pack"binary+keys" for fzf
 
+# load fzf-tab-sources from source dir
+# zstyle ':fzf-tab:sources' config-directory "$XDG_CONFIG_HOME/zsh/fzf-tab/sources"
 zinit wait"0" lucid for \
     Aloxaf/fzf-tab \
   multisrc="$XDG_CONFIG_HOME/zsh/fzf-tab/fzf-tab.zsh" \

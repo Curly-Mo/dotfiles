@@ -1,7 +1,7 @@
 [Desktop Entry]
 Categories=Application;
 Comment=myscreensaver
-Exec=myscreensaver
+Exec=sh -c "myscreensaver"
 Icon=myscreensaver
 Name=Myscreensaver
 StartupNotify=false

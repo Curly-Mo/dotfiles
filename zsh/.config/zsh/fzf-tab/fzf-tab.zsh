@@ -1,6 +1,3 @@
-# load fzf-tab-sources from source dir
-zstyle ':fzf-tab:sources' config-directory "$XDG_CONFIG_HOME/zsh/fzf-tab/sources"
-
 # accept and run
 zstyle ':fzf-tab:*' print-query alt-enter
 # zstyle ':fzf-tab:*' print-query alt-space # unbind from alt-enter

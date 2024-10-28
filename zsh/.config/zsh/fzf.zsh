@@ -69,11 +69,11 @@ export FZF_COMPLETION_OPTS="--select-1 --exit-0 ${FZF_COMPLETION_BINDINGS_OPTS}"
 # export FZF_COMPLETION_PATH_OPTS="${FZF_DEFAULT_OPTS}"
 
 
-FZF_COMPLETION_TRIGGER=''
+export FZF_COMPLETION_TRIGGER=''
 
-FZF_COMPLETION_DIR_COMMANDS="cd pushd rmdir"
-FZF_COMPLETION_PATH_COMMANDS="ls ll"
-FZF_COMPLETION_FILE_COMMANDS="vi vim nvim v cat bat"
+export FZF_COMPLETION_DIR_COMMANDS="cd pushd rmdir"
+export FZF_COMPLETION_PATH_COMMANDS="ls ll"
+export FZF_COMPLETION_FILE_COMMANDS="vi vim nvim v cat bat"
 
 # Use fd (https://github.com/sharkdp/fd) for listing path candidates.
 # - The first argument to the function ($1) is the base path to start traversal
@@ -252,9 +252,9 @@ bindkey -M vicmd "^V" fzf-edit-file-widget
 
 
 # custom override of fzf-completion https://github.com/junegunn/fzf/pull/1299
-# declare -A -x FZF_PER_CMD_COMPLETION_TRIGGERS
+declare -A -x FZF_PER_CMD_COMPLETION_TRIGGERS
 # FZF_PER_CMD_COMPLETION_TRIGGERS[man]="**"
-# export FZF_PER_CMD_COMPLETION_TRIGGERS_EXPORT=$(declare -p FZF_PER_CMD_COMPLETION_TRIGGERS)
+export FZF_PER_CMD_COMPLETION_TRIGGERS_EXPORT=$(declare -p FZF_PER_CMD_COMPLETION_TRIGGERS)
 fzf-completion () {
 	local tokens cmd prefix trigger tail matches lbuf d_cmds
 	setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
