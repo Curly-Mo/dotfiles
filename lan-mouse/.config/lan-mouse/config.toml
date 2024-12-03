@@ -1,0 +1,41 @@
+# capture_backend = "LayerShell"
+capture_backend = "layer-shell"
+# capture_backend = "input-capture-portal"
+
+# configure release bind
+# release_bind = [ "KeyA", "KeyS", "KeyD", "KeyF" ]
+
+# optional port (defaults to 4242)
+port = 4242
+# # optional frontend -> defaults to gtk if available
+# # possible values are "cli" and "gtk"
+# frontend = "gtk"
+
+# list of authorized tls certificate fingerprints that are accepted for incoming traffic
+[authorized_fingerprints]
+"c3:b9:32:e6:0e:cd:10:50:4f:64:bd:9d:22:db:ae:78:80:a1:65:29:fb:f9:1e:0b:15:c3:bf:4d:b6:7c:38:0e" = "windoze"
+
+# # define a client on the right side with host name "iridium"
+# [right]
+# # hostname
+# hostname = "iridium"
+# # activate this client immediately when lan-mouse is started
+# activate_on_startup = true
+# # optional list of (known) ip addresses
+# ips = ["192.168.178.156"]
+
+# # define a client on the left side with IP address 192.168.178.189
+# [left]
+# # The hostname is optional: When no hostname is specified,
+# # at least one ip address needs to be specified.
+# hostname = "thorium"
+# # ips for ethernet and wifi
+# ips = ["192.168.178.189", "192.168.178.172"]
+# # optional port
+# port = 4242
+
+[right]
+hostname = "windoze"
+activate_on_startup = true
+# ips = ["192.168.1.173"]
+port = 4242

@@ -1,0 +1,58 @@
+### APPLICATIONS ###
+alt + d
+  launch_or_focus alacritty
+  # prime-run launch_or_focus alacritty
+alt + F2
+  launch_or_focus alacritty
+  # prime-run launch_or_focus alacritty
+# alt + f
+#   launch_or_focus google-chrome
+alt + f
+  launch_or_focus firefox
+  # prime-run launch_or_focus firefox
+alt + s
+  launch_or_focus spotify
+  # prime-run launch_or_focus spotify
+alt + a
+  launch_or_focus slack
+  # prime-run launch_or_focus slack
+alt + shift + s
+  launch_or_focus idea
+  # prime-run launch_or_focus idea
+alt + shift + g
+  launch_or_focus gpclient
+
+### SELECTION ###
+alt + c
+  xsel -po|xsel -bi
+alt + shift + c
+  xsel -po|xsel -bi
+alt + @v
+  xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+alt + shift + @v
+  xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+# alt + v
+#   sleep 0.1 && xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+# alt + shift + v
+#   sleep 0.1 &&  xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+# alt + v
+#   sleep 0.1 && ydotool type --key-delay 0 -- "$(xclip -out -selection clipboard -4)"
+# alt + shift + v
+#   sleep 0.1 && ydotool type --key-delay 0 -- "$(xclip -out -selection clipboard -4)"
+# alt + v
+#   sleep 0.1 && (echo typedelay 0 | dotoolc) && (echo typehold 0 | dotoolc) && echo type "$(xclip -out -selection clipboard -4)" | dotoolc
+# alt + shift + v
+#   sleep 0.1 && (echo typedelay 0 | dotoolc) && (echo typehold 0 | dotoolc) && echo type "$(xclip -out -selection clipboard -r)" | dotoolc
+
+#alt + c
+#  xclip -in -selection clipboard
+#alt + v
+#  xte "keydown Shift_L" "key Insert" "keyup Shift_L"
+  #xdotool key --clearmodifiers shift+Insert
+  # xclip -o -selection clipboard | xdotool type --delay 0 --clearmodifiers
+  # sh -c 'xdotool type --clearmodifiers --delay 0 -- "$(xclip -o -selection clipboard)"'
+  # xsel | xvkbd -xsendevent -file -
+  # xclip -o -selection clipboard | xvkbd -xsendevent -file -
+  # sh -c 'xclip -o -selection clipboard | xvkbd -xsendevent -file -'
+  #sh -c 'sleep 0.1 && xdotool type --clearmodifiers --delay 0 -- "$(xclip -o -selection clipboard)"'
+  # xclip -out -selection clipboard

@@ -60,9 +60,6 @@ Top=None
 TopLeft=None
 TopRight=None
 
-[Input]
-TabletMode=on
-
 [ModifierOnlyShortcuts]
 Meta=
 
@@ -167,6 +164,9 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][c1c82fcc-3f4b-58b2-9e87-a17bdca89851]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][cfe8c89d-1be5-520c-b534-fb031dd5452c]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][ea69addc-bc12-58fb-9d6d-9a8d4aa9fd37]

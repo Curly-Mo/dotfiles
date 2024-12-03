@@ -75,6 +75,12 @@ return {
           end
         end, opts({ desc = "prev hunk" }))
         -- Actions
+        vim.keymap.set('n', 'ghs', require('gitsigns').stage_hunk, opts({ desc = "stage hunk" }))
+        vim.keymap.set('n', 'ghr', require('gitsigns').reset_hunk, opts({ desc = "reset hunk" }))
+        vim.keymap.set('n', 'ghu', require('gitsigns').undo_stage_hunk, opts({ desc = "undo stage hunk" }))
+        vim.keymap.set('n', 'ghp', require('gitsigns').preview_hunk, opts({ desc = "preview hunk" }))
+        vim.keymap.set('n', 'ghb', function() require('gitsigns').blame_line{full=true} end, opts({ desc = "blame line" }))
+        vim.keymap.set('n', 'ghd', require('gitsigns').diffthis, opts({ desc = "gitsigns.diffthis" }))
         vim.keymap.set('n', '<leader>hs', require('gitsigns').stage_hunk, opts({ desc = "stage hunk" }))
         vim.keymap.set('n', '<leader>hr', require('gitsigns').reset_hunk, opts({ desc = "reset hunk" }))
         vim.keymap.set('v', '<leader>hs', function() require('gitsigns').stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, opts({ desc = "stage hunk" }))

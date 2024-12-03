@@ -1,0 +1,6 @@
+[Desktop Entry]
+Name=swhkd
+Comment=Sxhkd clone for Wayland
+Exec=/usr/bin/swhks & pkexec /usr/bin/swhkd -c /home/colinfahy/.config/swhkd/swhkdrc
+Terminal=false
+Type=Application

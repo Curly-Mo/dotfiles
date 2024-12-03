@@ -72,7 +72,7 @@ export FZF_COMPLETION_OPTS="--select-1 --exit-0 ${FZF_COMPLETION_BINDINGS_OPTS}"
 export FZF_COMPLETION_TRIGGER=''
 
 export FZF_COMPLETION_DIR_COMMANDS="cd pushd rmdir"
-export FZF_COMPLETION_PATH_COMMANDS="ls ll"
+export FZF_COMPLETION_PATH_COMMANDS="ls ll ltr cp"
 export FZF_COMPLETION_FILE_COMMANDS="vi vim nvim v cat bat"
 
 # Use fd (https://github.com/sharkdp/fd) for listing path candidates.

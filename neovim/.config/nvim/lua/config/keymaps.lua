@@ -1,9 +1,9 @@
 -- vim.diagnostic keybinds
 vim.keymap.set('n', '<leader>e', function() vim.diagnostic.open_float(nil, {focus=false}) end)
-vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev({ severity = {min = vim.diagnostic.severity.ERROR} }) end, { desc = "previous error" })
-vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next({ severity = {min = vim.diagnostic.severity.ERROR} }) end, { desc = "next error" })
-vim.keymap.set('n', '[D', function() vim.diagnostic.goto_prev({ severity = {min = vim.diagnostic.severity.HINT} }) end, { desc = "previous diagnostic" })
-vim.keymap.set('n', ']D', function() vim.diagnostic.goto_next({ severity = {min = vim.diagnostic.severity.HINT} }) end, { desc = "next diagnostic" })
+vim.keymap.set('n', '[D', function() vim.diagnostic.goto_prev({ severity = {min = vim.diagnostic.severity.ERROR} }) end, { desc = "previous error" })
+vim.keymap.set('n', ']D', function() vim.diagnostic.goto_next({ severity = {min = vim.diagnostic.severity.ERROR} }) end, { desc = "next error" })
+vim.keymap.set('n', '[d', function() vim.diagnostic.goto_prev({ severity = {min = vim.diagnostic.severity.HINT} }) end, { desc = "previous diagnostic" })
+vim.keymap.set('n', ']d', function() vim.diagnostic.goto_next({ severity = {min = vim.diagnostic.severity.HINT} }) end, { desc = "next diagnostic" })
 vim.keymap.set('n', '[c', function() vim.diagnostic.goto_prev({ severity = {min = vim.diagnostic.severity.WARN} }) end, { desc = "previous warning" })
 vim.keymap.set('n', ']c', function() vim.diagnostic.goto_next({ severity = {min = vim.diagnostic.severity.WARN} }) end, { desc = "next warning" })
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = "setloclist" })

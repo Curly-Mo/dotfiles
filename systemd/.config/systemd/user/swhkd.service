@@ -1,0 +1,17 @@
+[Unit]
+Description=swhkd hotkey daemon
+Documentation=man:swhkd(1)
+PartOf=graphical-session.target
+After=graphical-session-pre.target
+StartLimitBurst=10
+StartLimitIntervalSec=60
+
+[Service]
+ExecStart=/home/colinfahy/dotfiles/swhkd/.config/swhkd/swhkd-start.sh
+ExecReload=/bin/kill -HUP swhkd
+Restart=always
+RestartSec=1
+KillMode=process
+
+[Install]
+WantedBy=graphical-session.target

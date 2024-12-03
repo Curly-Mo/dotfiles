@@ -214,41 +214,40 @@ vim.opt.diffopt:append({'internal', algorithm = 'patience'})
 -- keep cursor centered
 -- vim.opt.scrolloff = 999
 -- keep cursor centered without setting scrolloff larger than needed
-vim.cmd([[
-augroup VCenterCursor
-  au!
-  au BufEnter,WinEnter,WinNew,VimResized *,*.*
-    \ let &scrolloff=winheight(win_getid())/2
-augroup END
-
-" ignore scrolloff for mouse clicks
-function! DisableScrollOff() abort
-  " Save the current scrolloff
-  let w:current_scrolloff = get(w:, 'current_scrolloff', &scrolloff) 
-  " Disable scrolloff
-  setlocal scrolloff=0
-endfunction
-function MouseScrollOffAutocommand() abort
-  let w:current_line = line('.')
-  " Set up an autocommand to reenable scrolloff
-  augroup mouse_scrolloff
-    autocmd!
-    autocmd CursorMoved * call ReenableScrollOff()
-  augroup END
-endfunction
-function ReenableScrollOff() abort
-  if ShouldReenable()
-    let &l:scrolloff = w:current_scrolloff
-  endif
-endfunction
-function ShouldReenable() abort
-  return exists('w:current_scrolloff') &&
-    \ winline() > w:current_scrolloff &&
-    \ winline() <= winheight(0) - w:current_scrolloff
-  return line('.') != w:current_line
-endfunction
-nnoremap <silent> <LeftMouse> <CMD>call DisableScrollOff()<CR><LeftMouse><CMD>call MouseScrollOffAutocommand()<CR>
-]])
+-- vim.cmd([[
+-- augroup VCenterCursor
+--   au!
+--   au BufEnter,WinEnter,WinNew,VimResized *,*.*
+--     \ let &scrolloff=winheight(win_getid())/2
+-- augroup END
+-- " ignore scrolloff for mouse clicks
+-- function! DisableScrollOff() abort
+--   " Save the current scrolloff
+--   let w:current_scrolloff = get(w:, 'current_scrolloff', &scrolloff) 
+--   " Disable scrolloff
+--   setlocal scrolloff=0
+-- endfunction
+-- function MouseScrollOffAutocommand() abort
+--   let w:current_line = line('.')
+--   " Set up an autocommand to reenable scrolloff
+--   augroup mouse_scrolloff
+--     autocmd!
+--     autocmd CursorMoved * call ReenableScrollOff()
+--   augroup END
+-- endfunction
+-- function ReenableScrollOff() abort
+--   if ShouldReenable()
+--     let &l:scrolloff = w:current_scrolloff
+--   endif
+-- endfunction
+-- function ShouldReenable() abort
+--   return exists('w:current_scrolloff') &&
+--     \ winline() > w:current_scrolloff &&
+--     \ winline() <= winheight(0) - w:current_scrolloff
+--   return line('.') != w:current_line
+-- endfunction
+-- nnoremap <silent> <LeftMouse> <CMD>call DisableScrollOff()<CR><LeftMouse><CMD>call MouseScrollOffAutocommand()<CR>
+-- ]])
 
 -- completion options
 -- vim.opt_global.completeopt = { "menu", "menuone", "noinsert", "noselect", "preview", "popup" }

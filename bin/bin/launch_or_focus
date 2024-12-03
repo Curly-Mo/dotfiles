@@ -24,7 +24,7 @@ function launch_or_focus_current_workspace() {
 
   if [ -z "$WIN_ID" ]; then
     shift
-    $APP $@ &
+    $APP "$@" &
   else
     wmctrl -i -a $WIN_ID
   fi
@@ -32,13 +32,20 @@ function launch_or_focus_current_workspace() {
 
 ## any workspace
 function launch_or_focus_global_workspace() {
-  wmctrl -x -a "$APP" || $APP
+  wmctrl -x -a "$APP" || $APP "$@"
 }
 
 
-if [[ ${GLOBAL_APPS[@]} =~ $APP ]]; then
-  launch_or_focus_global_workspace
-else
-  launch_or_focus_current_workspace
+if [[ $XDG_SESSION_TYPE =~ "wayland" ]]; then
+  if [[ ${GLOBAL_APPS[@]} =~ $APP ]]; then
+    run-or-raise -f $APP -c $APP --global
+  else
+    run-or-raise -f $APP -c $APP
+  fi
+else 
+  if [[ ${GLOBAL_APPS[@]} =~ $APP ]]; then
+    launch_or_focus_global_workspace "$@"
+  else
+    launch_or_focus_current_workspace "$@"
+  fi
 fi
-

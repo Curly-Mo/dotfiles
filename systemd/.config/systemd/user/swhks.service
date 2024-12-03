@@ -1,0 +1,20 @@
+[Unit]
+Description=swhkd hotkey server
+Documentation=man:swhkd(1)
+PartOf=graphical-session.target
+Requires=swhkd.service
+After=swhkd.service
+StartLimitBurst=10
+StartLimitIntervalSec=60
+
+[Service]
+ExecStartPre=/bin/sleep 2
+ExecStart=/home/colinfahy/dotfiles/swhkd/.config/swhkd/swhks-start.sh
+RemainAfterExit=true
+Restart=always
+RestartSec=1
+PIDFile=/run/user/1000/swhks.pid
+Type=forking
+
+[Install]
+WantedBy=graphical-session.target
