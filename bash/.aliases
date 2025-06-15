@@ -79,6 +79,8 @@ alias sysu='systemctl --user'
 
 # conf
 alias conf='cd $XDG_CONFIG_HOME'
+alias config='cd $XDG_CONFIG_HOME'
+alias configs='cd $XDG_CONFIG_HOME'
 
 # xdg
 if ! [ -x "$(command -v open)" ]; then
@@ -142,6 +144,7 @@ alias ssht='TERM=xterm-color ssh'
 # stuff
 alias dot='cd $HOME/dotfiles'
 alias dotfiles='cd $HOME/dotfiles'
+alias dl='cd $HOME/downloads'
 
 # kde
 # nevermind kde sessions saving is borked
@@ -162,10 +165,23 @@ alias journallast='journalctl -x -b -1 -p 5'
 # notes
 alias notes='cd $HOME/sync/notes/'
 # todo.txt
-alias todo="$EDITOR $TODO_DIR/todo.txt"
-alias todos="todo.sh"
-alias todosp='todos -d $TODOTXT_CFG_FILE_PERSONAL'
-alias todosw="todos -d $TODOTXT_CFG_FILE_WORK"
+alias todo="todo.sh"
+alias t="todo"
+alias td="todo"
+alias todov="todo edit"
+alias tv="todo edit"
+alias te="todo edit"
+alias todop='todo -d $TODOTXT_CFG_FILE_PERSONAL'
+alias todow="todo -d $TODOTXT_CFG_FILE_WORK"
+alias tp='todop'
+alias tw="todow"
+alias tododir="$(todo cd)"
+alias todod="$(todo cd)"
+alias todocd="$(todo cd)"
+# alias todo="$EDITOR $TODO_DIR/todo.txt"
+# alias todos="todo.sh"
+# alias todosp='todos -d $TODOTXT_CFG_FILE_PERSONAL'
+# alias todosw="todos -d $TODOTXT_CFG_FILE_WORK"
 
 # build tools
 alias b="build"

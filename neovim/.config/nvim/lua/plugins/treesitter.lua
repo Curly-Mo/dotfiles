@@ -291,9 +291,9 @@ return {
     -- Module mappings. Use `''` (empty string) to disable one.
     -- Created for both Normal and Visual modes.
     mappings = {
-      toggle = 'J',
-      split = '<leader>J',
-      join = '<leader>j',
+      toggle = '<C-J>',
+      split = 'gJ',
+      join = 'gj',
     },
     -- Detection options: where split/join should be done
     detect = {
@@ -327,6 +327,7 @@ return {
     require('mini.splitjoin').toggle = require("utils").with_fallback(toggle, vim.cmd.join)
   end,
 },
+-- fallback for when treesj isn't cutting it
 {
   "Wansmer/treesj",
   dependencies = {
@@ -359,11 +360,11 @@ return {
     -- langs = {}, -- See the default presets in lua/treesj/langs
   },
   keys = {
-    { "J", function() require('treesj').toggle() end, desc = "Join Toggle (treesj)" },
-    { "<C-J>", function() require('treesj').split() end, desc = "Join Split (treesj)" },
-    { "<C-j>", function() require('treesj').join() end, desc = "Join (treesj)" },
-    { "gJ", function() require('treesj').split() end, desc = "Join Split (treesj)" },
-    { "gj", function() require('treesj').join() end, desc = "Join (treesj)" },
+    { "<leader><C-J>", function() require('treesj').toggle() end, desc = "Join Toggle (treesj)" },
+    { "<leader>gJ", function() require('treesj').split() end, desc = "Join Split (treesj)" },
+    { "<leader>gj", function() require('treesj').join() end, desc = "Join (treesj)" },
+    -- { "gJ", function() require('treesj').split() end, desc = "Join Split (treesj)" },
+    -- { "gj", function() require('treesj').join() end, desc = "Join (treesj)" },
     -- { "<leader>J", "<cmd>TSJJoin<cr>", desc = "Join" },
     -- { "<leader>j", "<cmd>TSJSplit<cr>", desc = "Join Split" },
   },

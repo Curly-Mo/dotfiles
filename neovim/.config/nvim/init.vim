@@ -156,9 +156,9 @@ set undofile
 set undolevels=50000
 
 " Always open readonly if swapfile exists
-if has("autocmd")
-  autocmd SwapExists * let v:swapchoice = "o"
-endif
+" if has("autocmd")
+"   autocmd SwapExists * let v:swapchoice = "e"
+" endif
 
 " Remember last cursor position
 if has("autocmd")

@@ -36,6 +36,6 @@ port = 4242
 
 [right]
 hostname = "windoze"
-activate_on_startup = true
+activate_on_startup = false
 # ips = ["192.168.1.173"]
 port = 4242

@@ -418,6 +418,30 @@ return {
             }
           end
         },
+        python = {
+          require("formatter.filetypes.python").black,
+        },
+        javascript = {
+          require('formatter.filetypes.javascript').prettier,
+          require('formatter.filetypes.javascript').eslint,
+        },
+        typescript = {
+          require('formatter.filetypes.typescript').prettier,
+          require('formatter.filetypes.typescript').eslint,
+        },
+        json = {
+          require('formatter.filetypes.json').prettier,
+        },
+        yaml = {
+          require('formatter.filetypes.yaml').prettier,
+        },
+        sh = {
+          require('formatter.filetypes.sh').shfmt,
+        },
+        java = {
+          require("formatter.filetypes.java").google_java_format,
+          -- require("formatter.filetypes.java").clangformat,
+        },
         -- Use the special "*" filetype for defining formatter configurations on
         -- any filetype
         ["*"] = {
@@ -511,6 +535,8 @@ return {
   opts = function()
     local metals_config = require("metals").bare_config()
     metals_config.settings = {
+      -- disable in diff-mode
+      disabledMode = vim.opt.diff:get(),
       excludedPackages = { },
       showImplicitArguments = true,
       autoImportBuild = "all",
@@ -574,7 +600,7 @@ return {
       -- A list of servers to automatically install if they're not already installed. Example: { "rust_analyzer@nightly", "lua_ls" }
       -- This setting has no relation with the `automatic_installation` setting.
       ---@type string[]
-      ensure_installed = {"pyright", "jdtls", "lua_ls"},
+      ensure_installed = {"jdtls", "lua_ls"},
       -- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.
       -- This setting has no relation with the `ensure_installed` setting.
       -- Can either be:

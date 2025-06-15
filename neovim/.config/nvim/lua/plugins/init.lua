@@ -227,6 +227,7 @@ return {
 -- { "vim-airline/vim-airline-themes", event = "VeryLazy", },
 -- "romainl/Apprentice", { "branch": "fancylines-and-neovim" }
 -- "romainl/Apprentice", { "branch": "fancylines-and-neovim", "as": "apprentice-airline" }
+{ "EdenEast/nightfox.nvim", event = "VeryLazy", },
 
 {
   'nvim-lualine/lualine.nvim',
@@ -515,7 +516,7 @@ return {
     vim.g.matchup_text_obj_enabled = 1
     vim.g.matchup_surround_enabled = 1
     vim.g.matchup_transmute_enabled = 1
-    vim.g.matchup_matchparen_deferred = 1
+    -- vim.g.matchup_matchparen_deferred = 1
     vim.g.matchup_matchparen_deferred_show_delay = 50
     vim.g.matchup_matchparen_deferred_hide_delay = 700
     vim.g.matchup_matchparen_hi_surround_always = 1
@@ -1540,78 +1541,78 @@ return {
   },
 },
 
-{
-  "rachartier/tiny-inline-diagnostic.nvim",
-  event = "VeryLazy",
-  opts = {
-    signs = {
-      left = "",
-      right = "",
-      diag = "●",
-      arrow = "   ",
-      up_arrow = "   ",
-      vertical = " │",
-      vertical_end = " └",
-    },
-    hi = {
-      error = "DiagnosticError",
-      warn = "DiagnosticWarn",
-      info = "DiagnosticInfo",
-      hint = "DiagnosticHint",
-      arrow = "NonText",
-      background = "CursorLine", -- Can be a highlight or a hexadecimal color (#RRGGBB)
-      mixing_color = "None", -- Can be None or a hexadecimal color (#RRGGBB). Used to blend the background color with the diagnostic background color with another color.
-    },
-    blend = {
-      factor = 0.17,
-    },
-    options = {
-      -- Show the source of the diagnostic.
-      show_source = false,
-      -- Throttle the update of the diagnostic when moving cursor, in milliseconds.
-      -- You can increase it if you have performance issues.
-      -- Or set it to 0 to have better visuals.
-      throttle = 200,
-      -- The minimum length of the message, otherwise it will be on a new line.
-      softwrap = 35,
-      -- If multiple diagnostics are under the cursor, display all of them.
-      multiple_diag_under_cursor = false,
-      -- Enable diagnostic message on all lines.
-      multilines = true,
-      overflow = {
-        -- Manage the overflow of the message.
-        --    - wrap: when the message is too long, it is then displayed on multiple lines.
-        --    - none: the message will not be truncated.
-        --    - oneline: message will be displayed entirely on one line.
-        mode = "wrap",
-      },
-      -- Format the diagnostic message.
-      -- Example:
-      -- format = function(diagnostic)
-      --     return diagnostic.message .. " [" .. diagnostic.source .. "]"
-      -- end,
-      format = nil,
-      --- Enable it if you want to always have message with `after` characters length.
-      break_line = {
-        enabled = false,
-        after = 40,
-      },
-      virt_texts = {
-        priority = 2048,
-      },
-      -- Filter by severity.
-      severity = {
-        vim.diagnostic.severity.ERROR,
-        -- vim.diagnostic.severity.WARN,
-        -- vim.diagnostic.severity.INFO,
-        -- vim.diagnostic.severity.HINT,
-      },
-      -- Overwrite events to attach to a buffer. You should not change it, but if the plugin
-      -- does not works in your configuration, you may try to tweak it.
-      overwrite_events = nil,
-    },
-  },
-},
+-- {
+--   "rachartier/tiny-inline-diagnostic.nvim",
+--   event = "VeryLazy",
+--   opts = {
+--     signs = {
+--       left = "",
+--       right = "",
+--       diag = "●",
+--       arrow = "   ",
+--       up_arrow = "   ",
+--       vertical = " │",
+--       vertical_end = " └",
+--     },
+--     hi = {
+--       error = "DiagnosticError",
+--       warn = "DiagnosticWarn",
+--       info = "DiagnosticInfo",
+--       hint = "DiagnosticHint",
+--       arrow = "NonText",
+--       background = "CursorLine", -- Can be a highlight or a hexadecimal color (#RRGGBB)
+--       mixing_color = "None", -- Can be None or a hexadecimal color (#RRGGBB). Used to blend the background color with the diagnostic background color with another color.
+--     },
+--     blend = {
+--       factor = 0.17,
+--     },
+--     options = {
+--       -- Show the source of the diagnostic.
+--       show_source = false,
+--       -- Throttle the update of the diagnostic when moving cursor, in milliseconds.
+--       -- You can increase it if you have performance issues.
+--       -- Or set it to 0 to have better visuals.
+--       throttle = 200,
+--       -- The minimum length of the message, otherwise it will be on a new line.
+--       softwrap = 35,
+--       -- If multiple diagnostics are under the cursor, display all of them.
+--       multiple_diag_under_cursor = false,
+--       -- Enable diagnostic message on all lines.
+--       multilines = true,
+--       overflow = {
+--         -- Manage the overflow of the message.
+--         --    - wrap: when the message is too long, it is then displayed on multiple lines.
+--         --    - none: the message will not be truncated.
+--         --    - oneline: message will be displayed entirely on one line.
+--         mode = "wrap",
+--       },
+--       -- Format the diagnostic message.
+--       -- Example:
+--       -- format = function(diagnostic)
+--       --     return diagnostic.message .. " [" .. diagnostic.source .. "]"
+--       -- end,
+--       format = nil,
+--       --- Enable it if you want to always have message with `after` characters length.
+--       break_line = {
+--         enabled = false,
+--         after = 40,
+--       },
+--       virt_texts = {
+--         priority = 2048,
+--       },
+--       -- Filter by severity.
+--       severity = {
+--         vim.diagnostic.severity.ERROR,
+--         -- vim.diagnostic.severity.WARN,
+--         -- vim.diagnostic.severity.INFO,
+--         -- vim.diagnostic.severity.HINT,
+--       },
+--       -- Overwrite events to attach to a buffer. You should not change it, but if the plugin
+--       -- does not works in your configuration, you may try to tweak it.
+--       overwrite_events = nil,
+--     },
+--   },
+-- },
 
 ---- could be replaced with nvim-treesitter/nvim-treesitter-textobjects make_repeatable_move_pair instead
 --{ -- repeat any movements with ; and ,

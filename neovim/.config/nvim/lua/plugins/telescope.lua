@@ -427,6 +427,17 @@ return {
 },
 
 {
+  "Lilja/telescope-swap-files",
+  dependencies = { "nvim-telescope/telescope.nvim" },
+  opts = {
+  },
+  config = function(_, opts)
+    require("telescope").setup(opts)
+    require("telescope").load_extension("uniswapfiles")
+  end,
+},
+
+{
   "nvim-telescope/telescope.nvim",
   -- tag = '0.1.8',
   dependencies = {

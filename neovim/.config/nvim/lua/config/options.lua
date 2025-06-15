@@ -73,8 +73,8 @@ vim.opt.mouse = 'a'
 
 -- Neovim
 -- Python
-vim.g.python3_host_prog = "~/.pyenv/shims/python3"
-vim.g.python_host_prog = "~/.pyenv/shims/python2"
+-- vim.g.python3_host_prog = "~/.pyenv/shims/python3"
+-- vim.g.python_host_prog = "~/.pyenv/shims/python2"
 -- END BASICS
 
 vim.g.icons = { error = "✗", warn = "⚠", hint = "󰌶", info = "ⓘ", dot = "⏺" }
@@ -105,7 +105,8 @@ local diagnostic_config = {
   --     return signs.text[diagnostic.severity]
   --   end,
   -- },
-  underline = {severity = {vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN}},
+  -- underline = {severity = {vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN}},
+  underline = {severity = {vim.diagnostic.severity.ERROR}},
   update_in_insert = false,
   severity_sort = true,
   -- float = false,
@@ -122,8 +123,10 @@ vim.diagnostic.config(diagnostic_config)
 -- note: this setting is global and should be set only once
 vim.o.updatetime = 2000 -- default 4000
 -- only hover float for non-errors (errors are handled by tiny-inline-diagnostic.nvim
-local cursor_severity_filter = {vim.diagnostic.severity.WARN}
-local line_severity_filter = {vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT}
+-- local cursor_severity_filter = {vim.diagnostic.severity.WARN}
+-- local line_severity_filter = {vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT}
+local cursor_severity_filter = {vim.diagnostic.severity.ERROR, vim.diagnostic.severity.WARN, vim.diagnostic.severity.INFO, vim.diagnostic.severity.HINT}
+local line_severity_filter = {}
 -- show only diagnostic of word under cursor
 vim.api.nvim_create_autocmd({ "CursorHold" }, {
   group = vim.api.nvim_create_augroup("float_diagnostic_cursor", { clear = true }),

@@ -164,6 +164,7 @@ zinit lucid for Curly-Mo/last-working-dir-tmux
 
 zinit wait"0" lucid for darvid/zsh-poetry
 
+export ZSH_PYENV_LAZY_VIRTUALENV=true
 zinit wait"0" lucid for davidparsson/zsh-pyenv-lazy
 
 # zinit wait"0" lucid for @shihyuho/zsh-jenv-lazy
@@ -186,6 +187,16 @@ zinit wait lucid for \
 # zinit wait lucid for \
 #   MichaelAquilina/zsh-you-should-use
 # export YSU_IGNORED_ALIASES=("zini")
+
+zinit wait lucid for \
+  tom-doerr/zsh_codex
+bindkey '^X' create_completion
+
+zinit wait lucid for \
+  Licheam/zsh-ask
+
+# zinit wait lucid for \
+#   ytakahashi/igit
 
 
 # Packages https://github.com/zdharma-continuum/zinit-packages
@@ -349,9 +360,15 @@ zinit snippet "https://github.com/jwilm/alacritty/blob/master/extra/completions/
 
 # Welcome message
 if [[ -o login && -x "$(command -v fortune)" && -x "$(command -v lolcat)" ]]; then
-  # wget http://skeeto.s3.amazonaws.com/share/showerthoughts -O /usr/share/fortune/showerthoughts
-  # strfile /usr/share/fortune/showerthoughts /usr/share/fortune/showerthoughts.dat
-  fortune showerthoughts | lolcat
+  # sudo wget http://skeeto.s3.amazonaws.com/share/showerthoughts -O /usr/share/fortune/showerthoughts
+  # sudo strfile /usr/share/fortune/showerthoughts /usr/share/fortune/showerthoughts.dat
+  # sudo wget https://raw.githubusercontent.com/JKirchartz/fortunes/refs/heads/master/handey -O /usr/share/fortune/handey
+  # sudo strfile /usr/share/fortune/handey /usr/share/fortune/handey.dat
+  fortune -e showerthoughts handey hitchhiker billwurtz definitions drugs -s -n 300 | lolcat
+fi
+if [[ -o login && -x "$(command -v todo.sh)" ]]; then
+  echo
+  todo.sh -d $TODOTXT_CFG_FILE_WORK
 fi
 
 # History
@@ -409,3 +426,5 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete
 
 # uncomment for profiling
 # zprof
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

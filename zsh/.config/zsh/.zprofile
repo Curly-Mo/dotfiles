@@ -20,6 +20,7 @@ export DOTS_DIR="$DOTFILES_DIR"
 export DOT_DIR="$DOTFILES_DIR"
 # syncthing
 export SYNC_DIR="$HOME/sync"
+export SYNC="$SYNC_DIR"
 # notes
 export NOTES_DIR="$SYNC_DIR/notes"
 export NOTES_FZFVIM_DIR="$SYNC_DIR/notes/fzfvim"
@@ -37,6 +38,9 @@ export TODOTXT_CFG_FILE="$TODO_DIR/.config/config"
 export WORK_DIR="$HOME/workspace"
 export PERSONAL_DIR="$HOME/personal"
 export PACKAGES_DIR="$HOME/packages"
+# various
+export DOWNLOADS_DIR="$HOME/downloads"
+export DL="$DOWNLOADS_DIR"
 
 # ssh-agent
 export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
