@@ -78,7 +78,7 @@ lastoutput() {
 now() {
   local last_args=$(lastargs)
   local cmd="$@"
-  print -z $cmd $lastargs
+  print -z $cmd $last_args
 }
 _now() {
   # _alternative _command_names

@@ -127,8 +127,8 @@ zinit snippet "$HOME/.aliases"
 # Load all my functions and completions
 # TODO: load these better
 zinit wait"0" lucid id-as"my_zsh_functions" for \
-  pick:"zsh/.zsh_functions/zsh_functions.plugin.zsh" \
-  multisrc:"zsh/.zsh_functions/my_zsh_functions.zsh" \
+  pick="zsh/.config/zsh/.zsh_functions/zsh_functions.plugin.zsh" \
+  multisrc="zsh/.config/zsh/.zsh_functions/my_zsh_functions.zsh" \
     Curly-Mo/dotfiles
 
 
@@ -215,6 +215,7 @@ zinit lucid lman for \
     junegunn/fzf
   # atload"_fzf_config" \
 zinit wait'0' lucid for \
+  nocompile \
   multisrc'shell/{completion,key-bindings}.zsh $XDG_CONFIG_HOME/zsh/fzf.zsh' \
   id-as"junegunn/fzf_completions" \
     junegunn/fzf
@@ -427,4 +428,4 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete
 # uncomment for profiling
 # zprof
 
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+# [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

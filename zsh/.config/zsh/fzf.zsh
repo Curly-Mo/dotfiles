@@ -256,57 +256,88 @@ declare -A -x FZF_PER_CMD_COMPLETION_TRIGGERS
 # FZF_PER_CMD_COMPLETION_TRIGGERS[man]="**"
 export FZF_PER_CMD_COMPLETION_TRIGGERS_EXPORT=$(declare -p FZF_PER_CMD_COMPLETION_TRIGGERS)
 fzf-completion () {
-	local tokens cmd prefix trigger tail matches lbuf d_cmds
+  local tokens prefix trigger tail matches lbuf d_cmds cursor_pos cmd_word
 	setopt localoptions noshwordsplit noksh_arrays noposixbuiltins
+  # http://zsh.sourceforge.net/FAQ/zshfaq03.html
+  # http://zsh.sourceforge.net/Doc/Release/Expansion.html#Parameter-Expansion-Flags
 	tokens=(${(z)LBUFFER}) 
 	if [ ${#tokens} -lt 1 ]
 	then
 		zle ${fzf_default_completion:-expand-or-complete}
 		return
 	fi
-	cmd=$(__fzf_extract_command "$LBUFFER") 
 
-  # Use a per-command completion trigger if available. Otherwise, fall
-  # back to $FZF_COMPLETION_TRIGGER.
-  source <(printf "%s" "$FZF_PER_CMD_COMPLETION_TRIGGERS_EXPORT")
-  trigger=${FZF_PER_CMD_COMPLETION_TRIGGERS[$cmd]-${FZF_COMPLETION_TRIGGER-'**'}}
+  # Use a per-command completion trigger if available. Otherwise, fall back to $FZF_COMPLETION_TRIGGER.
+	# cmd=$(__fzf_extract_command "$LBUFFER") 
+  # cmd=${${(z)LBUFFER}:0:1}
+  # source <(printf "%s" "$FZF_PER_CMD_COMPLETION_TRIGGERS_EXPORT")
+  # trigger=${FZF_PER_CMD_COMPLETION_TRIGGERS[$cmd]-${FZF_COMPLETION_TRIGGER-'**'}}
 
-	[ -z "$trigger" -a ${LBUFFER[-1]} = ' ' ] && tokens+=("") 
-	if [[ ${LBUFFER} = *"${tokens[-2]-}${tokens[-1]}" ]]
-	then
-		tokens[-2]="${tokens[-2]-}${tokens[-1]}" 
-		tokens=(${tokens[0,-2]}) 
-	fi
-	lbuf=$LBUFFER 
-	tail=${LBUFFER:$(( ${#LBUFFER} - ${#trigger} ))} 
-	if [ ${#tokens} -gt 1 -a "$tail" = "$trigger" ]
-	then
+  # Explicitly allow for empty trigger.
+  trigger=${FZF_COMPLETION_TRIGGER-'**'}
+
+  [[ -z $trigger && ${LBUFFER[-1]} == ' ' ]] && tokens+=("")
+
+  # When the trigger starts with ';', it becomes a separate token
+  if [[ ${LBUFFER} = *"${tokens[-2]-}${tokens[-1]}" ]]; then
+    tokens[-2]="${tokens[-2]-}${tokens[-1]}"
+    tokens=(${tokens[0,-2]})
+  fi
+
+  lbuf=$LBUFFER
+  tail=${LBUFFER:$(( ${#LBUFFER} - ${#trigger} ))}
+
+  # Trigger sequence given
+  if [ ${#tokens} -gt 1 -a "$tail" = "$trigger" ]; then
 		d_cmds=(${=FZF_COMPLETION_DIR_COMMANDS-cd pushd rmdir}) 
 		p_cmds=(${=FZF_COMPLETION_PATH_COMMANDS-ls}) 
 		f_cmds=(${=FZF_COMPLETION_FILE_COMMANDS-vi vim cat}) 
+
+    {
+      cursor_pos=$CURSOR
+      # Move the cursor before the trigger to preserve word array elements when
+      # trigger chars like ';' or '`' would otherwise reset the 'words' array.
+      CURSOR=$((cursor_pos - ${#trigger} - 1))
+      # Check if at least one completion system (old or new) is active.
+      # If at least one user-defined completion widget is detected, nothing will
+      # be completed if neither the old nor the new completion system is enabled.
+      # In such cases, the 'zsh/compctl' module is loaded as a fallback.
+      if ! zmodload -F zsh/parameter p:functions 2>/dev/null || ! (( ${+functions[compdef]} )); then
+        zmodload -F zsh/compctl 2>/dev/null
+      fi
+      # Create a completion widget to access the 'words' array (man zshcompwid)
+      zle -C __fzf_extract_command .complete-word __fzf_extract_command
+      zle __fzf_extract_command
+    } always {
+      CURSOR=$cursor_pos
+      # Delete the completion widget
+      zle -D __fzf_extract_command  2>/dev/null
+    }
+
 		[ -z "$trigger" ] && prefix=${tokens[-1]}  || prefix=${tokens[-1]:0:-${#trigger}} 
 		if [[ $prefix = *'$('* ]] || [[ $prefix = *'<('* ]] || [[ $prefix = *'>('* ]] || [[ $prefix = *':='* ]] || [[ $prefix = *'`'* ]]
 		then
 			return
 		fi
 		[ -n "${tokens[-1]}" ] && lbuf=${lbuf:0:-${#tokens[-1]}} 
-		if eval "type _fzf_complete_${cmd} > /dev/null"
+		if eval "noglob type _fzf_complete_${cmd_word} > /dev/null"
 		then
-			prefix="$prefix" eval _fzf_complete_${cmd} ${(q)lbuf}
+			prefix="$prefix" eval _fzf_complete_${cmd_word} ${(q)lbuf}
 			zle reset-prompt
-		elif [ ${d_cmds[(i)$cmd]} -le ${#d_cmds} ]
+		elif [ ${d_cmds[(i)$cmd_word]} -le ${#d_cmds} ]
 		then
 			_fzf_dir_completion "$prefix" "$lbuf"
-		elif [ ${p_cmds[(i)$cmd]} -le ${#p_cmds} ]
+		elif [ ${p_cmds[(i)$cmd_word]} -le ${#p_cmds} ]
 		then
 			_fzf_path_completion "$prefix" "$lbuf"
-		elif [ ${f_cmds[(i)$cmd]} -le ${#f_cmds} ]
+		elif [ ${f_cmds[(i)$cmd_word]} -le ${#f_cmds} ]
 		then
 			_fzf_file_completion "$prefix" "$lbuf"
 		else
 			# _fzf_path_completion "$prefix" "$lbuf"
       zle ${fzf_default_completion:-expand-or-complete}
 		fi
+  # Fall back to default completion
 	else
 		zle ${fzf_default_completion:-expand-or-complete}
 	fi
