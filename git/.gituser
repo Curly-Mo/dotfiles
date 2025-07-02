@@ -4,3 +4,5 @@
 # always use SSH instead of HTTPS
 [url "git@ghe.spotify.net:"]
   insteadOf = https://ghe.spotify.net/
+[maintenance]
+	repo = /home/colinfahy/workspace/services-pilot

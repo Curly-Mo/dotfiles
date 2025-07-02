@@ -57,9 +57,26 @@ attach() {
 #   cd "$dir"
 # }
 
+cmdargs() {
+  local cmd="$@"
+  local args=${${(z)cmd}:1}
+  echo $args
+}
+lastcmd() {
+  fc -ln -1
+}
+lastargs() {
+  cmdargs $(lastcmd)
+}
+lastoutput() {
+  local last_cmd=$(lastcmd)
+  # eval "$last_cmd" | tail -n 1
+  echo $(eval "$last_cmd")
+}
+
+# run a new command on the previous command's args
 now() {
-  local lastcmd=$(fc -l -1)
-  local lastargs=${${(z)lastcmd}:2}
+  local last_args=$(lastargs)
   local cmd="$@"
   print -z $cmd $lastargs
 }
@@ -77,6 +94,27 @@ _now() {
   # esac
 }
 compdef _now now
+
+# run a command on the previous command's output
+on() {
+  local last_output=$(lastoutput)
+  local cmd="$@"
+  print -z $cmd $last_output
+}
+_on() {
+  # _alternative _command_names
+  local context state state_descr line
+  _arguments -C ':any:_command_names -e'
+  # _arguments -C '*::_command_names->cmd' 
+  # case "$state" in
+  #     cmd)
+  #         local -a music_files
+  #         music_files=( Music/**/*.{mp3,wav,flac,ogg} )
+  #         _arguments -C 'wut:any:_files'
+  #         ;;
+  # esac
+}
+compdef _on on
 
 # recommand() {
 #   local lastcmd=$(fc -l -1)
