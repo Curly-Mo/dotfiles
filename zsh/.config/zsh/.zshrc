@@ -112,13 +112,13 @@ colors
 zinit ice lucid
 zinit snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zsh'
 # zinit ice wait"0" lucid if"[[ -f $HOME/.zsh_theme ]]"
-zinit ice lucid link if"[[ -f $HOME/.zsh_theme ]]"
+zinit ice lucid nocompile link if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
-zinit ice wait"0" lucid link if"[[ -f $HOME/.localrc ]]"
+zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.localrc ]]"
 zinit snippet "$HOME/.localrc"
 
-zinit ice wait"0" lucid link if"[[ -f $HOME/.aliases ]]"
+zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.aliases ]]"
 zinit snippet "$HOME/.aliases"
 
 # completions
@@ -195,9 +195,14 @@ bindkey '^X' create_completion
 zinit wait lucid for \
   Licheam/zsh-ask
 
-# zinit wait lucid for \
-#   ytakahashi/igit
+zinit wait lucid for \
+  ytakahashi/igit
 
+zinit wait lucid for \
+  hlissner/zsh-autopair
+
+zinit wait lucid for \
+  yoogottamk/zsh-manydots-magic
 
 # Packages https://github.com/zdharma-continuum/zinit-packages
 # zinit pack for dircolors-material
@@ -253,12 +258,15 @@ zinit lucid light-mode for \
 zinit wait"0" lucid lman completions nocompile for \
     eza-community/eza
 
+zinit wait"0" lucid from"gh-r" as"program" for \
+    umlx5h/gtrash
+
 # sharkdp
 zinit wait"0" from"gh-r" lucid lbin lman completions nocompile for \
   nocd atload"export BAT_THEME='ansi'" \
   cp="bat-*/autocomplete/bat.zsh -> _bat" \
     @sharkdp/bat
-zinit wait"0" from"gh-r" lucid lbin lman for \
+zinit wait"0" from"gh-r" lucid lbin lman completions for \
   cp="fd-*/autocomplete/_fd -> _fd" \
     @sharkdp/fd
 zinit wait"0" from"gh-r" lucid lbin lman for \
@@ -319,19 +327,17 @@ zinit wait"0" lucid from"gh-r" lbin lman for \
     jesseduffield/lazygit
 zinit wait"0" lucid lbin lman make"install PREFIX=$ZPFX" for \
   zdharma-continuum/git-url
-# zinit wait"0" lucid as:"program" make"PREFIX=$ZPFX" for \
-#   src"etc/git-extras-completion.zsh" \
-#     tj/git-extras 
-zinit wait"0" lucid as:"program" make"PREFIX=$ZPFX" for \
-  lbin"!bin/git-*" \
-  lman"bin/git-*" \
+zinit wait"0" lucid as"program" make"PREFIX=$ZPFX" for \
+  pick"$ZPFX/bin/git-*" \
   src"etc/git-extras-completion.zsh" \
     tj/git-extras 
 zinit wait"0" lucid make lbin lman completions nocompile for \
   cp="etc/hub.zsh_completion -> _hub" \
     @github/hub
-# zinit wait"0" lucid for \
-#   wfxr/forgit
+zinit wait"0" lucid for \
+  atinit"export FORGIT_NO_ALIASES=true" \
+  atload'export PATH="$PATH:$(dirname $FORGIT)"' \
+    wfxr/forgit
 
 
 # zsh stuff
@@ -341,6 +347,8 @@ zinit wait lucid for \
   blockf atpull'zinit creinstall -q .' \
     zsh-users/zsh-completions \
   nocd atload"!_zsh_autosuggest_start" atload"zstyle ':completion:*' special-dirs false" \
+  atload'export ZSH_AUTOSUGGEST_STRATEGY=(match_prev_cmd history completion)' \
+  atload'export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=50' \
     zsh-users/zsh-autosuggestions
 
 
@@ -429,3 +437,5 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete
 # zprof
 
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

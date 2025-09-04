@@ -35,6 +35,36 @@ function fp(){
   ls -1 "$@" | xargs realpath
 }
 
+# functions
+function echo_exec() {
+  echo $(tput setaf 2)'$' ${@}$(tput sgr0)
+  $@
+}
+function dash_args() {
+  local options=()
+  # local args=()
+  for arg in "$@"; do
+    if [[ "$arg" == -* ]]; then
+      options+=("$arg")
+    else
+      # args+=("$arg")
+    fi
+  done
+  echo $options
+}
+function non_dash_args() {
+  # local options=()
+  local args=()
+  for arg in "$@"; do
+    if [[ "$arg" == -* ]]; then
+      # options+=("$arg")
+    else
+      args+=("$arg")
+    fi
+  done
+  echo $args
+}
+
 # vim
 alias vi="vim"
 alias e="vim"
@@ -67,12 +97,18 @@ alias serious='sudo $(fc -nl -1)'
 alias sudid='sudo $(fc -nl -1)'
 alias sudoit='sudo $(fc -nl -1)'
 alias doit='sudo $(fc -nl -1)'
+alias sude='sudo -E'
+alias sudov='sudo -E vim'
+alias suvim='sudo -E vim'
+alias svim='sudo -E vim'
+alias sv='sudo -E vim'
+alias se='sudo -E vim'
 
 # arch
 alias yay="PYENV_VERSION=system paru"
 alias yeet="paru -Rns"
 # alias yayy='yay -Syu --noconfirm'
-# alias yolo='yay -Syu --noconfirm'
+alias yolo='yay -Syu --noconfirm'
 alias sys='systemctl'
 alias ctl='systemctl'
 alias sysu='systemctl --user'
@@ -109,6 +145,11 @@ alias proot="groot"
 
 # gcloud
 alias gs='gsutil'
+gls() {
+  local options=$(dash_args "$@")
+  local args=$(non_dash_args "$@")
+  echo_exec gsutil ls $options "gs://$args"
+}
 
 # go to workspace root
 alias work='cd $HOME/workspace'
@@ -143,6 +184,7 @@ alias ssht='TERM=xterm-color ssh'
 
 # stuff
 alias dot='cd $HOME/dotfiles'
+alias dots='cd $HOME/dotfiles'
 alias dotfiles='cd $HOME/dotfiles'
 alias dl='cd $HOME/downloads'
 
