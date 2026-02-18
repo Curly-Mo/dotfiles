@@ -23,14 +23,14 @@ alt + shift + g
   launch_or_focus gpclient
 
 ### SELECTION ###
-alt + c
-  xsel -po|xsel -bi
-alt + shift + c
-  xsel -po|xsel -bi
-alt + @v
-  xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
-alt + shift + @v
-  xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+# alt + c
+#   xsel -po|xsel -bi
+# alt + shift + c
+#   xsel -po|xsel -bi
+# alt + @v
+#   xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
+# alt + shift + @v
+#   xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
 # alt + v
 #   sleep 0.1 && xdotool type --window "$(xdotool getwindowfocus)" --clearmodifiers --delay 1 -- "$(xclip -out -selection clipboard -rmlastnl)"
 # alt + shift + v
@@ -56,3 +56,17 @@ alt + shift + @v
   # sh -c 'xclip -o -selection clipboard | xvkbd -xsendevent -file -'
   #sh -c 'sleep 0.1 && xdotool type --clearmodifiers --delay 0 -- "$(xclip -o -selection clipboard)"'
   # xclip -out -selection clipboard
+
+
+# alt + c
+#   xsel -po|xsel -bi
+# alt + shift + c
+#   xsel -po|xsel -bi
+alt + v
+  wl-paste
+alt + shift + v
+  wl-paste
+# alt + @v
+#   wl-paste --primary
+# alt + shift + @v
+#   wl-paste --primary

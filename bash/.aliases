@@ -140,7 +140,8 @@ alias g='git'
 alias gremaster='git stash && git fetch && git rebase origin/master && git stash pop'
 alias status='git status'
 # go to git project root
-alias groot='cd $(git rev-parse --show-toplevel)'
+alias grootdir='git rev-parse --show-toplevel'
+alias groot='cd $(grootdir)'
 alias proot="groot"
 
 # gcloud
@@ -231,3 +232,4 @@ alias bc="build c"
 alias bv="build v"
 alias bt="build t"
 alias bcv="build c v"
+alias br="build r"

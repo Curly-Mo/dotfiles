@@ -33,8 +33,8 @@ return {
         icon_style = "Question",    -- Highlight group for group icons
         priority = 30,              -- Ordering priority for LSP notification group
         skip_history = true,        -- Whether progress notifications should be omitted from history
-        format_message =            -- How to format a progress message
-          require("fidget.progress.display").default_format_message,
+        -- format_message =            -- How to format a progress message
+        --   require("fidget.progress.display").default_format_message,
         format_annote =             -- How to format a progress annotation
           function(msg) return msg.title end,
         format_group_name =         -- How to format a progress notification group's name
@@ -55,8 +55,8 @@ return {
       filter = vim.log.levels.INFO, -- Minimum notifications level
       history_size = 128,           -- Number of removed messages to retain in history
       override_vim_notify = false,  -- Automatically override vim.notify() with Fidget
-      configs =                     -- How to configure notification groups when instantiated
-        { default = require("fidget.notification").default_config },
+      -- configs =                     -- How to configure notification groups when instantiated
+      --   { default = require("fidget.notification").default_config },
       redirect =                    -- Conditionally redirect notifications to another backend
         function(msg, level, opts)
           if opts and opts.on_open then
@@ -720,10 +720,11 @@ return {
     if (vim.opt.diff:get()) then
       return
     end
-    local lsp = require("lspconfig")
-    lsp.util.default_config = vim.tbl_extend(
+    -- local lsp = require("lspconfig")
+    local lsputil = require("lspconfig.util")
+    lsputil.default_config = vim.tbl_extend(
       "force",
-      lsp.util.default_config,
+      lsputil.default_config,
       {
         -- autostart = false,
         handlers = {
@@ -741,10 +742,10 @@ return {
       }
     )
 
-    -- lsp.pyright.setup{
+    -- vim.lsp.config("pyright", {
     --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
     --   single_file_support = true,
-    --   root_dir = lsp.util.root_pattern('pyproject.toml',
+    --   root_dir = lsputil.root_pattern('pyproject.toml',
     --     'setup.py',
     --     'setup.cfg',
     --     'requirements.txt',
@@ -799,11 +800,12 @@ return {
     --       },
     --     },
     --   },
-    -- }
-    lsp.basedpyright.setup{
+    -- })
+    vim.lsp.enable("basedpyright")
+    vim.lsp.config("basedpyright", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
       single_file_support = true,
-      root_dir = lsp.util.root_pattern('pyproject.toml',
+      root_dir = lsputil.root_pattern('pyproject.toml',
         'setup.py',
         'setup.cfg',
         'requirements.txt',
@@ -813,9 +815,9 @@ return {
       ),
       settings = {
         basedpyright = {
-          pythonPath = require("utils.python").pyenv_path(),
-          venvPath = require("utils.python").pyenv_root(),
-          venv = require("utils.python").pyenv_venv(),
+          -- pythonPath = require("utils.python").pyenv_path(),
+          -- venvPath = require("utils.python").pyenv_root(),
+          -- venv = require("utils.python").pyenv_venv(),
           analysis = {
             indexing = true,
             typeCheckingMode = "standard",
@@ -863,8 +865,9 @@ return {
           },
         },
       },
-    }
-    lsp.jdtls.setup{
+    })
+    vim.lsp.enable("jdtls")
+    vim.lsp.config("jdtls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
       cmd = { 'jdtls' },
       -- filetypes = { 'java' },
@@ -914,8 +917,8 @@ return {
           },
         },
       },
-    }
-    -- lsp.metals.setup{
+    })
+    -- vim.lsp.config("metals", {
     --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
     --   filetypes = { "scala", "sbt" },
     --   init_options = {
@@ -925,39 +928,49 @@ return {
     --     isHttpEnabled = true,
     --     statusBarProvider = "show-message",
     --   },
-    -- }
-    lsp.vimls.setup{
+    -- })
+    vim.lsp.enable("vimls")
+    vim.lsp.config("vimls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.yamlls.setup{
+    })
+    vim.lsp.enable("yamlls")
+    vim.lsp.config("yamlls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.ts_ls.setup{
+    })
+    vim.lsp.enable("ts_ls")
+    vim.lsp.config("ts_ls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.bashls.setup{
+    })
+    vim.lsp.enable("bashls")
+    vim.lsp.config("bashls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
       filetypes = { "sh", "bash", "zsh" },
-    }
-    lsp.cmake.setup{
+    })
+    vim.lsp.enable("cmake")
+    vim.lsp.config("cmake", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.jsonls.setup{
+    })
+    vim.lsp.enable("jsonls")
+    vim.lsp.config("jsonls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.dprint.setup{
+    })
+    vim.lsp.enable("dprint")
+    vim.lsp.config("dprint", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.eslint.setup{
+    })
+    vim.lsp.enable("eslint")
+    vim.lsp.config("eslint", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.jinja_lsp.setup{
+    })
+    vim.lsp.enable("jinja_lsp")
+    vim.lsp.config("jinja_lsp", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    -- lsp.ltex.setup{
+    })
+    -- vim.lsp.config("ltex", {
     --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    -- }
-    lsp.lua_ls.setup{
+    -- })
+    vim.lsp.enable("lua_ls")
+    vim.lsp.config("lua_ls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
       settings = {
         Lua = {
@@ -1004,36 +1017,42 @@ return {
       --   --   }
       --   -- })
       -- end,
-    }
-    -- lsp.grammarly.setup{
+    })
+    -- vim.lsp.config("grammarly", {
     --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
     --   -- fix for grammarly only working on node 16 https://github.com/neovim/nvim-lspconfig/issues/2007
     --   -- cmd = { "nvm", "exec", "16", "grammarly-languageserver", "--stdio" },
     -- }
-    lsp.pbls.setup{
+    vim.lsp.enable("pbls")
+    vim.lsp.config("pbls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    -- lsp.r_language_server.setup{
+    })
+    -- vim.lsp.config("r_language_server", {
+    --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    -- })
+    vim.lsp.enable("rust_analyzer")
+    vim.lsp.config("rust_analyzer", {
+      capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    })
+    vim.lsp.enable("cssls")
+    vim.lsp.config("cssls", {
+      capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    })
+    vim.lsp.enable("sqlls")
+    vim.lsp.config("sqlls", {
+      capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    })
+    -- vim.lsp.config("harper_ls", {
     --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
     -- }
-    lsp.rust_analyzer.setup{
+    vim.lsp.enable("marksman")
+    vim.lsp.config("marksman", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.cssls.setup{
+    })
+    vim.lsp.enable("awk_ls")
+    vim.lsp.config("awk_ls", {
       capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.sqlls.setup{
-      capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    -- lsp.harper_ls.setup{
-    --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    -- }
-    lsp.marksman.setup{
-      capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
-    lsp.awk_ls.setup{
-      capabilities = require('cmp_nvim_lsp').default_capabilities(),
-    }
+    })
   end,
 },
 

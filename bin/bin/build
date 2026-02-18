@@ -2,13 +2,17 @@
 
 pomfile="pom.xml"
 sbtfile="build.sbt"
+bazelfile="BUILD.bazel"
 wrong_dir=false
 default_command="package"
+default_bazel_command="build"
 
 if [ -e "$PWD/$pomfile" ]; then
   tool="mvn"
 elif [ -e "$PWD/$sbtfile" ]; then
   tool="sbt"
+elif [ -e "$PWD/$bazelfile" ]; then
+  tool="bazel"
 else
   gitroot=$(git rev-parse --show-toplevel)
   relative_groot=$(realpath -s --relative-to="$PWD" "$gitroot")
@@ -39,6 +43,12 @@ for arg in "$@"; do
     p|pack)
       newarg="package"
       ;;
+    b)
+      newarg="build"
+      ;;
+    r)
+      newarg="run"
+      ;;
     t)
       newarg="test"
       ;;
@@ -62,7 +72,15 @@ for arg in "$@"; do
 done
 
 if [[ ${#args[@]} -eq 0 || (${#args[@]} -eq 1 && ${args[1]} = "clean") ]]; then
-  args+=($default_command)
+  if [[ "${tool}" == "bazel" ]]; then
+    args+=($default_bazel_command)
+  else
+    args+=($default_command)
+  fi
+fi
+
+if [[ "${tool}" == "bazel" ]]; then
+  args+=(".")
 fi
 
 if [ "$wrong_dir" = true ]; then

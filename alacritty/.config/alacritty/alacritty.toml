@@ -28,7 +28,9 @@ foreground = "0xbcbcbc"
 [font]
 # size = 19.5
 # size = 17.5
-size = 14.25
+# size = 14.25
+# size = 13.75
+size = 14.0
 [font.normal]
 # family = "Roboto Mono for Powerline"
 family = "Roboto Mono Nerd Font Mono"
@@ -62,10 +64,12 @@ style = "Bold Italic"
 [scrolling]
 history = 100000
 
-[shell]
+[terminal.shell]
 args = ["--login"]
 program = "/usr/bin/zsh"
 
 [window]
 decorations = "none"
 startup_mode = "Maximized"
+
+[terminal]

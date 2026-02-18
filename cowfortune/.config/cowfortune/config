@@ -1,0 +1,24 @@
+; basic options
+LENGTH_USE=short
+LENGTH_SHORT=200
+COLUMN_WIDTH=120
+OFFENSIVE_ONLY=0
+LOLCAT_IGNORE=0
+
+; debug options
+DEBUG_SOURCE=0
+DEBUG_COW=0
+DEBUG_FILES=0
+DEBUG_OPTIONS=0
+
+; fortune file whitelist (multiple possible)
+;FORTUNES=/usr/share/games/fortunes/bofh-excuses
+;FORTUNES=/usr/share/games/fortunes/linux
+;FORTUNES=/usr/share/games/fortunes/off/linux
+;FORTUNES=/usr/share/fortunes/linux
+FORTUNES=/usr/share/fortune/showerthoughts
+FORTUNES=/usr/share/fortune/handey
+FORTUNES=/usr/share/fortune/hitchhiker
+FORTUNES=/usr/share/fortune/billwurtz
+FORTUNES=/usr/share/fortune/definitions
+FORTUNES=/usr/share/fortune/drugs

@@ -115,11 +115,11 @@ zinit snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zs
 zinit ice lucid nocompile link if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
-zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.localrc ]]"
-zinit snippet "$HOME/.localrc"
-
 zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.aliases ]]"
 zinit snippet "$HOME/.aliases"
+
+zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.localrc ]]"
+zinit snippet "$HOME/.localrc"
 
 # completions
 # zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall "$HOME/bin/_completions"
@@ -172,6 +172,8 @@ zinit wait"0" lucid for davidparsson/zsh-pyenv-lazy
 # zinit ice wait"10" lucid
 # zinit snippet OMZ::"plugins/jenv/jenv.plugin.zsh"
 
+# export NVM_COMPLETION=true
+export NVM_AUTO_USE=true
 export NVM_LAZY_LOAD=true
 zinit wait'0' lucid for \
   lukechilds/zsh-nvm
@@ -375,10 +377,10 @@ if [[ -o login && -x "$(command -v fortune)" && -x "$(command -v lolcat)" ]]; th
   # sudo strfile /usr/share/fortune/handey /usr/share/fortune/handey.dat
   fortune -e showerthoughts handey hitchhiker billwurtz definitions drugs -s -n 300 | lolcat
 fi
-if [[ -o login && -x "$(command -v todo.sh)" ]]; then
-  echo
-  todo.sh -d $TODOTXT_CFG_FILE_WORK
-fi
+# if [[ -o login && -x "$(command -v todo.sh)" ]]; then
+#   echo
+#   todo.sh -d $TODOTXT_CFG_FILE_WORK
+# fi
 
 # History
 HISTSIZE=10000000

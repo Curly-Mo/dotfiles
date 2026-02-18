@@ -3,7 +3,6 @@ update_info=kwin.upd:replace-scalein-with-scale,kwin.upd:port-minimizeanimation-
 
 [Activities][LastVirtualDesktop]
 5be90c79-ed9e-44a4-ab1f-c31940c11852=cb417c34-3cca-4810-acc2-30b3d15f67b5
-b2207353-489a-4ecd-9049-74748154918e=cb417c34-3cca-4810-acc2-30b3d15f67b5
 
 [Compositing]
 Backend=OpenGL
@@ -52,6 +51,9 @@ BorderActivateClass=9
 [Effect-diminactive]
 Strength=2
 
+[Effect-overview]
+BorderActivate=9
+
 [Effect-windowview]
 BorderActivateAll=9
 
@@ -87,16 +89,17 @@ CommandWindowWheel=Scroll
 
 [NightColor]
 Active=true
-EveningBeginFixed=0030
-Mode=Times
-MorningBeginFixed=0800
 NightTemperature=2800
-TransitionTime=180
 
 [Plugins]
 diminactiveEnabled=true
 highlightwindowEnabled=true
+rememberwindowpositionsEnabled=false
 windowgeometryEnabled=false
+
+[Script-rememberwindowpositions]
+blacklist=org.kde.spectacle\norg.kde.polkit-kde-authentication-agent-1\nsteam*\norg.kde.plasmashell\nkwin\nksmserver\nsystemsettings\nAlacritty\nUlauncher
+restoreType=0
 
 [TabBox]
 ActivitiesMode=1
@@ -134,6 +137,12 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 [Tiling][28b8f3eb-1ecb-57e9-b5b1-a41dd0513c16]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
+[Tiling][29de415b-d0f1-48ce-997d-361bb0b1c2ee][0a60f5b9-ac5b-4a1d-9329-a7606ef993e7]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][29de415b-d0f1-48ce-997d-361bb0b1c2ee][cc11a792-2d5e-4fd5-aed1-f266cf359ee8]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Tiling][38793e0f-e5e2-5832-aabf-2c1377ed7c92]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
@@ -161,6 +170,18 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 [Tiling][8df035f6-9c38-59e0-83c0-9372231be0b5]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
+[Tiling][b7c117a4-fdb1-41a9-8a31-8233020e5c2e][0a60f5b9-ac5b-4a1d-9329-a7606ef993e7]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][b7c117a4-fdb1-41a9-8a31-8233020e5c2e][cc11a792-2d5e-4fd5-aed1-f266cf359ee8]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][ba913a49-985d-4f5e-8929-aee9fd24c85d][0a60f5b9-ac5b-4a1d-9329-a7606ef993e7]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][ba913a49-985d-4f5e-8929-aee9fd24c85d][cc11a792-2d5e-4fd5-aed1-f266cf359ee8]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
 [Tiling][bb5b1357-f6f6-59c1-9f77-0fa1783115f7]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
@@ -168,6 +189,12 @@ tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"wi
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][c1c82fcc-3f4b-58b2-9e87-a17bdca89851]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][cb417c34-3cca-4810-acc2-30b3d15f67b5][0a60f5b9-ac5b-4a1d-9329-a7606ef993e7]
+tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
+
+[Tiling][cb417c34-3cca-4810-acc2-30b3d15f67b5][cc11a792-2d5e-4fd5-aed1-f266cf359ee8]
 tiles={"layoutDirection":"horizontal","tiles":[{"width":0.25},{"width":0.5},{"width":0.25}]}
 
 [Tiling][cfe8c89d-1be5-520c-b534-fb031dd5452c]
@@ -204,7 +231,7 @@ TitlebarDoubleClickCommand=Maximize
 WindowSnapZone=10
 
 [Xwayland]
-Scale=2.25
+Scale=2.55
 
 [org.kde.kdecoration2]
 ButtonsOnLeft=MN
