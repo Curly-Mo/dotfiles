@@ -76,8 +76,8 @@ cd "$(<~/.lastdir)"
 # Python
 #export PATH="/home/colin/miniconda3/bin:$PATH"
 
-if [ -f ~/.localrc ]; then
-    . ~/.localrc
+if [ -f ~/.zsh_localrc ]; then
+    . ~/.zsh_localrc
 fi
 
 # vi-mode

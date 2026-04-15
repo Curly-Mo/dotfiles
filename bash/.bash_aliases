@@ -168,9 +168,10 @@ newdir() {
 }
 
 # ps
-alias ps='ps -o pid,tty,start,time,%cpu,%mem,command'
-alias pse='command ps -e -o pid,ppid,user,tty,start,time,%cpu,%mem,command'
-alias psgrep='pse | grep -v "grep -i --color=auto" | command grep -i --color=auto'
+# alias ps='ps -o user,pid,ppid,%cpu,%mem,vsz,rss,tty,state,start_time,cputime,docker,command'
+alias ps='ps -o user,pid,ppid,%cpu,%mem,tname,stat,start_time,bsdtime,command'
+alias pse='ps -e --forest'
+alias psgrep='ps -e | grep -v "grep -i --color=auto" | command grep -i --color=auto'
 alias psme='ps -u $USER'
 
 # pipe

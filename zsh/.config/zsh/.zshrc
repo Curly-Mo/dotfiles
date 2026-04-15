@@ -115,11 +115,11 @@ zinit snippet 'https://github.com/woefe/git-prompt.zsh/blob/master/git-prompt.zs
 zinit ice lucid nocompile link if"[[ -f $HOME/.zsh_theme ]]"
 zinit snippet "$HOME/.zsh_theme"
 
-zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.aliases ]]"
-zinit snippet "$HOME/.aliases"
+zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.zsh_aliases ]]"
+zinit snippet "$HOME/.zsh_aliases"
 
-zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.localrc ]]"
-zinit snippet "$HOME/.localrc"
+zinit ice wait"0" lucid nocompile link if"[[ -f $HOME/.zsh_localrc ]]"
+zinit snippet "$HOME/.zsh_localrc"
 
 # completions
 # zinit ice wait"0" lucid if"[[ -d $HOME/bin/_completions ]]" creinstall "$HOME/bin/_completions"
@@ -288,10 +288,10 @@ zinit wait"0" lucid from"gh-r" lbin lman for \
 # zinit wait"0" lucid lbin'sk' lman'sk' for \
 #   atclone"cargo build --release" atpull"%atclone" \
 #   multisrc"shell/completion.zsh" \
-#     lotabout/skim
-zinit wait"0" lucid lbin'sk' lman'sk' for \
-  atclone"cargo build --release" atpull"%atclone" \
-    lotabout/skim
+#     skim-rs/skim
+# zinit wait"0" lucid lbin'sk' lman'sk' for \
+#   atclone"cargo build --release" atpull"%atclone" \
+#     skim-rs/skim
 
 zinit wait"0" lucid from"gh-r" lbin lman for \
   peco/peco

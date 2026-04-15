@@ -13,7 +13,7 @@ dotdirs=$(realpath ${args:-${all_dotdirs}})
 printf '%s\n' "$(color ${dotdirs})"
 for d in $dotdirs; do
     printf "Create symlinks in $(color $HOME) for: $(color $(basename $d))\n"
-    files=$(find ${d} -type f)
+    files=$(find ${d} -type f,l)
     pretty_files=($(color $files))
     paste <(printf "%s\n" "${pretty_files[@]/$d\//${HOME}/}") <(printf "%s\n" "${pretty_files[@]}") | column -t -o " -> "
     read -p "Confirm? Y/n:" -n 1 -r
@@ -28,7 +28,7 @@ for d in $dotdirs; do
             mkdir -p ${dir}
             ln -s ${f} ${dest} 2>/dev/null
             if [ $? -ne 0 ]; then
-                actual=$(readlink -f -- ${dest} 2>/dev/null || realpath ${dest})
+                actual=$(readlink -- ${dest} 2>/dev/null || realpath ${dest})
                 if [ "${actual}" = ${f} ]; then
                   echo Already linked
                 else
