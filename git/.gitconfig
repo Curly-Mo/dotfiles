@@ -39,11 +39,12 @@
   memaster = "!f() { git execho git pull $(git remoteupstream) master --autostash; }; f"
   remain = "!f() { git execho git pull $(git remoteupstream) main --rebase --autostash; }; f"
   memain = "!f() { git execho git pull $(git remoteupstream) main --autostash; }; f"
-  arc = "! f() { git execho git tag archive/$(date '+%Y-%m-%d')/$1 $1 && git execho git branch -d $1; }; f"
+  arc = "! f() { git execho git tag archive/$(date '+%Y-%m-%d')/$1 $1 && git execho git branch -D $1; }; f"
   arcl = "! f() { git execho git tag --list --sort=-version:refname $@ | grep '^archive/';}; f"
   ; unarc = "! f() { git execho git checkout $(git arcl --sort=v:refname | grep $1 -m 1) && git switch -c $(echo $1 | sed -E 's/^archive\\/([^a-zA-Z]*\\/)*//') && git tag -d $1; }; f "
   unarc = "! f() { git arcl | grep $1 -m 1 && git execho git checkout $(git arcl --sort=v:refname | grep $1 -m 1) && git execho git switch -c $(echo $1 | sed -E 's/^archive\\/([^a-zA-Z]*\\/)*//') && git execho git tag -d $(git arcl --sort=v:refname | grep $1 -m 1); }; f "
   cleanup = "!f() { git execho git branch --merged master | grep -E -v '(^\\*|master|dev)' | xargs -n 1 git arc; }; f"
+  cleansquashed = "!f() { git execho git_cleanup; }; f"
   fresh = "!f() { git execho git stash && git execho git checkout master && git execho git pull $(git remoteupstream) master && git execho git stash pop; }; f"
   new = "!f() { git execho git stash && git execho git checkout -b $1 --no-track $(git remoteupstream)/master && git execho git pull $(git remoteupstream) master --rebase --autostash && git execho git stash pop; }; f"
   # new = "!f() { git execho git checkout -b $1 master && git execho git pull $(git remoteupstream) master; }; f"
@@ -128,3 +129,5 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
+[rerere]
+	enabled = true

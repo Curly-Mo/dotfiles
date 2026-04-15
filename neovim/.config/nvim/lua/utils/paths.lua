@@ -66,4 +66,33 @@ M.groot = function(path, fallback)
   return groot_cache[path]
 end
 
+local is_monorepo_cache = {}
+local monorepo_pattern = ".*services%-pilot"
+M.is_monorepo = function(path)
+  if path == nil then path = vim.fn.getcwd() end
+  if is_monorepo_cache[path] == nil then
+    is_monorepo_cache[path] = path:match(monorepo_pattern)
+  end
+  return is_monorepo_cache[path]
+end
+
+local monogroot_cache = {}
+M.monogroot = function(path, fallback)
+  local groot = M.groot(path, fallback)
+  if path == nil then path = vim.fs.normalize(vim.fn.getcwd()) end
+  if fallback == nil then fallback = path end
+  local monogroot = groot
+  if monogroot_cache[path] == nil then
+    if M.is_monorepo(path) then
+      local mono_target = string.gsub(vim.fn.system("echo ${${$(git -C " .. path .. " rev-parse --show-prefix)%/}:h2}"), "\n", "")
+      local root = groot .. "/" .. mono_target
+      if vim.v.shell_error == 0 then
+        monogroot = root
+      end
+    end
+    monogroot_cache[path] = monogroot
+  end
+  return monogroot_cache[path]
+end
+
 return M

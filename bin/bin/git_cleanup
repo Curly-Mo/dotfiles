@@ -1,0 +1,80 @@
+#!/bin/bash
+
+TARGET_BRANCH=${1:-master}
+PROTECTED_BRANCHES=("master" "main" "$TARGET_BRANCH")
+
+# Switch to the target branch
+git checkout -q "$TARGET_BRANCH" || exit 1
+
+echo "Collecting candidate branches for archival..."
+
+# Branches that were merged directly
+merged_branches=$(git branch --merged "$TARGET_BRANCH" | grep -v "\*" | sed 's/^[[:space:]]*//' | grep -vE "$(IFS=\|; echo "${PROTECTED_BRANCHES[*]}")")
+
+# Branches that were squash-merged
+squashed_branches=()
+for branch in $(git for-each-ref refs/heads/ --format='%(refname:short)'); do
+  # Skip protected branches
+  if printf '%s\n' "${PROTECTED_BRANCHES[@]}" | grep -qx "$branch"; then
+    continue
+  fi
+
+  merge_base=$(git merge-base "$TARGET_BRANCH" "$branch")
+  commit_tree=$(git commit-tree "$(git rev-parse "$branch^{tree}")" -p "$merge_base" -m _)
+  cherry_output=$(git cherry "$TARGET_BRANCH" "$commit_tree")
+
+  if [[ "$cherry_output" == -* ]]; then
+    squashed_branches+=("$branch")
+  fi
+done
+
+# Combine both lists and remove duplicates
+combined=($(echo "${merged_branches[@]}" "${squashed_branches[@]}" | tr ' ' '\n' | sort -u))
+
+# Display result
+if [ ${#combined[@]} -eq 0 ]; then
+  echo "No branches found for archival."
+  exit 0
+fi
+
+echo ""
+echo "Branches eligible for archival:"
+for branch in "${combined[@]}"; do
+  echo "  $branch"
+done
+
+echo ""
+echo "What would you like to do?"
+COLUMNS=1
+IFS=$'\n'
+select option in "Archive all" "Archive individually" "Cancel"; do
+  case $option in
+    "Archive all")
+      for branch in "${combined[@]}"; do
+        git arc "$branch"
+      done
+      echo "All branches have been archived."
+      break
+      ;;
+    "Archive individually")
+      for branch in "${combined[@]}"; do
+        while true; do
+          read -p "Archive branch '$branch'? (y/n): " answer
+          case "$answer" in
+            [Yy]* ) git arc "$branch"; break;;
+            [Nn]* ) echo "Skipping '$branch'"; break;;
+            * ) echo "Please answer y/n.";;
+          esac
+        done
+      done
+      break
+      ;;
+    "Cancel")
+      echo "Operation cancelled."
+      break
+      ;;
+    *)
+      echo "Invalid option. Please choose 1, 2 or 3."
+      ;;
+  esac
+done

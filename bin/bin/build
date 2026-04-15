@@ -22,6 +22,9 @@ else
   elif [ -e "$gitroot/$sbtfile" ]; then
     tool="sbt"
     wrong_dir=true
+  elif [ -e "$gitroot/$bazelfile" ]; then
+    tool="bazel"
+    wrong_dir=true
   else
     echo "I can't build this project."
     exit 1
@@ -86,9 +89,11 @@ fi
 if [ "$wrong_dir" = true ]; then
   echo "not in root of project"
   echo "try running:"
+  echo $relative_groot $tool "${args[@]}"
+  (cd $relative_groot && $tool "${args[@]}")
   # TODO: move this to a function to get `print -z` support 
-  print -z $relative_groot $tool "${args[@]}"
+  # print -z $relative_groot $tool "${args[@]}"
 else
-  echo "$tool "${args[@]}"" | bat --color=always --style plain -l sh --theme ansi
+  echo "$tool "${args[@]}"" | bat --color=always --style plain --language sh --theme ansi
   exec $tool "${args[@]}"
 fi
