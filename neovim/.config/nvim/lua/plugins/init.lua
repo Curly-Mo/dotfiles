@@ -206,7 +206,26 @@ return {
 },
 
 -- tpope
-{ "tpope/vim-fugitive", event = "VeryLazy", },
+{
+  "tpope/vim-fugitive", event = "VeryLazy",
+  init = function()
+    vim.g.github_enterprise_urls = { "https://ghe.spotify.net" }
+  end,
+  keys = {
+    { "<leader>gB", ":GBrowse<cr>", mode = {"n", "v"}, desc = "open the current file on the web" },
+    { "<leader>O", ":GBrowse<cr>", mode = {"n", "v"}, desc = "open the current file on the web" },
+    { "gO", ":GBrowse<cr>", mode = {"n", "v"}, desc = "open the current file on the web" },
+    { "<leader>0", ":GBrowse master:%<cr>", mode = {"n", "v"}, desc = "open the current file on the web in master branch" },
+    { "<leader>gl", ":Gclog<cr>", mode = {"n"} },
+    { "<leader>gd", ":Gdiff<cr>", mode = {"n"} },
+    { "<leader>ge", ":Gedit<cr>", mode = {"n"} },
+    { "<leader>gb", ":Git blame<cr>", mode = {"n"} },
+    { "<leader>gw", ":Gwrite<cr>", mode = {"n"} },
+    { "<leader>gC", ":Git commit<cr>", mode = {"n"} },
+    { "<leader>gs", ":Git status<cr>", mode = {"n"} },
+    { "<leader>gS", ":Git<cr>", mode = {"n"} },
+  },
+},
 { "tpope/vim-surround", event = "VeryLazy", },
 { "tpope/vim-obsession", event = "VeryLazy", },
 { "tpope/vim-commentary", event = "VeryLazy", },
@@ -215,7 +234,6 @@ return {
 -- "tpope/vim-unimpaired",
 { "tpope/vim-dadbod", event = "VeryLazy", },
 { "tpope/vim-eunuch", event = "VeryLazy", },
-{ "tpope/vim-markdown", event = "VeryLazy", },
 -- "tpope/vim-tbone",
 { "tpope/vim-rhubarb", event = "VeryLazy", },
 { "tpope/vim-abolish", event = "VeryLazy", },
@@ -505,44 +523,6 @@ return {
   end,
 },
 { "alexghergh/nvim-tmux-navigation" },
-{
-  "andymass/vim-matchup",
-  init = function()
-    vim.g.matchup_matchparen_offscreen = { method = "popup" }
-    -- vim.g.matchup_matchparen_offscreen = { method = "status" }
-    vim.g.matchup_enabled = 1
-    vim.g.matchup_matchparen_enabled = 1
-    vim.g.matchup_motion_enabled = 1
-    vim.g.matchup_text_obj_enabled = 1
-    vim.g.matchup_surround_enabled = 1
-    vim.g.matchup_transmute_enabled = 1
-    -- vim.g.matchup_matchparen_deferred = 1
-    vim.g.matchup_matchparen_deferred_show_delay = 50
-    vim.g.matchup_matchparen_deferred_hide_delay = 700
-    vim.g.matchup_matchparen_hi_surround_always = 1
-    -- vim.api.nvim_set_hl(0, 'MatchParen', { fg = '#b1d8f6', bg = 'none' })
-    -- vim.cmd.highlight("MatchParen guifg=#b1d8f6 ctermfg=012 ctermbg=none")
-    -- vim.cmd.highlight("MatchWord guifg=#b1d8f6 ctermfg=012 ctermbg=none")
-    -- " hi MatchParen guifg=#b1d8f6 ctermfg=012 ctermbg=none
-    -- " hi MatchWord guifg=#b1d8f6 ctermfg=012 ctermbg=none
-    vim.cmd([[
-      augroup matchup_matchparen_highlight
-        autocmd!
-        autocmd ColorScheme * hi MatchParen ctermfg=012 guifg=#b1d8f6 ctermbg=none
-        autocmd ColorScheme * hi MatchWord ctermfg=012 guifg=#b1d8f6 ctermbg=none
-      augroup END
-    ]])
-
-    -- TODO: replace with native lua keymapping attempted below
-    -- vim.cmd([[ nnoremap "[[" <plug>(matchup-[%) ]])
-    vim.keymap.set({'n', 'v'}, '[[', "<Plug>(matchup-[%)", { noremap = false, desc = "matchup.prev" })
-    vim.keymap.set({'n', 'v'}, ']]', "<Plug>(matchup-]%)", { noremap = false, desc = "matchup.next" })
-  end,
-  -- keys = {
-  --   {"[[", "<plug>(matchup-[%)", desc = "go to previous match using matchup" },
-  --   {"]]", "<plug>(matchup-]%)", desc = "go to next match using matchup" },
-  -- },
-},
 -- "uber/prototool", { "rtp":"vim/prototool" }
 { "mattn/calendar-vim" },
 { "freitass/todo.txt-vim" },

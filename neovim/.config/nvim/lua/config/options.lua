@@ -49,7 +49,7 @@ vim.api.nvim_create_user_command('BD', 'bd', {})
 -- :command W :execute '!sudo tee % > /dev/null'
 -- :command W w
 -- vim.api.nvim_create_user_command('W', 'SudoWrite', {})
-vim.api.nvim_create_user_command('W', 'SudaWrite', {})
+-- vim.api.nvim_create_user_command('W', 'SudaWrite', {})
 vim.api.nvim_create_user_command('WW', 'SudaWrite', {})
 vim.api.nvim_create_user_command('Wd', 'Mkdir | w', {})
 -- vim.api.nvim_create_user_command('WD', 'Mkdir | SudoWrite', {})

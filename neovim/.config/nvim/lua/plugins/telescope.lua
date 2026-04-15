@@ -237,7 +237,7 @@ return {
   end,
   keys = {
     {'<C-p>', function()
-        require("telescope").extensions.frecency.frecency({workspaces={["GROOT"] = require("utils.paths").groot()}, cwd=require("utils.paths").groot()})
+        require("telescope").extensions.frecency.frecency({workspaces={["GROOT"] = require("utils.paths").groot()}, cwd=require("utils.paths").monogroot()})
       end
     },
     -- {'<M-p>', function()

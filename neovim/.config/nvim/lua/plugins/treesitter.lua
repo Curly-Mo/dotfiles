@@ -6,6 +6,9 @@ return {
     "lewis6991/gitsigns.nvim",
   },
   -- event = "VeryLazy",
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   opts = {
     textobjects = { -- syntax-aware textobjects
       swap = {
@@ -97,9 +100,9 @@ return {
     },
   },
   config = function(_, opts)
-    require("nvim-treesitter.configs").setup(opts)
+    require("nvim-treesitter").setup(opts)
     -- make movements repeatable with ; and ,
-    local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
+    -- local ts_repeat_move = require("nvim-treesitter.textobjects.repeatable_move")
     -- replace ; and , keybinds with wrapper commands
     -- ensure ; goes forward and , goes backward regardless of the last direction
     -- vim.keymap.set({ "n", "x", "o" }, ";", ts_repeat_move.repeat_last_move)
@@ -122,6 +125,9 @@ return {
   "theHamsta/nvim-dap-virtual-text",
   dependencies = { "nvim-treesitter/nvim-treesitter" },
   event = "VeryLazy",
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   opts = {
     enabled = true,                        -- enable this plugin (the default)
     enabled_commands = true,               -- create commands DapVirtualTextEnable, DapVirtualTextDisable, DapVirtualTextToggle, (DapVirtualTextForceRefresh for refreshing when debug adapter did not notify its termination)
@@ -158,9 +164,100 @@ return {
 },
 
 {
+  "andymass/vim-matchup",
+  -- enabled = false,
+  opts = {
+    enabled = true,
+    matchparen = {
+      enabled = true,
+      offscreen = {
+        method = "popup",
+        -- method = "status",
+        scrolloff = true,
+        -- fullwidth = true,
+        -- border = true,
+      },
+      -- singleton = false,
+      stopline = 500,
+      -- timeout = 300,
+      -- insert_timeout = 60,
+      deferred = true,
+      deferred_show_delay = 50,
+      deferred_hide_delay = 700,
+      deferred_fade_time = 0,
+      -- pumvisible = 0,
+      -- nomode = "",
+      hi_surround_always = true,
+      -- hi_background = false,
+      -- end_sign = "◀",
+    },
+    delim = {
+      stopline = 1500,
+      -- noskips = 0,
+      -- nomids = 0,
+      -- start_plaintext = true,
+    },
+    treesitter = {
+      enabled = true,
+      -- disabled = {},
+      include_match_words = true,
+      -- disable_virtual_text = true,
+      enable_quotes = false,
+      stopline = 500,
+    },
+    transmute = {
+      enabled = true,
+    },
+    text_obj = {
+      enabled = true,
+      -- linewise_operators = { "d", "y" },
+    },
+    surround = {
+      enabled = false,
+    },
+    motion = {
+      enabled = true,
+      -- override_Npercent = 6,
+      -- cursor_end = 1,
+    },
+    mouse = {
+      enabled = true,
+    },
+    mappings = {
+      enabled = true,
+    },
+  },
+  init = function()
+    vim.cmd([[
+      augroup matchup_matchparen_highlight
+        autocmd!
+        autocmd ColorScheme * hi MatchParen ctermfg=012 guifg=#b1d8f6 ctermbg=none
+        autocmd ColorScheme * hi MatchWord ctermfg=012 guifg=#b1d8f6 ctermbg=none
+        " autocmd ColorScheme * hi MatchParenCur ctermfg=012 guifg=#b1d8f6 ctermbg=none
+        " autocmd ColorScheme * hi MatchWordCur ctermfg=012 guifg=#b1d8f6 ctermbg=none
+      augroup END
+    ]])
+    vim.keymap.set({'n', 'v'}, '[[', "<Plug>(matchup-[%)", { noremap = false, desc = "matchup.prev" })
+    vim.keymap.set({'n', 'v'}, ']]', "<Plug>(matchup-]%)", { noremap = false, desc = "matchup.next" })
+    vim.keymap.set({'n', 'v'}, 'g>', "<Plug>(matchup-z%)", { noremap = false, desc = "matchup.inside" })
+    vim.keymap.set({'n', 'v'}, 'g<', "<Plug>(matchup-g%)", { noremap = false, desc = "matchup.cycle" })
+    vim.keymap.set({'n', 'v'}, 'g/', "<Plug>(matchup-g%)", { noremap = false, desc = "matchup.cycle" })
+    vim.keymap.set({'n', 'v'}, 'gW', ":MatchupWhereAmI?<CR>", { noremap = false, desc = "matchup.status" })
+  end,
+  -- keys = {
+  --   {{'n', 'v'}, "[[", "<Plug>(matchup-[%)", desc = "matchup.prev" },
+  --   {{'n', 'v'}, "]]", "<Plug>(matchup-]%)", desc = "matchup.next" },
+  -- },
+},
+
+{
   "nvim-treesitter/nvim-treesitter-context",
+  -- enabled = false,
   dependencies = { "nvim-treesitter/nvim-treesitter" },
   event = "VeryLazy",
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   config = function()
     local tsc = require('treesitter-context')
     tsc.setup{
@@ -184,46 +281,65 @@ return {
 },
 
 {
-  "nvim-treesitter/nvim-treesitter-refactor",
-  dependencies = { "nvim-treesitter/nvim-treesitter" },
-  -- event = "VeryLazy",
+  "ThePrimeagen/refactoring.nvim",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "nvim-treesitter/nvim-treesitter",
+  },
+  -- lazy = false,
   opts = {
-    refactor = {
-      highlight_definitions = {
-        enable = false,
-        -- Set to false if you have an `updatetime` of ~100.
-        clear_on_cursor_move = true,
-        highlight_current_scope = { enable = true },
-        smart_rename = {
-          enable = true,
-          -- Assign keymaps to false to disable them, e.g. `smart_rename = false`.
-          keymaps = {
-            smart_rename = "grn",
-            -- smart_rename = "<leader>rn",
-          },
-        },
-      },
-      navigation = {
-        enable = true,
-        -- Assign keymaps to false to disable them, e.g. `goto_definition = false`.
-        keymaps = {
-          goto_definition = "gd",
-          goto_definition_lsp_fallback = "gnD",
-          list_definitions = "gnd",
-          list_definitions_toc = "gO",
-          goto_next_usage = "gr",
-          goto_previous_usage = "gR",
-        },
-      },
+    prompt_func_return_type = {
+      go = false,
+      java = false,
+      cpp = false,
+      c = false,
+      h = false,
+      hpp = false,
+      cxx = false,
+    },
+    prompt_func_param_type = {
+      go = false,
+      java = false,
+      cpp = false,
+      c = false,
+      h = false,
+      hpp = false,
+      cxx = false,
+    },
+    printf_statements = {},
+    print_var_statements = {},
+    show_success_message = true, -- shows a message with information about the refactor on success
+                                 -- i.e. [Refactor] Inlined 3 variable occurrences
+  },
+},
+
+{
+  "cshuaimin/ssr.nvim",
+  opts = {
+    border = "rounded",
+    min_width = 50,
+    min_height = 5,
+    max_width = 120,
+    max_height = 25,
+    adjust_window = true,
+    keymaps = {
+      close = "q",
+      next_match = "n",
+      prev_match = "N",
+      replace_confirm = "<cr>",
+      replace_all = "<leader><cr>",
     },
   },
-  config = function(_, opts)
-    require("nvim-treesitter.configs").setup(opts)
-  end,
+  keys = {
+    {"<leader>sr", function() require("ssr").open() end, {'n', 'x'}, desc = "Structural search and replace" },
+  },
 },
 
 {
   "HiPhish/rainbow-delimiters.nvim",
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   config = function(_, options)
     local rainbow_delimiters = require('rainbow-delimiters')
     local opts = require("utils").default_opts(options){
@@ -256,6 +372,9 @@ return {
 {
   "JoosepAlviste/nvim-ts-context-commentstring",
   dependencies = { "tpope/vim-commentary" },
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   opts = {
     enable_autocmd = false,
   },
@@ -266,6 +385,9 @@ return {
 
 {
   "windwp/nvim-ts-autotag",
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   opts = {
     opts = {
       -- Defaults
@@ -416,82 +538,112 @@ return {
   "nvim-treesitter/nvim-treesitter",
   build = ":TSUpdate",
   event = "VeryLazy",
-  config = function(_, opts)
-    local configs = require("nvim-treesitter.configs")
-    configs.setup {
-      ensure_installed = {
-        "bash",
-        "c",
-        "cmake",
-        "commonlisp",
-        "cpp",
-        "comment",
-        "css",
-        "csv",
-        "diff",
-        "dockerfile",
-        "html",
-        "http",
-        "java",
-        "javascript",
-        "json",
-        "json5",
-        "latex",
-        "lua",
-        "make",
-        "markdown",
-        "python",
-        "regex",
-        "rst",
-        "ruby",
-        "rust",
-        "scala",
-        "scss",
-        "todotxt",
-        "toml",
-        "typescript",
-        "vim",
-        "yaml",
+  opts = {
+    -- Install parsers synchronously (only applied to `ensure_installed`)
+    sync_install = false,
+    -- Automatically install missing parsers when entering buffer
+    -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
+    auto_install = true,
+    -- List of parsers to ignore installing (or "all")
+    ignore_install = { },
+    highlight = {
+      enable = true,                    -- false will disable the whole extension
+      disable = { "csv", "tsv",  },     -- list of language that will be disabled
+      custom_captures = {               -- mapping of user defined captures to highlight groups
+        -- ["foo.bar"] = "Identifier"   -- highlight own capture @foo.bar with highlight group "Identifier", see :h nvim-treesitter-query-extensions
       },
-      -- Install parsers synchronously (only applied to `ensure_installed`)
-      sync_install = false,
-      -- Automatically install missing parsers when entering buffer
-      -- Recommendation: set to false if you don't have `tree-sitter` CLI installed locally
-      auto_install = true,
-      -- List of parsers to ignore installing (or "all")
-      ignore_install = { },
-      highlight = {
-        enable = true,                    -- false will disable the whole extension
-        disable = { "csv", "tsv",  },     -- list of language that will be disabled
-        custom_captures = {               -- mapping of user defined captures to highlight groups
-          -- ["foo.bar"] = "Identifier"   -- highlight own capture @foo.bar with highlight group "Identifier", see :h nvim-treesitter-query-extensions
-        },
-        -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
-        -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
-        -- Using this option may slow down your editor, and you may see some duplicate highlights.
-        -- Instead of true it can also be a list of languages
-        additional_vim_regex_highlighting = false,
-      },
-      incremental_selection = {
-        enable = true,
-        disable = { },
-        keymaps = {                       -- mappings for incremental selection (visual mappings)
-          init_selection = "gnn",         -- maps in normal mode to init the node/scope selection
-          node_incremental = "gNn",       -- increment to the upper named parent
-          scope_incremental = "gNc",      -- increment to the upper scope (as defined in locals.scm)
-          node_decremental = "gNm",       -- decrement to the previous node
-        }
-      },
-      indent = {
-        enable = true,
-        disable = {"lua"},
-      },
-      matchup = {
-        enable = true,  -- mandatory, false will disable the whole extension
-        disable = { },  -- optional, list of language that will be disabled
-        include_match_words = true,
-      },
+      -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+      -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+      -- Using this option may slow down your editor, and you may see some duplicate highlights.
+      -- Instead of true it can also be a list of languages
+      additional_vim_regex_highlighting = false,
+    },
+    incremental_selection = {
+      enable = true,
+      disable = { },
+      keymaps = {                       -- mappings for incremental selection (visual mappings)
+        init_selection = "gnn",         -- maps in normal mode to init the node/scope selection
+        node_incremental = "gNn",       -- increment to the upper named parent
+        scope_incremental = "gNc",      -- increment to the upper scope (as defined in locals.scm)
+        node_decremental = "gNm",       -- decrement to the previous node
+      }
+    },
+    indent = {
+      enable = true,
+      disable = {"lua"},
+    },
+    folds = { enable = false },
+  },
+  init = function()
+    local ensure_installed = {
+      "bash",
+      "c",
+      "cmake",
+      "commonlisp",
+      "cpp",
+      "comment",
+      "css",
+      "csv",
+      "diff",
+      "dockerfile",
+      "editorconfig",
+      "git_config",
+      "gitattributes",
+      "gitcommit",
+      "gitignore",
+      "go",
+      "gpg",
+      "graphql",
+      "hjson",
+      "hocon",
+      "html",
+      "http",
+      "java",
+      "javadoc",
+      "javascript",
+      "jinja",
+      "jinja_inline",
+      "jq",
+      "jsdoc",
+      "json",
+      "json5",
+      "latex",
+      "lua",
+      "luadoc",
+      "make",
+      "markdown",
+      "markdown_inline",
+      "matlab",
+      "nginx",
+      "printf",
+      "properties",
+      "proto",
+      "pymanifest",
+      "python",
+      "regex",
+      "rst",
+      "ruby",
+      "rust",
+      "scala",
+      "scss",
+      "tmux",
+      "todotxt",
+      "toml",
+      "tsv",
+      "tsx",
+      "typescript",
+      "vim",
+      "vimdoc",
+      "xresources",
+      "yaml",
     }
+    local already_installed = require('nvim-treesitter.config').get_installed()
+    local parsers_to_install = vim.iter(ensure_installed)
+      :filter(function(parser)
+        return not vim.tbl_contains(already_installed, parser)
+      end)
+      :totable()
+    require('nvim-treesitter').install(parsers_to_install)
   end,
 },
 

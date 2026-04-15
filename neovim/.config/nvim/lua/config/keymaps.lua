@@ -26,23 +26,24 @@ vim.api.nvim_create_autocmd('LspAttach', {
     -- local capabilities = client.server_capabilities
     -- Buffer local mappings.
     -- See `:help vim.lsp.*` for documentation on any of the below functions
-    if client.supports_method("textDocument/implementation") then
+    if client:supports_method("textDocument/implementation") then
       vim.keymap.set("n", "gi", vim.lsp.buf.implementation, opts({ desc = "lsp goto implementation" }))
     end
-    if client.supports_method("textDocument/definition") then
+    if client:supports_method("textDocument/definition") then
       vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts({ desc = "lsp goto definition" }))
     end
-    if client.supports_method("textDocument/declaration") then
+    if client:supports_method("textDocument/declaration") then
       vim.keymap.set("n", "gD", vim.lsp.buf.declaration, opts({ desc = "lsp goto declaration" }))
     end
-    if client.supports_method("textDocument/references") then
+    if client:supports_method("textDocument/references") then
       vim.keymap.set("n", "gwr", vim.lsp.buf.references, opts({ desc = "lsp goto references" }))
     end
-    if client.supports_method("textDocument/rename") then
+    if client:supports_method("textDocument/rename") then
       vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts({ desc = "lsp" }))
     end
-    if client.supports_method("textDocument/code_action") then
-      vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts({ desc = "lsp code action" }))
+    if client:supports_method("textDocument/code_action") then
+      vim.keymap.set({"n", "v"}, "<leader>ca", vim.lsp.buf.code_action, opts({ desc = "lsp code action" }))
+      vim.keymap.set({"n", "v"}, "ga", vim.lsp.buf.code_action, opts({ desc = "lsp code action" }))
     end
     -- TODO: put these under contidional supports_method blocks
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts({ desc = "lsp hover" }))
@@ -52,7 +53,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set("n", "gws", vim.lsp.buf.workspace_symbol, opts({ desc = "lsp workspace symbol" }))
     vim.keymap.set('n', '<leader>D', vim.lsp.buf.type_definition, opts({ desc = "lsp type definition" }))
     vim.keymap.set("n", "<leader>cl", vim.lsp.codelens.run, opts({ desc = "lsp codelens run" }))
-    vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts({ desc = "lsp code action" }))
     vim.keymap.set('n', '<leader>F', function()
       vim.lsp.buf.format({ async = true })
     end, opts({ desc = "lsp Format" }))

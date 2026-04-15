@@ -23,7 +23,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
     --   }
     -- )
 
-    if client.supports_method("textDocument/inlayHint") then
+    if client:supports_method("textDocument/inlayHint") then
       vim.lsp.inlay_hint.enable(true, opts())
       -- disable inlay_hints in insert mode
       -- vim.api.nvim_create_autocmd({ 'InsertEnter', 'InsertLeave' }, {

@@ -7,9 +7,9 @@ return {
     -- Options related to LSP progress subsystem
     progress = {
       poll_rate = 0,                -- How and when to poll for progress messages
-      suppress_on_insert = false,   -- Suppress new messages while in insert mode
-      ignore_done_already = false,  -- Ignore new tasks that are already complete
-      ignore_empty_message = false, -- Ignore new tasks that don't contain a message
+      suppress_on_insert = true,   -- Suppress new messages while in insert mode
+      ignore_done_already = true,  -- Ignore new tasks that are already complete
+      ignore_empty_message = true, -- Ignore new tasks that don't contain a message
       clear_on_detach =             -- Clear notification group when LSP server detaches
         function(client_id)
           local client = vim.lsp.get_client_by_id(client_id)
@@ -17,7 +17,18 @@ return {
         end,
       notification_group =          -- How to get a progress message's notification group key
         function(msg) return msg.lsp_client.name end,
-      ignore = {},                  -- List of LSP servers to ignore
+      ignore = {
+          -- Ignore all messages from specific LSP servers by name (e.g., "pylsp", "rust_analyzer")
+          -- "pylsp",
+          -- "rust-analyzer",
+          -- Ignore messages based on a custom function (e.g., messages containing "linting")
+          function(msg)
+              -- msg.title is the message title, msg.annote is typically the content/annotation
+              -- return string.match(msg.annote, "linting") ~= nil or string.match(msg.title, "lint") ~= nil
+              return string.match(msg.title, "Publish Diagnostics") ~= nil or
+                     string.match(msg.title, "Validate documents") ~= nil
+          end,
+      },
       -- Options related to how LSP progress messages are displayed as notifications
       display = {
         render_limit = 16,          -- How many LSP messages to show at once
@@ -457,71 +468,39 @@ return {
 -- Special language servers
 -- {
 --   "mfussenegger/nvim-jdtls",
---   config = function()
---     local jdtls_dir = os.getenv("HOME") .. "/jdtls/"
---     -- local jar = jdtls_dir .. 'plugins/org.eclipse.equinox.launcher.gtk.linux.x86_64_1.2.1100.v20240722-2106.jar'
---     local jar = jdtls_dir .. 'plugins/org.eclipse.equinox.launcher_1.6.900.v20240613-2009.jar'
---     local config_dir = jdtls_dir .. 'config_linux'
---     -- local root_markers = { "pom.xml",  "build.xml", ".git", "mvnw", "gradlew", "build.gradle" }
---     local root_markers = { "pom.xml" }
---     local root_dir = vim.fs.root(0, root_markers)
---     local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
---     local workspace_dir = jdtls_dir .. project_name
---     -- -- If you started neovim within `~/dev/xy/project-1` this would resolve to `project-1`
---     -- local project_name = vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
---     -- local workspace_dir = '~/.cache/jdtls/workspace' .. project_name
---     -- See `:help vim.lsp.start_client` for an overview of the supported `config` options.
---     local config = {
---       -- The command that starts the language server
---       -- See: https://github.com/eclipse/eclipse.jdt.ls#running-from-the-command-line
---       cmd = {
---         'jdtls',
---         -- 'java', -- or '/path/to/java17_or_newer/bin/java'
---         --         -- depends on if `java` is in your $PATH env variable and if it points to the right version.
---         -- '-Declipse.application=org.eclipse.jdt.ls.core.id1',
---         -- '-Dosgi.bundles.defaultStartLevel=4',
---         -- '-Declipse.product=org.eclipse.jdt.ls.core.product',
---         -- '-Dlog.protocol=true',
---         -- '-Dlog.level=ALL',
---         -- '-Xmx1g',
---         -- '--add-modules=ALL-SYSTEM',
---         -- '--add-opens', 'java.base/java.util=ALL-UNNAMED',
---         -- '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
---         -- '-jar', jar,
---         --      -- Must point to the                                                     Change this to
---         --      -- eclipse.jdt.ls installation                                           the actual version
---         -- '-configuration', config_dir,
---         --                 -- ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^        ^^^^^^
---         --                 -- Must point to the                      Change to one of `linux`, `win` or `mac`
---         --                 -- eclipse.jdt.ls installation            Depending on your system.
---         -- -- See `data directory configuration` section in the README
---         -- '-data', workspace_dir,
---       },
---       -- This is the default if not provided, you can remove it. Or adjust as needed.
---       -- One dedicated LSP server & client will be started per unique root_dir
---       -- vim.fs.root requires Neovim 0.10.
---       -- If you're using an earlier version, use: require('jdtls.setup').find_root({'.git', 'mvnw', 'gradlew'}),
---       root_dir = root_dir,
---       -- Here you can configure eclipse.jdt.ls specific settings
---       -- See https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
---       -- for a list of options
---       settings = {
---         java = {
---         }
---       },
---       -- Language server `initializationOptions`
---       -- You need to extend the `bundles` with paths to jar files
---       -- if you want to use additional eclipse.jdt.ls plugins.
---       -- See https://github.com/mfussenegger/nvim-jdtls#java-debug-installation
---       -- If you don't plan on using the debugger or other eclipse.jdt.ls plugins you can remove this
---       init_options = {
---         bundles = {}
---       },
---     }
---     -- This starts a new client & server,
---     -- or attaches to an existing client & server depending on the `root_dir`.
---     require('jdtls').start_or_attach(config)
+--   cond = function()
+--     return not vim.opt.diff:get()
 --   end,
+--   -- config = function(_, opts)
+--   --   vim.lsp.config("jdtls", {
+--   --     settings = {
+--   --       java = {
+--   --           -- Custom eclipse.jdt.ls options go here
+--   --       },
+--   --     },
+--   --   })
+--   --   vim.lsp.enable("jdtls")
+--   -- end,
+-- },
+
+-- {
+--   "idelice/nvim-jls",
+--   opts = {
+--     -- jls_dir = nil, -- used to resolve dist/lang_server_*.sh
+--     jls_dir = "$HOME/packages/jls",
+--     filetypes = { "java" },
+--     root_markers = {
+--       "pom.xml",
+--       "build.gradle",
+--       "build.gradle.kts",
+--       "settings.gradle",
+--       "settings.gradle.kts",
+--       "WORKSPACE",
+--       "WORKSPACE.bazel",
+--       ".java-version",
+--       ".git",
+--     },
+--   },
 -- },
 
 {
@@ -532,6 +511,9 @@ return {
     "nvim-telescope/telescope.nvim",
   },
   ft = { "scala", "sbt", }, -- "java" },
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   opts = function()
     local metals_config = require("metals").bare_config()
     metals_config.settings = {
@@ -591,31 +573,42 @@ return {
 {
   "williamboman/mason-lspconfig.nvim",
   dependencies = {
-    "williamboman/mason.nvim",
+    { "mason-org/mason.nvim", opts = {} },
+    "neovim/nvim-lspconfig",
   },
-  config = function()
-    require("mason").setup()
-    local mason_lspconfig = require("mason-lspconfig")
-    mason_lspconfig.setup{
-      -- A list of servers to automatically install if they're not already installed. Example: { "rust_analyzer@nightly", "lua_ls" }
-      -- This setting has no relation with the `automatic_installation` setting.
-      ---@type string[]
-      ensure_installed = {"jdtls", "lua_ls"},
-      -- Whether servers that are set up (via lspconfig) should be automatically installed if they're not already installed.
-      -- This setting has no relation with the `ensure_installed` setting.
-      -- Can either be:
-      --   - false: Servers are not automatically installed.
-      --   - true: All servers set up via lspconfig are automatically installed.
-      --   - { exclude: string[] }: All servers set up via lspconfig, except the ones provided in the list, are automatically installed.
-      --       Example: automatic_installation = { exclude = { "rust_analyzer", "solargraph" } }
-      ---@type boolean
-      -- automatic_installation = false,
-      automatic_installation = { exclude = { } },
-      -- See `:h mason-lspconfig.setup_handlers()`
-      ---@type table<string, fun(server_name: string)>?
-      handlers = nil,
-    }
+  cond = function()
+    return not vim.opt.diff:get()
   end,
+  opts = {
+    -- A list of servers to automatically install if they're not already installed. Example: { "rust_analyzer@nightly", "lua_ls" }
+    ---@type string[]
+    ensure_installed = {"jdtls", "basedpyright", "lua_ls"},
+    -- Whether installed servers should automatically be enabled via `:h vim.lsp.enable()`.
+    --
+    -- To exclude certain servers from being automatically enabled:
+    -- ```lua
+    --   automatic_enable = {
+    --     exclude = { "rust_analyzer", "ts_ls" }
+    --   }
+    -- ```
+    --
+    -- To only enable certain servers to be automatically enabled:
+    -- ```lua
+    --   automatic_enable = {
+    --     "lua_ls",
+    --     "vimls"
+    --   }
+    -- ```
+    ---@type boolean | string[] | { exclude: string[] }
+    automatic_enable = false,
+    -- automatic_enable = {
+    --   "jdtls",
+    --   "basedpyright",
+    -- },
+    -- automatic_enable = {
+    --   exclude = {  },
+    -- },
+  },
 },
 
 -- lua_ls config for editing neovim files
@@ -655,6 +648,9 @@ return {
       -- return not vim.uv.fs_stat(root_dir .. "/.luarc.json")
     end,
   },
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   config = function(_, opts)
     require("lazydev").setup(opts)
     -- require("cmp").setup({
@@ -670,6 +666,9 @@ return {
   "folke/neoconf.nvim",
   cmd = "Neoconf",
   event = "VeryLazy",
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   opts = {
     -- name of the local settings files
     local_settings = ".neoconf.json",
@@ -715,11 +714,10 @@ return {
 {
   "neovim/nvim-lspconfig",
   dependencies = {'folke/neoconf.nvim'},
+  cond = function()
+    return not vim.opt.diff:get()
+  end,
   config = function(_, opts)
-    -- If diff-mode, don't load any LSP Configs
-    if (vim.opt.diff:get()) then
-      return
-    end
     -- local lsp = require("lspconfig")
     local lsputil = require("lspconfig.util")
     lsputil.default_config = vim.tbl_extend(
@@ -873,20 +871,19 @@ return {
       -- filetypes = { 'java' },
       filetypes = { 'java', 'xml.maven' },
       single_file_support = true,
-      -- init_options = {
-      --   extendedClientCapabilities = {
-      --     progressReportProvider = false,
-      --   },
-      -- },
       handlers = {
         -- mute; having progress reports is enough
         ["language/status"] = function() end,
       },
-      root_dir = function(fname)
-        local root_markers = { "pom.xml",  "build.xml", "mvnw", "gradlew", "build.gradle" }
-        local root_dir = vim.fs.root(0, root_markers)
-        return root_dir
-      end,
+      root_markers = {
+        { "mvnw", "gradlew", "settings.gradle", "settings.gradle.kts", ".git" },
+        { "build.xml", "pom.xml", "build.gradle", "build.gradle.kts" },
+      },
+      -- root_dir = function(fname)
+      --   local root_markers = { "pom.xml",  "build.xml", "mvnw", "gradlew", "build.gradle" }
+      --   local root_dir = vim.fs.root(0, root_markers)
+      --   return root_dir
+      -- end,
       settings = {
         java = {
           autobuild = { enabled = false },
@@ -898,6 +895,17 @@ return {
               staticStarThreshold = 9999,
             },
           },
+          compile = {
+            nullAnalysis = {
+              mode = "automatic",
+            },
+          },
+          eclipse = {
+            downloadSources = true,
+          },
+          maven = {
+            downloadSources = true,
+          },
           codeGeneration = {
             -- toString = {
             --   template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
@@ -907,17 +915,31 @@ return {
             -- },
             -- useBlocks = true,
           },
+          format = {
+            enabled = true,
+            settings = {
+              url = vim.fn.stdpath("config") .. "/lang-servers/intellij-java-google-style.xml",
+              profile = "GoogleStyle",
+            },
+          },
           configuration = {
-            -- runtimes = {
-            --   {
-            --     name = "JavaSE-17",
-            --     path = "/usr/lib/jvm/java-17-openjdk/",
-            --   },
-            -- },
+            runtimes = {
+              -- {
+              --   name = "JavaSE-17",
+              --   path = "/usr/lib/jvm/java-17-openjdk/",
+              -- },
+            },
           },
         },
       },
     })
+    -- vim.lsp.enable("java-language-server")
+    -- vim.lsp.config("java-language-server", {
+    --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    --   cmd = { vim.fn.stdpath("data") .. "/mason/packages/java-language-server/java-language-server" },
+    --   filetypes = { "java" },
+    --   root_dir = lsputil.root_pattern("BUILD.bazel"),
+    -- })
     -- vim.lsp.config("metals", {
     --   capabilities = require('cmp_nvim_lsp').default_capabilities(),
     --   filetypes = { "scala", "sbt" },
