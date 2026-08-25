@@ -1,0 +1,240 @@
+# Aliases sourced by .bashrc
+
+# meta
+alias aliases="$EDITOR $(realpath ${0:a})"
+
+# various
+alias grep="grep --color=auto"
+
+# I'm an idiot
+alias rm='rm -I'
+
+
+# ls
+# if [ -x "$(command -v gls)" ]; then
+#     alias ls='gls -GFh --color=auto --group-directories-first'
+# else
+#     alias ls='ls -h --color=auto --group-directories-first'
+# fi
+alias ls='ls -Fh --color=auto --group-directories-first --time-style long-iso'
+alias ll='ls -lA'
+alias la='ls -A'
+alias l='ls -CF'
+alias ltr='ls -lAtr'
+alias lr='ls -ltu'
+alias tree='tree -C -L 4'
+# find
+alias today='find -maxdepth 1 -type f -mtime -1'
+alias latest='find . -maxdepth 1 -type f -printf "%Ts\t%f\n" | sort -nr | cut -f2 | head -1'
+alias lf='latest | xargs -o'
+function rc(){
+  local latest_file=$(latest)
+  $1 $(latest)
+}
+function fp(){
+  ls -1 "$@" | xargs realpath
+}
+
+# functions
+function echo_exec() {
+  echo $(tput setaf 2)'$' ${@}$(tput sgr0)
+  $@
+}
+function dash_args() {
+  local options=()
+  # local args=()
+  for arg in "$@"; do
+    if [[ "$arg" == -* ]]; then
+      options+=("$arg")
+    else
+      # args+=("$arg")
+    fi
+  done
+  echo $options
+}
+function non_dash_args() {
+  # local options=()
+  local args=()
+  for arg in "$@"; do
+    if [[ "$arg" == -* ]]; then
+      # options+=("$arg")
+    else
+      args+=("$arg")
+    fi
+  done
+  echo $args
+}
+function populate_opts_and_args() {
+  args=("${(@)@:#-*}")
+  opts=("${(@M)@:#-*}")
+}
+
+# vim
+alias vi="vim"
+alias e="vim"
+if hash nvim 2>/dev/null; then
+    alias vim="nvim"
+    alias vimdiff="nvim -d"
+fi
+alias vl="vim $(latest)"
+alias v="vim_wrapper"
+alias vimcd="vim -c ':cd %:h'"
+alias vimrc="vimcd $HOME/.config/nvim/init.vim"
+
+# fzf
+alias fzv='vim $(fzf)'
+
+# the silver searcher
+alias ag='ag --follow --hidden --ignore .git'
+
+# python
+# python poetry activate
+alias poetry_shell='. "$(dirname $(poetry run which python))/activate"'
+# ipython
+alias ipy='ipython'
+
+# sudo
+alias pacman='sudo pacman'
+alias pacmatic='sudo pacmatic'
+alias sudont='sudo $(fc -nl -1)'
+alias serious='sudo $(fc -nl -1)'
+alias sudid='sudo $(fc -nl -1)'
+alias sudoit='sudo $(fc -nl -1)'
+alias doit='sudo $(fc -nl -1)'
+alias sude='sudo -E'
+alias sudov='sudo -E vim'
+alias suvim='sudo -E vim'
+alias svim='sudo -E vim'
+alias sv='sudo -E vim'
+alias se='sudo -E vim'
+
+# arch
+alias yay="PYENV_VERSION=system paru"
+alias yeet="paru -Rns"
+# alias yayy='yay -Syu --noconfirm'
+alias yolo='yay -Syu --noconfirm'
+alias sys='systemctl'
+alias ctl='systemctl'
+alias sysu='systemctl --user'
+
+# conf
+alias conf='cd $XDG_CONFIG_HOME'
+alias config='cd $XDG_CONFIG_HOME'
+alias configs='cd $XDG_CONFIG_HOME'
+
+# xdg
+if ! [ -x "$(command -v open)" ]; then
+  if [ -x "$(command -v xdg-open)" ] ; then
+    alias open='xdg-open'
+  fi
+fi
+
+# tools
+alias top='htop'
+
+# raspi
+alias pi='ssh -t pi@musinformatics.ddns.net screen -RR'
+
+# NYU
+alias citygram='ssh citygram.smusic.nyu.edu'
+alias hpc='ssh cpf247@hpc.nyu.edu'
+
+# git
+alias g='git'
+alias gremaster='git stash && git fetch && git rebase origin/master && git stash pop'
+alias status='git status'
+# go to git project root
+alias grootdir='git rev-parse --show-toplevel'
+alias groot='cd $(grootdir)'
+alias proot="groot"
+
+# gcloud
+alias gs='gsutil'
+gls() {
+  populate_opts_and_args "$@"
+  echo_exec gsutil ls $opts "gs://$args"
+}
+
+# go to workspace root
+alias work='cd $HOME/workspace'
+# go to personal root
+alias personal='cd $HOME/personal'
+
+# go to package root
+alias packages='cd $HOME/packages'
+
+# cd
+alias ..='cd ..'
+alias -- '-'='cd -'
+newdir() {
+  mkdir -p -- "$1" && cd -- "$1"
+}
+
+# ps
+# alias ps='ps -o user,pid,ppid,%cpu,%mem,vsz,rss,tty,state,start_time,cputime,docker,command'
+alias ps='ps -o user,pid,ppid,%cpu,%mem,tname,stat,start_time,bsdtime,command'
+alias pse='ps -e --forest'
+alias psgrep='ps -e | grep -v "grep -i --color=auto" | command grep -i --color=auto'
+alias psme='ps -u $USER'
+
+# pipe
+alias dofor='xargs -l'
+
+# zsh
+alias zhrc='vim $HOME/.zshrc'
+alias zshrc='vim $HOME/.zshrc'
+alias localrc='vim $HOME/.localrc'
+
+# ssh
+alias ssht='TERM=xterm-color ssh'
+
+# stuff
+alias dot='cd $HOME/dotfiles'
+alias dots='cd $HOME/dotfiles'
+alias dotfiles='cd $HOME/dotfiles'
+alias dl='cd $HOME/downloads'
+
+# kde
+# nevermind kde sessions saving is borked
+# alias restart='qdbus org.kde.ksmserver /KSMServer saveCurrentSession && sudo reboot'
+
+# optimus-steam
+alias optisteam='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME="nvidia" __VK_LAYER_NV_optimus="NVIDIA_only" steam'
+# prime
+# alias alacritty='prime-run alacritty'
+# alias google-chrome='prime-run google-chrome'
+# alias slack='prime-run slack'
+
+# journalctl
+alias journalboot='journalctl -xb -p 5'
+alias journalthis='journalctl -xb -p 5'
+alias journallast='journalctl -x -b -1 -p 5'
+
+# notes
+alias notes='cd $HOME/sync/notes/'
+# todo.txt
+alias todo="todo.sh"
+alias t="todo"
+alias td="todo"
+alias todov="todo edit"
+alias tv="todo edit"
+alias te="todo edit"
+alias todop='todo -d $TODOTXT_CFG_FILE_PERSONAL'
+alias todow="todo -d $TODOTXT_CFG_FILE_WORK"
+alias tp='todop'
+alias tw="todow"
+alias tododir="$(todo cd)"
+alias todod="$(todo cd)"
+alias todocd="$(todo cd)"
+# alias todo="$EDITOR $TODO_DIR/todo.txt"
+# alias todos="todo.sh"
+# alias todosp='todos -d $TODOTXT_CFG_FILE_PERSONAL'
+# alias todosw="todos -d $TODOTXT_CFG_FILE_WORK"
+
+# build tools
+alias b="build"
+alias bc="build c"
+alias bv="build v"
+alias bt="build t"
+alias bcv="build c v"
+alias br="build r"

@@ -358,16 +358,17 @@ alias bed="cd $HOME/workspace/descriptor-embeddings-pipeline/"
 alias embed="cd $HOME/workspace/descriptor-embeddings-pipeline/"
 alias seed="cd $HOME/workspace/seeded-candidate-pools-pipeline/"
 alias seeded="cd $HOME/workspace/seeded-candidate-pools-pipeline/"
-alias junction="cd $HOME/workspace/services-pilot/junction-loader/junction-loader-libs/"
+alias junction="cd $HOME/workspace/services-pilot/master/junction-loader/junction-loader-libs/"
 alias cape="cd $HOME/workspace/cape-luigi/"
 alias feed="cd $HOME/workspace/candidate-pool-feedback-pipeline/"
-alias desc="cd $HOME/workspace/services-pilot/set-describer/set-describer/"
+alias desc="cd $HOME/workspace/services-pilot/master/set-describer/set-describer/"
 alias tod="cd $HOME/workspace/time-of-day-pipeline/"
-alias tods="cd $HOME/workspace/services-pilot/time-of-day/time-of-day-vector-service/"
-alias nudge="cd $HOME/workspace/services-pilot/vector-nudging/vector-nudge/"
-alias nudging="cd $HOME/workspace/services-pilot/vector-nudging/vector-nudging/"
-alias commons="cd $HOME/workspace/services-pilot/my-mix-commons/my-mix-commons/"
-alias registry="cd $HOME/workspace/services-pilot/media-mixer-platform/media-mixer-component-registry/"
+alias tods="cd $HOME/workspace/services-pilot/master/time-of-day/time-of-day-vector-service/"
+alias nudge="cd $HOME/workspace/services-pilot/master/vector-nudging/vector-nudge/"
+alias nudging="cd $HOME/workspace/services-pilot/master/vector-nudging/vector-nudging/"
+alias commons="cd $HOME/workspace/services-pilot/master/my-mix-commons/my-mix-commons/"
+alias registry="cd $HOME/workspace/services-pilot/master/media-mixer-platform/media-mixer-component-registry/"
+alias chips="cd $HOME/workspace/services-pilot/master/algorithmic-playlist-control/session-control-proxy/"
 
 
 # notes / todo
@@ -398,17 +399,22 @@ export PATH="$PATH:/home/colinfahy/workspace/de-toolbox"
 # AI / LLM
 
 # Claude Code
-export CLAUDE_CODE_USE_VERTEX=1 
-export ANTHROPIC_SMALL_FAST_MODEL='claude-4-5-haiku@20241022'
-# export CLOUD_ML_REGION='europe-west1'
-export CLOUD_ML_REGION='global'
-export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-5@20251101'
-export ANTHROPIC_VERTEX_PROJECT_ID=spotify-claude-code-trial 
-# export VERTEX_REGION_CLAUDE_4_5_OPUS='europe-west4'
-export VERTEX_REGION_CLAUDE_4_5_SONNET='global'
-export VERTEX_REGION_CLAUDE_4_0_OPUS='global'
-export VERTEX_REGION_CLAUDE_4_5_OPUS='global'
-export VERTEX_REGION_CLAUDE_4_6_OPUS='global'
+# export CLAUDE_CODE_USE_VERTEX=1 
+# export ANTHROPIC_SMALL_FAST_MODEL='claude-4-5-haiku@20241022'
+# # export CLOUD_ML_REGION='europe-west1'
+# export CLOUD_ML_REGION='global'
+# # export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-5@20251101'
+# export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-6@default'
+# # export ANTHROPIC_DEFAULT_OPUS_MODEL='claude-opus-4-7@default'
+# export ANTHROPIC_VERTEX_PROJECT_ID=spotify-claude-code-trial 
+# # export VERTEX_REGION_CLAUDE_4_5_OPUS='europe-west4'
+# export VERTEX_REGION_CLAUDE_4_5_SONNET='global'
+# export VERTEX_REGION_CLAUDE_4_6_SONNET='global'
+# export VERTEX_REGION_CLAUDE_4_7_SONNET='global'
+# export VERTEX_REGION_CLAUDE_4_0_OPUS='global'
+# export VERTEX_REGION_CLAUDE_4_5_OPUS='global'
+# export VERTEX_REGION_CLAUDE_4_6_OPUS='global'
+# export VERTEX_REGION_CLAUDE_4_7_OPUS='global'
 
 # VPN
 # https://ghe.spotify.net/jonsson/GlobalProtectClient-Linux
@@ -426,7 +432,10 @@ alias vpn="sudo -E gpclient connect --hip --browser default $VPN_PORTAL --gatewa
 export PATH="$PATH:$HOME/.local/share/JetBrains/Toolbox/scripts"
 
 # monorepo
-export monodir="$HOME/workspace/services-pilot"
+export monodir_root="$HOME/workspace/services-pilot"
+export monodir="${monodir_root}/master"
+export monodir_dev1="${monodir_root}/dev1"
+export monodir_dev2="${monodir_root}/dev2"
 # alias mono="cd $monodir"
 alias monorepo="cd $monodir"
 # go to project within monorepo
@@ -443,16 +452,60 @@ function _mono() {
   _files -/ -W "${monodir}/" -g "*/*(-/)"
 }
 compdef _mono mono
+function mono1() {
+  # cd "$@"
+  if [ $# -eq 0 ]; then
+    cd "${monodir_dev1}"
+  else
+    cd "${monodir_dev1}/$1"
+  fi
+}
+function _mono1() {
+  # _files -/ -g "${monodir}/*/*"
+  _files -/ -W "${monodir_dev1}/" -g "*/*(-/)"
+}
+compdef _mono1 mono1
+function mono2() {
+  # cd "$@"
+  if [ $# -eq 0 ]; then
+    cd "${monodir_dev2}"
+  else
+    cd "${monodir_dev2}/$1"
+  fi
+}
+function _mono2() {
+  # _files -/ -g "${monodir}/*/*"
+  _files -/ -W "${monodir_dev2}/" -g "*/*(-/)"
+}
+compdef _mono2 mono2
 alias monorepo_grootdir='echo $(git rev-parse --show-toplevel)/${${$(git rev-parse --show-prefix)%/}:h2}'
 alias grootdir='if [[ $(git rev-parse --show-toplevel) == *"services-pilot"* ]]; then monorepo_grootdir; else git rev-parse --show-toplevel; fi'
 # alias groot='$(git rev-parse --show-toplevel)/${$(git rev-parse --show-prefix):h2}'
 # bazel
+# silly shortcut for skipping slow monorepo targets when running tests without cache
+function monorepo_skip_targets() {
+  local skiptarget_suffixes=("-catalog-info-test" "-standalone-image-push_test")
+  local pwd=${PWD}
+  local relative_dir=${pwd/(#b)(*)services-pilot\//}
+  local split=(${(s[/])relative_dir})
+  local org=${split[2]}
+  local project=${split[3]}
+  local skiptarget_prefix="-//${org}/${project}:${project}"
+  echo ${skiptarget_prefix}${^skiptarget_suffixes}
+}
+function btt() {
+  bt "$@" --nocache_test_results -- $(monorepo_skip_targets)
+}
+function populate_opts_and_args() {
+  args=("${(@)@:#-*}")
+  opts=("${(@M)@:#-*}")
+}
 function monorepo_target_from_dir() {
   local pwd=${PWD}
   local relative_dir=${pwd/(#b)(*)services-pilot\//}
   local split=(${(s[/])relative_dir})
-  local org=${split[1]}
-  local project=${split[2]}
+  local org=${split[2]}
+  local project=${split[3]}
   echo "${org}/${project}"
 }
 function baztarget() {
@@ -461,10 +514,12 @@ function baztarget() {
 }
 function bazdots() {
   local target="$(monorepo_target_from_dir)/..."
-  bazel "$@" "//${target}"
+  populate_opts_and_args "$@"
+  bazel "${args[@]}" "//${target}" "${opts[@]}"
 }
 function bazdot() {
-  bazel "$@" "."
+  populate_opts_and_args "$@"
+  bazel "${args[@]}" "." "${opts[@]}"
 }
 function baz() {
   if [[ "$1" == "test" ]]; then
@@ -478,3 +533,28 @@ alias monorun='baz run'
 alias monotest='bazel test //$(monotarget)/...'
 alias monoformat='bazel run //:format -- $(monotarget)'
 alias format='monoformat'
+
+# spt
+alias sparse='spt git:sparse'
+alias worktree='spt git:worktree'
+alias dev='wt dev1'
+alias dev1='wt dev1'
+alias dev2='wt dev2'
+alias master='wt master'
+function wt() {
+  local pwd=${PWD}
+  local relative_dir=${pwd/(#b)(*)services-pilot\//}
+  local parts=(${(s:/:)relative_dir})
+  shift parts
+  local target="${(j:/:)parts}"
+  cd "${monodir_root}/$1/${target}"
+}
+function _wt() {
+  # _files -/ -g "${monodir}/*/*"
+  _files -/ -W "${monodir_root}/" -g "*(-/)"
+}
+compdef _wt wt
+function addtree() {
+  cd "${monodir}"
+  git worktree add "${monodir_root}/$1" -b $1
+}

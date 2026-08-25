@@ -64,6 +64,10 @@ function non_dash_args() {
   done
   echo $args
 }
+function populate_opts_and_args() {
+  args=("${(@)@:#-*}")
+  opts=("${(@M)@:#-*}")
+}
 
 # vim
 alias vi="vim"
@@ -147,9 +151,8 @@ alias proot="groot"
 # gcloud
 alias gs='gsutil'
 gls() {
-  local options=$(dash_args "$@")
-  local args=$(non_dash_args "$@")
-  echo_exec gsutil ls $options "gs://$args"
+  populate_opts_and_args "$@"
+  echo_exec gsutil ls $opts "gs://$args"
 }
 
 # go to workspace root
@@ -180,6 +183,7 @@ alias dofor='xargs -l'
 # zsh
 alias zhrc='vim $HOME/.zshrc'
 alias zshrc='vim $HOME/.zshrc'
+alias localrc='vim $HOME/.localrc'
 
 # ssh
 alias ssht='TERM=xterm-color ssh'

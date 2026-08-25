@@ -178,12 +178,12 @@ return {
         -- border = true,
       },
       -- singleton = false,
-      stopline = 500,
-      -- timeout = 300,
-      -- insert_timeout = 60,
+      stopline = 1500,
+      timeout = 50,
+      insert_timeout = 10,
       deferred = true,
       deferred_show_delay = 50,
-      deferred_hide_delay = 700,
+      deferred_hide_delay = 10,
       deferred_fade_time = 0,
       -- pumvisible = 0,
       -- nomode = "",
@@ -203,7 +203,7 @@ return {
       include_match_words = true,
       -- disable_virtual_text = true,
       enable_quotes = false,
-      stopline = 500,
+      stopline = 1500,
     },
     transmute = {
       enabled = true,
@@ -572,7 +572,9 @@ return {
       enable = true,
       disable = {"lua"},
     },
-    folds = { enable = false },
+    folds = {
+      enable = false
+    },
   },
   init = function()
     local ensure_installed = {

@@ -4,7 +4,7 @@ TARGET_BRANCH=${1:-master}
 PROTECTED_BRANCHES=("master" "main" "$TARGET_BRANCH")
 
 # Switch to the target branch
-git checkout -q "$TARGET_BRANCH" || exit 1
+execho git checkout -q "$TARGET_BRANCH" || exit 1
 
 echo "Collecting candidate branches for archival..."
 
@@ -51,7 +51,7 @@ select option in "Archive all" "Archive individually" "Cancel"; do
   case $option in
     "Archive all")
       for branch in "${combined[@]}"; do
-        git arc "$branch"
+        execho git arc "$branch"
       done
       echo "All branches have been archived."
       break
@@ -61,7 +61,7 @@ select option in "Archive all" "Archive individually" "Cancel"; do
         while true; do
           read -p "Archive branch '$branch'? (y/n): " answer
           case "$answer" in
-            [Yy]* ) git arc "$branch"; break;;
+            [Yy]* ) execho git arc "$branch"; break;;
             [Nn]* ) echo "Skipping '$branch'"; break;;
             * ) echo "Please answer y/n.";;
           esac

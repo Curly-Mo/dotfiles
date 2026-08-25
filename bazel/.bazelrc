@@ -1,0 +1,12 @@
+common --experimental_disk_cache_gc_max_size=50G
+common --experimental_disk_cache_gc_max_age=30d
+common --experimental_disk_cache_gc_idle_delay=5m
+
+common --remote_cache_async
+common --remote_cache_compression
+common --experimental_remote_cache_chunking
+common --experimental_remote_cache_eviction_retries=1
+common --experimental_remote_cache_lease_extension
+
+build --remote_download_minimal
+# common --discard_analysis_cache

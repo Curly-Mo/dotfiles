@@ -1,0 +1,9 @@
+# Custom Config
+Defaults passwd_timeout=0
+Defaults timestamp_type=global
+Defaults timestamp_timeout=120
+Defaults pwfeedback
+Defaults insults
+
+# nopasswd commands
+colinfahy ALL=(ALL:ALL) NOPASSWD:SETENV: /usr/bin/gpclient
