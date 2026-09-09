@@ -43,7 +43,8 @@ export DOWNLOADS_DIR="$HOME/downloads"
 export DL="$DOWNLOADS_DIR"
 
 # ssh-agent
-export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+# export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/ssh-agent.socket"
+export SSH_AUTH_SOCK="$XDG_RUNTIME_DIR/openssh_agent"
 
 # ruby
 export GEM_HOME="$(gem env user_gemhome)"

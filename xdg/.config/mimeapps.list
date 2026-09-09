@@ -8,15 +8,22 @@ x-scheme-handler/https=firefox.desktop;
 x-scheme-handler/slack=slack.desktop;Slack.desktop;
 x-scheme-handler/jetbrains=jetbrains-toolbox.desktop;
 ; application/x-desktop=dex.desktop;
+text/plain=nvim_nvim.desktop;
 
 [Default Applications]
 ; x-scheme-handler/geo=google-maps-geo-handler.desktop;
 application/pdf=firefox.desktop;
 image/jpeg=firefox.desktop;
 image/png=firefox.desktop;
-x-scheme-handler/http=firefox.desktop;
-x-scheme-handler/https=firefox.desktop;
+x-scheme-handler/http=firefox_firefox.desktop
+x-scheme-handler/https=firefox_firefox.desktop
 x-scheme-handler/slack=slack.desktop
-x-scheme-handler/jetbrains=jetbrains-toolbox.desktop
+x-scheme-handler/jetbrains=jetbrainsd.desktop
+text/html=firefox_firefox.desktop
+x-scheme-handler/about=firefox_firefox.desktop
+x-scheme-handler/unknown=firefox_firefox.desktop
+x-scheme-handler/claude=com.anthropic.Claude.desktop
+x-scheme-handler/claude-cli=claude-code-url-handler.desktop
+text/plain=nvim_nvim.desktop
 
 [Removed Associations]

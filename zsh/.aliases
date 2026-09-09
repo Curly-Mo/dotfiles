@@ -1,7 +1,8 @@
 # Aliases sourced by .bashrc
 
 # meta
-alias aliases="$EDITOR $(realpath ${0:a})"
+aliases_file=$(readlink "${BASH_SOURCE[0]:-${(%):-%x}}")
+alias aliases="$EDITOR $aliases_file"
 
 # various
 alias grep="grep --color=auto"
@@ -40,30 +41,30 @@ function echo_exec() {
   echo $(tput setaf 2)'$' ${@}$(tput sgr0)
   $@
 }
-function dash_args() {
-  local options=()
-  # local args=()
-  for arg in "$@"; do
-    if [[ "$arg" == -* ]]; then
-      options+=("$arg")
-    else
-      # args+=("$arg")
-    fi
-  done
-  echo $options
-}
-function non_dash_args() {
-  # local options=()
-  local args=()
-  for arg in "$@"; do
-    if [[ "$arg" == -* ]]; then
-      # options+=("$arg")
-    else
-      args+=("$arg")
-    fi
-  done
-  echo $args
-}
+#function dash_args() {
+#  local options=()
+#  # local args=()
+#  for arg in "$@"; do
+#    if [[ "$arg" == -* ]]; then
+#      options+=("$arg")
+#    else
+#      # args+=("$arg")
+#    fi
+#  done
+#  echo $options
+#}
+#function non_dash_args() {
+#  # local options=()
+#  local args=()
+#  for arg in "$@"; do
+#    if [[ "$arg" == -* ]]; then
+#      # options+=("$arg")
+#    else
+#      args+=("$arg")
+#    fi
+#  done
+#  echo $args
+#}
 function populate_opts_and_args() {
   args=("${(@)@:#-*}")
   opts=("${(@M)@:#-*}")
@@ -213,7 +214,8 @@ alias journallast='journalctl -x -b -1 -p 5'
 # notes
 alias notes='cd $HOME/sync/notes/'
 # todo.txt
-alias todo="todo.sh"
+# alias todo="todo.sh"
+alias todo="todo-txt"
 alias t="todo"
 alias td="todo"
 alias todov="todo edit"

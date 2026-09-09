@@ -1,7 +1,8 @@
 # Aliases sourced by .bashrc
 
 # meta
-alias aliases="$EDITOR $(realpath ${0:a})"
+aliases_file=$(readlink "${BASH_SOURCE[0]:-${(%):-%x}}")
+alias aliases="$EDITOR $aliases_file"
 
 # various
 alias grep="grep --color=auto"
@@ -198,6 +199,17 @@ alias dl='cd $HOME/downloads'
 # nevermind kde sessions saving is borked
 # alias restart='qdbus org.kde.ksmserver /KSMServer saveCurrentSession && sudo reboot'
 
+# gnome
+alias apt='sudo apt'
+alias apti='sudo apt install'
+alias apts='apt search'
+alias update='sudo apt update'
+alias upgrade='sudo apt upgrade'
+alias install='sudo apt install'
+alias remove='sudo apt remove'
+alias uninstall='sudo apt remove'
+alias search='apt search'
+
 # optimus-steam
 alias optisteam='__NV_PRIME_RENDER_OFFLOAD=1 __GLX_VENDOR_LIBRARY_NAME="nvidia" __VK_LAYER_NV_optimus="NVIDIA_only" steam'
 # prime
@@ -213,7 +225,8 @@ alias journallast='journalctl -x -b -1 -p 5'
 # notes
 alias notes='cd $HOME/sync/notes/'
 # todo.txt
-alias todo="todo.sh"
+#alias todo="todo.sh"
+alias todo="todo-txt"
 alias t="todo"
 alias td="todo"
 alias todov="todo edit"

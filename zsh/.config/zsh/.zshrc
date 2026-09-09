@@ -140,24 +140,13 @@ function zvm_config() {
   ZVM_ESCAPE_KEYTIMEOUT=0.03
   ZVM_LINE_INIT_MODE=$ZVM_MODE_INSERT
   ZVM_LAZY_KEYBINDINGS=true
+  ZVM_SYSTEM_CLIPBOARD_ENABLED=true
 }
 function zvm_after_lazy_keybindings() {
   # bindkey -M vicmd 's' your_normal_widget
   # bindkey -M visual 'n' your_visual_widget
 }
-# patch all modify functions to copy/paste from/to the clipboard
-function zvm_patch_functions() {
-  for f in zvm_backward_kill_region zvm_yank zvm_replace_selection zvm_change_surround_text_object zvm_vi_delete zvm_vi_change zvm_vi_change_eol; do
-    eval "$(echo "_$f() {"; declare -f $f | tail -n +2)"
-    eval "$f() { _$f; echo -en \$CUTBUFFER | xsel -bi }"
-  done
-  for f in zvm_vi_put_after zvm_vi_put_before; do
-    eval "$(echo "_$f() {"; declare -f $f | tail -n +2)"
-    eval "$f() { CUTBUFFER=\$(xclip -out -selection clipboard); _$f; zvm_highlight clear }"
-  done
-}
 zinit lucid depth=1 for \
-  atload"zvm_patch_functions" \
   jeffreytse/zsh-vi-mode
 
 zinit lucid for Curly-Mo/last-working-dir-tmux
@@ -439,5 +428,3 @@ bindkey -M menuselect '^[[Z' reverse-menu-complete
 # zprof
 
 # [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

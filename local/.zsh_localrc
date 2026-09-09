@@ -415,6 +415,7 @@ export PATH="$PATH:/home/colinfahy/workspace/de-toolbox"
 # export VERTEX_REGION_CLAUDE_4_5_OPUS='global'
 # export VERTEX_REGION_CLAUDE_4_6_OPUS='global'
 # export VERTEX_REGION_CLAUDE_4_7_OPUS='global'
+# alias claude="claude-code"
 
 # VPN
 # https://ghe.spotify.net/jonsson/GlobalProtectClient-Linux
@@ -447,11 +448,13 @@ function mono() {
     cd "${monodir}/$1"
   fi
 }
-function _mono() {
-  # _files -/ -g "${monodir}/*/*"
-  _files -/ -W "${monodir}/" -g "*/*(-/)"
-}
-compdef _mono mono
+if [ -n "${ZSH_VERSION}" ]; then
+  function _mono() {
+    # _files -/ -g "${monodir}/*/*"
+    _files -/ -W "${monodir}/" -g "*/*(-/)"
+  }
+  compdef _mono mono
+fi
 function mono1() {
   # cd "$@"
   if [ $# -eq 0 ]; then
@@ -460,11 +463,13 @@ function mono1() {
     cd "${monodir_dev1}/$1"
   fi
 }
-function _mono1() {
-  # _files -/ -g "${monodir}/*/*"
-  _files -/ -W "${monodir_dev1}/" -g "*/*(-/)"
-}
-compdef _mono1 mono1
+if [ -n "${ZSH_VERSION}" ]; then
+  function _mono1() {
+    # _files -/ -g "${monodir}/*/*"
+    _files -/ -W "${monodir_dev1}/" -g "*/*(-/)"
+  }
+  compdef _mono1 mono1
+fi
 function mono2() {
   # cd "$@"
   if [ $# -eq 0 ]; then
@@ -473,11 +478,13 @@ function mono2() {
     cd "${monodir_dev2}/$1"
   fi
 }
-function _mono2() {
-  # _files -/ -g "${monodir}/*/*"
-  _files -/ -W "${monodir_dev2}/" -g "*/*(-/)"
-}
-compdef _mono2 mono2
+if [ -n "${ZSH_VERSION}" ]; then
+  function _mono2() {
+    # _files -/ -g "${monodir}/*/*"
+    _files -/ -W "${monodir_dev2}/" -g "*/*(-/)"
+  }
+  compdef _mono2 mono2
+fi
 alias monorepo_grootdir='echo $(git rev-parse --show-toplevel)/${${$(git rev-parse --show-prefix)%/}:h2}'
 alias grootdir='if [[ $(git rev-parse --show-toplevel) == *"services-pilot"* ]]; then monorepo_grootdir; else git rev-parse --show-toplevel; fi'
 # alias groot='$(git rev-parse --show-toplevel)/${$(git rev-parse --show-prefix):h2}'
@@ -549,12 +556,17 @@ function wt() {
   local target="${(j:/:)parts}"
   cd "${monodir_root}/$1/${target}"
 }
-function _wt() {
-  # _files -/ -g "${monodir}/*/*"
-  _files -/ -W "${monodir_root}/" -g "*(-/)"
-}
-compdef _wt wt
+if [ -n "${ZSH_VERSION}" ]; then
+  function _wt() {
+    # _files -/ -g "${monodir}/*/*"
+    _files -/ -W "${monodir_root}/" -g "*(-/)"
+  }
+  compdef _wt wt
+fi
 function addtree() {
   cd "${monodir}"
   git worktree add "${monodir_root}/$1" -b $1
 }
+
+
+alias yay='aptyay'

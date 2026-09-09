@@ -1,0 +1,82 @@
+{
+    "7d217369-a471-41a7-9293-14a1e5235306": {
+        "id": "7d217369-a471-41a7-9293-14a1e5235306",
+        "name": "Google Search",
+        "keyword": "g",
+        "cmd": "https://google.com/search?q=%s",
+        "icon": "/usr/share/ulauncher/media/google-search-icon.png",
+        "is_default_search": true,
+        "run_without_argument": false,
+        "added": 1728595327.510748
+    },
+    "f8d72385-1540-4836-b9d2-0968da4309f0": {
+        "id": "f8d72385-1540-4836-b9d2-0968da4309f0",
+        "name": "Stack Overflow",
+        "keyword": "so",
+        "cmd": "https://stackoverflow.com/search?q=%s",
+        "icon": "/usr/share/ulauncher/media/stackoverflow-icon.svg",
+        "is_default_search": true,
+        "run_without_argument": false,
+        "added": 1728595327.5107722
+    },
+    "95aa49a1-a6d7-4f9c-bb69-00ad9da4d0c9": {
+        "id": "95aa49a1-a6d7-4f9c-bb69-00ad9da4d0c9",
+        "name": "Wikipedia",
+        "keyword": "wiki",
+        "cmd": "https://en.wikipedia.org/wiki/%s",
+        "icon": "/usr/share/ulauncher/media/wikipedia-icon.png",
+        "is_default_search": true,
+        "run_without_argument": false,
+        "added": 1728595327.5107868
+    },
+    "94b56b98-326c-461f-bfc5-eb8897f53de3": {
+        "id": "94b56b98-326c-461f-bfc5-eb8897f53de3",
+        "name": "userid",
+        "keyword": "userid",
+        "cmd": "echo -n e330b8ba2ed9475e91efb70eb7f879ab | wl-copy",
+        "icon": null,
+        "is_default_search": false,
+        "run_without_argument": true,
+        "added": 1729142767.6068916
+    },
+    "8b269803-694d-410b-b39e-e208f5eab406": {
+        "id": "8b269803-694d-410b-b39e-e208f5eab406",
+        "name": "save session",
+        "keyword": "save",
+        "cmd": "~/packages/kde-window-status-restore/kde-window-status-restore-save.sh",
+        "icon": null,
+        "is_default_search": false,
+        "run_without_argument": true,
+        "added": 1733344525.153622
+    },
+    "fd96efdf-c9ef-42c6-aff2-4cdf76c3c8d3": {
+        "id": "fd96efdf-c9ef-42c6-aff2-4cdf76c3c8d3",
+        "name": "restore session",
+        "keyword": "restore",
+        "cmd": "~/packages/kde-window-status-restore/kde-window-status-restore-restore.sh",
+        "icon": null,
+        "is_default_search": false,
+        "run_without_argument": true,
+        "added": 1733344544.972511
+    },
+    "be35e8a0-d93a-4941-b235-90ffcf4588f8": {
+        "id": "be35e8a0-d93a-4941-b235-90ffcf4588f8",
+        "name": "daylist_id",
+        "keyword": "daylist",
+        "cmd": "echo -n 37i9dQZF1EP6YuccBxUcC1 | wl-copy",
+        "icon": null,
+        "is_default_search": false,
+        "run_without_argument": true,
+        "added": 1774447093.9408333
+    },
+    "59a98d9f-6239-4040-8d7a-2b30c0baeb96": {
+        "id": "59a98d9f-6239-4040-8d7a-2b30c0baeb96",
+        "name": "daylist_uri",
+        "keyword": "daylist",
+        "cmd": "echo -n spotify:playlist:37i9dQZF1EP6YuccBxUcC1 | wl-copy",
+        "icon": null,
+        "is_default_search": false,
+        "run_without_argument": true,
+        "added": 1774447122.1108057
+    }
+}
