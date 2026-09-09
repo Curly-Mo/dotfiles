@@ -1,6 +1,6 @@
 # dotfiles
 
-Personal configuration files, managed with symlinks.
+Personal configuration files, managed with symlinks.  
 Each top-level directory is a self-contained package mirroring its target path under `$HOME`.
 
 ## Quick Start
